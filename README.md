@@ -1,4 +1,4 @@
-# AG-Admin-v2-UI 
+
 ## 准备工作
 - node.js环境（npm包管理器）
 - vue-cli 脚手架构建工具
@@ -73,10 +73,3 @@
 
 ## 状态管理
 后台只有user和app配置相关状态使用vuex存在全局，其它数据都由每个业务页面自己管理。
-
-## 感谢
-感谢作者：[PanJiaChen](https://github.com/PanJiaChen/vue-element-admin)
-
-## License
-
-Apache License Version 2.0
