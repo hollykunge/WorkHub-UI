@@ -1,8 +1,8 @@
 {
-  "name": "AG-Admin",
-  "version": "1.2.0",
-  "description": "A Vue.js admin",
-  "author": "Ace<463540703@qq.com>",
+  "name": "WorkHub-UI",
+  "version": "1.0.0",
+  "description": "the WorkHub admin",
+  "author": "协同设计团队<alwaysbegoing@163.com>",
   "license": "MIT",
   "private": true,
   "scripts": {
