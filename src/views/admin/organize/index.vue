@@ -13,8 +13,31 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="" width="">
-        <template></template>
+      <el-table-column align="center" label="部门">
+        <template scope="scope">
+          <span>{{ scope.row.orgname }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="编号">
+        <template scope="scope">
+          <span>{{ scope.row.orgcode }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="类型">
+        <template scope="scope">
+          <span>{{ scope.row.orgtype }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="创建时间">
+        <template scope="scope">
+          <i class="time"></i>
+          <span>{{ scope.row.crtTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="备注">
+        <template scope="scope">
+          <span>{{ scope.row.description }}</span>
+        </template>
       </el-table-column>
     </el-table>
   </div>
