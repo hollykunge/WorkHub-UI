@@ -1,11 +1,11 @@
-import fetch from 'utils/fetch';
+import fetch from 'utils/fetch'
 
 export function page(query) {
   return fetch({
     url: '/api/admin/user/page',
     method: 'get',
     params: query
-  });
+  })
 }
 
 export function addObj(obj) {
@@ -13,7 +13,7 @@ export function addObj(obj) {
     url: '/api/admin/user',
     method: 'post',
     data: obj
-  });
+  })
 }
 
 export function getObj(id) {

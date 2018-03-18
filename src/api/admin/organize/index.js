@@ -1,12 +1,5 @@
 import fetch from 'utils/fetch'
 
-export function getOrgList() {
-  return fetch({
-    url: '/api/admin/org/page',
-    method: 'get'
-  })
-}
-
 export function page(query) {
   return fetch({
     url: '/api/admin/org/page',
