@@ -11,10 +11,8 @@
 </template>
 
 <script>
-import tabPane from './components/groupDetail';
-import {
-  getAllGroupTypes
-} from 'api/admin/group/index';
+import tabPane from './components/groupDetail'
+import { getAllGroupTypes } from 'api/admin/group/index'
 export default {
   name: 'group',
   components: {
@@ -28,13 +26,13 @@ export default {
     }
   },
   created() {
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
     fetchData() {
       getAllGroupTypes().then(data => {
-        this.tabMapOptions = data;
-      });
+        this.tabMapOptions = data
+      })
     }
   }
 }

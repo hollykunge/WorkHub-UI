@@ -1,17 +1,17 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-row type="flex" :gutter="5">
-        <el-col :span="10">
+      <el-row type="flex" justify="space-between" :gutter="5">
+        <el-col :span="16">
           <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary" icon="edit">添加组织</el-button>
-          <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary">
+          <!-- <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary">
             <icon-svg icon-class="27"></icon-svg> 关联用户
-          </el-button>
+          </el-button> -->
         </el-col>
-        <el-col :span="6" :push="6">
+        <el-col :span="6">
           <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="组织名称" v-model="listQuery.orgname"> </el-input>
         </el-col>
-        <el-col :span="4" :push="6">
+        <el-col :span="2">
           <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
         </el-col>
       </el-row>
@@ -69,9 +69,11 @@
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="150" fixed="right" v-if="orgManager_btn_edit||orgManager_btn_del">
+      <el-table-column align="center" label="操作" width="200" fixed="right" v-if="orgManager_btn_edit||orgManager_btn_del||orgManager_btn_user">
         <template scope="scope">
-          <el-button v-if="orgManager_btn_edit" size="small" type="success" @click="handleUpdate(scope.row)">编辑
+          <el-button v-if="orgManager_btn_user" size="small" type="success" @click="handleUpdate(scope.row)">成员
+          </el-button>
+          <el-button v-if="orgManager_btn_edit" size="small" type="warning" @click="handleUpdate(scope.row)">编辑
           </el-button>
           <el-button v-if="orgManager_btn_del" size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
@@ -181,6 +183,7 @@ export default {
       orgManager_btn_edit: false,
       orgManager_btn_del: false,
       orgManager_btn_add: false,
+      orgManager_btn_user: false,
       textMap: {
         update: '编辑',
         create: '创建'
@@ -193,6 +196,7 @@ export default {
     this.orgManager_btn_edit = this.elements['orgManager:btn_edit']
     this.orgManager_btn_del = this.elements['orgManager:btn_del']
     this.orgManager_btn_add = this.elements['orgManager:btn_add']
+    this.orgManager_btn_user = this.elements['orgManager:btn_userManager']
   },
   computed: {
     ...mapGetters([
