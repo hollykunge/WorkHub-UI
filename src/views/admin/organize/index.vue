@@ -5,10 +5,11 @@
         <el-col :span="10">
           <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary" icon="edit">添加组织</el-button>
           <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary">
-            <icon-svg icon-class="27"></icon-svg> 关联用户</el-button>
+            <icon-svg icon-class="27"></icon-svg> 关联用户
+          </el-button>
         </el-col>
         <el-col :span="6" :push="6">
-          <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="部门名称" v-model="listQuery.orgname"> </el-input>
+          <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="组织名称" v-model="listQuery.orgname"> </el-input>
         </el-col>
         <el-col :span="4" :push="6">
           <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
@@ -21,7 +22,7 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="80" label="部门">
+      <el-table-column align="center" width="80" label="组织">
         <template scope="scope">
           <span>{{ scope.row.orgname }}</span>
         </template>
@@ -31,7 +32,7 @@
           <span>{{ scope.row.orgcode }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="110" label="上级部门id">
+      <el-table-column align="center" width="110" label="上级组织id">
         <template scope="scope">
           <span>{{ scope.row.parentid }}</span>
         </template>
@@ -84,19 +85,18 @@
     </el-row>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
+        <el-form-item label="组织名称" prop="orgname">
+          <el-input v-model="form.orgname" placeholder="请输入组织名称"></el-input>
         </el-form-item>
-        <el-form-item label="账户" prop="username">
-          <el-input v-if="dialogStatus == 'create'" v-model="form.username" placeholder="请输入账户"></el-input>
-          <el-input v-else v-model="form.username" placeholder="请输入账户" readonly></el-input>
+        <el-form-item label="组织代码" prop="orgcode">
+          <el-input v-model="form.orgcode" placeholder="请输入组织代码"></el-input>
         </el-form-item>
-        <el-form-item v-if="dialogStatus == 'create'" label="密码" placeholder="请输入密码" prop="password">
-          <el-input type="password" v-model="form.password"></el-input>
+        <el-form-item label="上级组织id" prop="parentid">
+          <el-input v-model="form.parentid" placeholder="请填写上级组织id"></el-input>
         </el-form-item>
-        <el-form-item label="性别">
-          <el-select class="filter-item" v-model="form.sex" placeholder="请选择">
-            <el-option v-for="item in  sexOptions" :key="item" :label="item" :value="item"> </el-option>
+        <el-form-item label="选择类型">
+          <el-select class="filter-item" v-model="form.orgtype" placeholder="请选择">
+            <el-option v-for="item in  orgtypeOptions" :key="item" :label="item" :value="item"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="描述">
@@ -120,49 +120,49 @@ export default {
   data() {
     return {
       form: {
-        username: undefined,
-        name: undefined,
-        sex: '男',
-        password: undefined,
+        orgname: undefined,
+        orgcode: undefined,
+        parentid: undefined,
+        orgtype: 'b',
         description: undefined
       },
       rules: {
-        name: [
+        orgname: [
           {
             required: true,
-            message: '请输入用户',
+            message: '请输入组织名称',
             trigger: 'blur'
           },
           {
-            min: 3,
+            min: 2,
             max: 20,
-            message: '长度在 3 到 20 个字符',
+            message: '长度在 2 到 20 个字符',
             trigger: 'blur'
           }
         ],
-        username: [
+        orgcode: [
           {
             required: true,
-            message: '请输入账户',
+            message: '请输入组织代码',
             trigger: 'blur'
           },
           {
-            min: 3,
+            min: 1,
             max: 20,
-            message: '长度在 3 到 20 个字符',
+            message: '长度在 1 到 20 个字符',
             trigger: 'blur'
           }
         ],
-        password: [
+        parentid: [
           {
             required: true,
-            message: '请输入密码',
+            message: '请输入上级组织id',
             trigger: 'blur'
           },
           {
-            min: 5,
+            min: 1,
             max: 20,
-            message: '长度在 5 到 20 个字符',
+            message: '长度在 1 到 20 个字符',
             trigger: 'blur'
           }
         ]
@@ -172,10 +172,10 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 10,
         orgname: undefined
       },
-      sexOptions: ['男', '女'],
+      orgtypeOptions: ['a', 'b', 'c', 'd'],
       dialogFormVisible: false,
       dialogStatus: '',
       orgManager_btn_edit: false,
@@ -237,52 +237,24 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      })
-        .then(() => {
-          delObj(row.id)
-            .then(() => {
-              this.$notify({
-                title: '成功',
-                message: '删除成功',
-                type: 'success',
-                duration: 2000
-              })
-              const index = this.list.indexOf(row)
-              this.list.splice(index, 1)
-            })
+      }).then(() => {
+        delObj(row.id).then(() => {
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          const index = this.list.indexOf(row) // 删除列表中对应的项
+          this.list.splice(index, 1)
         })
+      })
     },
     create(formName) {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
-          addObj(this.form)
-            .then(() => {
-              this.dialogFormVisible = false
-              this.getList()
-              this.$notify({
-                title: '成功',
-                message: '创建成功',
-                type: 'success',
-                duration: 2000
-              })
-            })
-        } else {
-          return false
-        }
-      })
-    },
-    cancel(formName) {
-      this.dialogFormVisible = false
-      this.$refs[formName].resetFields()
-    },
-    update(formName) {
-      const set = this.$refs
-      set[formName].validate(valid => {
-        if (valid) {
-          this.dialogFormVisible = false
-          this.form.password = undefined
-          putObj(this.form.id, this.form).then(() => {
+          addObj(this.form).then(() => {
             this.dialogFormVisible = false
             this.getList()
             this.$notify({
@@ -297,12 +269,36 @@ export default {
         }
       })
     },
+    cancel(formName) {
+      this.dialogFormVisible = false
+      this.$refs[formName].resetFields()
+    },
+    update(formName) {
+      const set = this.$refs
+      set[formName].validate(valid => {
+        if (valid) {
+          this.dialogFormVisible = false
+          putObj(this.form.id, this.form).then(() => {
+            this.dialogFormVisible = false
+            this.getList()
+            this.$notify({
+              title: '成功',
+              message: '修改成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        } else {
+          return false
+        }
+      })
+    },
     resetTemp() {
       this.form = {
-        username: undefined,
-        name: undefined,
-        sex: '男',
-        password: undefined,
+        orgname: undefined,
+        orgcode: undefined,
+        parentid: undefined,
+        orgtype: 'b',
         description: undefined
       }
     }
