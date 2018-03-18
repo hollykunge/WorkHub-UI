@@ -4,9 +4,8 @@
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="16">
           <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary" icon="edit">添加组织</el-button>
-          <!-- <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary">
-            <icon-svg icon-class="27"></icon-svg> 关联用户
-          </el-button> -->
+          <el-button class="filter-item" v-if="orgManager_btn_user" @click="handleUser()" type="success">
+            <icon-svg icon-class="27"></icon-svg>关联用户</el-button>
         </el-col>
         <el-col :span="6">
           <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="组织名称" v-model="listQuery.orgname"> </el-input>
@@ -69,11 +68,11 @@
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="200" fixed="right" v-if="orgManager_btn_edit||orgManager_btn_del||orgManager_btn_user">
+      <el-table-column align="center" label="操作" width="140" fixed="right" v-if="orgManager_btn_edit||orgManager_btn_del||orgManager_btn_user">
         <template scope="scope">
-          <el-button v-if="orgManager_btn_user" size="small" type="success" @click="handleUpdate(scope.row)">成员
-          </el-button>
-          <el-button v-if="orgManager_btn_edit" size="small" type="warning" @click="handleUpdate(scope.row)">编辑
+          <!-- <el-button v-if="orgManager_btn_user" size="small" type="success" @click="handleUser(scope.row)">成员 -->
+          <!-- </el-button> -->
+          <el-button v-if="orgManager_btn_edit" size="small" type="success" @click="handleUpdate(scope.row)">编辑
           </el-button>
           <el-button v-if="orgManager_btn_del" size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
@@ -86,7 +85,7 @@
       </div>
     </el-row>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form :model="form" :rules="rules" ref="form" label-width="100px">
+      <el-form v-if="dialogStatus!='orgUser'" :model="form" :rules="rules" ref="form" label-width="100px">
         <el-form-item label="组织名称" prop="orgname">
           <el-input v-model="form.orgname" placeholder="请输入组织名称"></el-input>
         </el-form-item>
@@ -108,8 +107,11 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel('form')">取 消</el-button>
         <el-button v-if="dialogStatus=='create'" type="primary" @click="create('form')">确 定</el-button>
-        <el-button v-else type="primary" @click="update('form')">确 定</el-button>
+        <el-button v-else-if="dialogStatus=='update'" type="primary" @click="update('form')">确 定</el-button>
       </div>
+    </el-dialog>
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUserVisible">
+      <org-user :groupId="currentId" :orgList="list" @closeUserDialog="cancel()" ref="orgUser"></org-user>
     </el-dialog>
   </div>
 </template>
@@ -117,8 +119,12 @@
 <script>
 import { page, addObj, getObj, delObj, putObj } from 'api/admin/organize/index'
 import { mapGetters } from 'vuex'
+import orgUser from './components/orgUser'
 export default {
   name: 'user',
+  components: {
+    orgUser
+  },
   data() {
     return {
       form: {
@@ -179,6 +185,7 @@ export default {
       },
       orgtypeOptions: ['a', 'b', 'c', 'd'],
       dialogFormVisible: false,
+      dialogUserVisible: false,
       dialogStatus: '',
       orgManager_btn_edit: false,
       orgManager_btn_del: false,
@@ -186,9 +193,11 @@ export default {
       orgManager_btn_user: false,
       textMap: {
         update: '编辑',
-        create: '创建'
+        create: '创建',
+        orgUser: '成员管理'
       },
-      tableKey: 0
+      tableKey: 0,
+      currentId: 1
     }
   },
   created() {
@@ -223,6 +232,11 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
+    handleUser() {
+      // this.currentId = row.id
+      this.dialogStatus = 'orgUser'
+      this.dialogUserVisible = true
+    },
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -232,7 +246,7 @@ export default {
       getObj(row.id)
         .then(response => {
           this.form = response.data
-          this.dialogFormVisible = true
+          this.dialogUserVisible = true
           this.dialogStatus = 'update'
         })
     },
@@ -274,6 +288,10 @@ export default {
       })
     },
     cancel(formName) {
+      if (this.dialogStatus === 'orgUser') {
+        this.dialogUserVisible = false
+        return
+      }
       this.dialogFormVisible = false
       this.$refs[formName].resetFields()
     },

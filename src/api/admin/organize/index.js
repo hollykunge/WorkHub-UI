@@ -37,3 +37,18 @@ export function putObj(id, obj) {
     data: obj
   })
 }
+
+export function getUsers(id) {
+  return fetch({
+    url: '/api/admin/org/' + id + '/user',
+    method: 'get'
+  })
+}
+
+export function modifyUsers(id, data) {
+  return fetch({
+    url: '/api/admin/org/' + id + '/user',
+    method: 'put',
+    params: data
+  })
+}

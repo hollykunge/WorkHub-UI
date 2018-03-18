@@ -1,5 +1,10 @@
 <template>
-  <el-form label-width="80px">
+  <el-form label-width="100px">
+    <el-form-item label="选择组织名称">
+      <el-select class="filter-item" v-model="orgId" placeholder="请选择" size="50px" @change="handleChange">
+        <el-option v-for="item in orgList" :key="item.id" :label="item.orgname" :value="item.id"> </el-option>
+      </el-select>
+    </el-form-item>
     <el-form-item label="群主|领导">
       <el-select v-model="leaders" multiple filterable remote placeholder="请输入关键词" :remote-method="remoteLeaderMethod" :loading="loading">
         <el-option v-for="item in lItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
@@ -24,10 +29,14 @@ export default {
   props: {
     groupId: {
       default: '1'
+    },
+    orgList: {
+      type: Array
     }
   },
   data() {
     return {
+      orgId: 1,
       lItems: [],
       mItems: [],
       leaders: [],
@@ -38,6 +47,7 @@ export default {
     }
   },
   created() {
+    console.log('123')
     this.initUsers()
     this.groupManager_btn_userManager = this.elements['groupManager:btn_userManager']
   },
@@ -47,6 +57,10 @@ export default {
     ])
   },
   methods: {
+    handleChange(orgId) {
+      console.log(orgId)
+      // getUser()
+    },
     remoteMemberMethod(query) {
       if (query !== '') {
         this.loading = true
