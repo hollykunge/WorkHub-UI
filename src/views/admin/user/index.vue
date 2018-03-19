@@ -41,7 +41,7 @@
           <span>{{scope.row.updName}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="150">
+      <el-table-column align="center" label="操作" width="150" fixed="right">
         <template scope="scope">
           <el-button v-if="userManager_btn_edit" size="small" type="success" @click="handleUpdate(scope.row)">编辑
           </el-button>
@@ -111,9 +111,9 @@ export default {
             trigger: 'blur'
           },
           {
-            min: 3,
+            min: 2,
             max: 20,
-            message: '长度在 3 到 20 个字符',
+            message: '长度在 2 到 20 个字符',
             trigger: 'blur'
           }
         ],
@@ -149,7 +149,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 10,
         name: undefined
       },
       sexOptions: ['男', '女'],

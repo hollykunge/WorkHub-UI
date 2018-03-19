@@ -37,3 +37,10 @@ export function putObj(id, obj) {
     data: obj
   })
 }
+
+export function all() {
+  return fetch({
+    url: '/api/admin/user/all',
+    method: 'get'
+  })
+}

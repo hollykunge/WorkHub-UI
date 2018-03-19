@@ -8,7 +8,7 @@
             <icon-svg icon-class="27"></icon-svg>关联用户</el-button>
         </el-col>
         <el-col :span="6">
-          <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="组织名称" v-model="listQuery.orgname"> </el-input>
+          <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="组织名称" v-model="listQuery.orgName"> </el-input>
         </el-col>
         <el-col :span="2">
           <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
@@ -70,8 +70,6 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="140" fixed="right" v-if="orgManager_btn_edit||orgManager_btn_del||orgManager_btn_user">
         <template scope="scope">
-          <!-- <el-button v-if="orgManager_btn_user" size="small" type="success" @click="handleUser(scope.row)">成员 -->
-          <!-- </el-button> -->
           <el-button v-if="orgManager_btn_edit" size="small" type="success" @click="handleUpdate(scope.row)">编辑
           </el-button>
           <el-button v-if="orgManager_btn_del" size="small" type="danger" @click="handleDelete(scope.row)">删除
@@ -164,14 +162,7 @@ export default {
         parentid: [
           {
             required: true,
-            message: '请输入上级组织id',
-            trigger: 'blur'
-          },
-          {
-            min: 1,
-            max: 20,
-            message: '长度在 1 到 20 个字符',
-            trigger: 'blur'
+            message: '请输入上级组织id'
           }
         ]
       },
@@ -181,7 +172,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        orgname: undefined
+        orgName: undefined
       },
       orgtypeOptions: ['a', 'b', 'c', 'd'],
       dialogFormVisible: false,
@@ -232,7 +223,6 @@ export default {
       this.getList()
     },
     handleUser() {
-      // this.currentId = row.id
       this.dialogStatus = 'orgUser'
       this.dialogUserVisible = true
     },
@@ -245,7 +235,7 @@ export default {
       getObj(row.id)
         .then(response => {
           this.form = response.data
-          this.dialogUserVisible = true
+          this.dialogFormVisible = true
           this.dialogStatus = 'update'
         })
     },
