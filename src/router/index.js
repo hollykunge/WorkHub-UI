@@ -115,7 +115,7 @@ export const asyncRouterMap = [{
 {
   path: '/authManager',
   component: Layout,
-  name: '基础配置管理',
+  name: '服务权限管理',
   icon: 'setting',
   authority: 'authManager',
   children: [{

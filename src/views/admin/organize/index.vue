@@ -111,7 +111,7 @@
       </div>
     </el-dialog>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUserVisible">
-      <org-user :groupId="currentId" :orgList="list" @closeUserDialog="cancel()" ref="orgUser"></org-user>
+      <org-user :orgList="list" @closeUserDialog="cancel()" ref="orgUser"></org-user>
     </el-dialog>
   </div>
 </template>
@@ -196,8 +196,7 @@ export default {
         create: '创建',
         orgUser: '成员管理'
       },
-      tableKey: 0,
-      currentId: 1
+      tableKey: 0
     }
   },
   created() {
