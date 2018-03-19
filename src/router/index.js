@@ -1,12 +1,12 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-const _import = require('./_import_' + process.env.NODE_ENV);
+import Vue from 'vue'
+import Router from 'vue-router'
+const _import = require('./_import_' + process.env.NODE_ENV)
 // in development env not use Lazy Loading,because Lazy Loading large page will cause webpack hot update too slow.so only in production use Lazy Loading
 
-Vue.use(Router);
+Vue.use(Router)
 
 /* layout */
-import Layout from '../views/layout/Layout';
+import Layout from '../views/layout/Layout'
 
 /**
  * icon : the icon show in the sidebar
@@ -61,12 +61,12 @@ export const constantRouterMap = [{
 ]
 
 export default new Router({
-  // mode: 'history', //后端支持可开
+  mode: 'history', // 后端支持可开
   scrollBehavior: () => ({
     y: 0
   }),
   routes: constantRouterMap
-});
+})
 
 export const asyncRouterMap = [{
   path: '/baseManager',
@@ -99,6 +99,12 @@ export const asyncRouterMap = [{
     name: '角色类型管理',
     authority: 'groupTypeManager'
   }, {
+    path: 'orgManager',
+    icon: 'group_fill',
+    component: _import('admin/organize/index'),
+    name: '组织部门管理',
+    authority: 'orgManager'
+  }, {
     path: 'gateLogManager',
     icon: 'viewlist',
     component: _import('admin/gateLog/index'),
@@ -109,7 +115,7 @@ export const asyncRouterMap = [{
 {
   path: '/authManager',
   component: Layout,
-  name: '基础配置管理',
+  name: '服务权限管理',
   icon: 'setting',
   authority: 'authManager',
   children: [{
@@ -141,4 +147,4 @@ export const asyncRouterMap = [{
     name: '服务状态监控',
     authority: 'serviceZipkinManager'
   }]
-}];
+}]
