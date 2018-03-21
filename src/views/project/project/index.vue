@@ -149,7 +149,7 @@ export default {
         limit: 10,
         name: undefined
       },
-      sexOptions: ['男', '女'],
+      sexOptions: ['1', '2'],
       dialogFormVisible: false,
       dialogStatus: '',
       userManager_btn_edit: false,
