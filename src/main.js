@@ -21,6 +21,12 @@ import errLog from 'store/errLog'// error log组件
 import './mock/index.js'  // 该项目所有请求使用mockjs模拟
 import { getToken } from 'utils/auth'
 
+/* 项目中用的icon图标 具体图标见https://fontawesome.com/v4.7.0/icons/
+  使用方法<icon name="beer"></icon>*/
+import Icon from 'vue-awesome/components/Icon'
+import 'vue-awesome/icons'
+Vue.component('icon', Icon)
+
 // register globally
 Vue.component('multiselect', Multiselect)
 Vue.component('Sticky', Sticky)
