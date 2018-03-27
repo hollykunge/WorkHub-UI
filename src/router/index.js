@@ -152,7 +152,7 @@ export const asyncRouterMap = [{
   path: '/projectSys',
   component: Layout,
   name: '项目管理',
-  icon: 'setting',
+  icon: 'category',
   authority: 'projectSys',
   children: [{
     path: 'allProjects',
