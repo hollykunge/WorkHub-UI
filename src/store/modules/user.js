@@ -1,17 +1,6 @@
-import {
-  loginByEmail,
-  logout,
-  getInfo,
-  getMenus
-} from 'api/login'
-import {
-  getToken,
-  setToken,
-  removeToken
-} from 'utils/auth'
-import {
-  Message
-} from 'element-ui'
+import { loginByEmail, logout, getInfo, getMenus } from 'api/login'
+import { getToken, setToken, removeToken } from 'utils/auth'
+import { Message } from 'element-ui'
 const user = {
   state: {
     user: '',

@@ -119,7 +119,7 @@ import { page, addObj, getObj, delObj, putObj } from 'api/admin/organize/index'
 import { mapGetters } from 'vuex'
 import orgUser from './components/orgUser'
 export default {
-  name: 'user',
+  name: 'organize',
   components: {
     orgUser
   },
