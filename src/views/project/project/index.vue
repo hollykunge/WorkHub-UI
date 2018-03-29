@@ -13,6 +13,7 @@
         </el-col>
       </el-row>
     </div>
+
     <el-table :key='tableKey' :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="序号" width="65">
         <template scope="scope">
@@ -42,7 +43,10 @@
       </el-table-column>
       <el-table-column align="center" width="120" label="所处阶段" show-overflow-tooltip>
         <template scope="scope">
-          <span>{{ scope.row.projectPhase }}</span>
+          <span v-if="scope.row.projectPhase==1">需求调研阶段</span>
+          <span v-if="scope.row.projectPhase==2">技术论证阶段</span>
+          <span v-if="scope.row.projectPhase==3">设计阶段</span>
+          <span v-if="scope.row.projectPhase==4">开发阶段</span>
         </template>
       </el-table-column>
       <el-table-column align="center" width="320" label="描述" show-overflow-tooltip>
@@ -52,12 +56,8 @@
       </el-table-column>
       <el-table-column align="center" width="80" label="操作" fixed="right">
         <template scope="scope">
-          <el-button size="small" type="success" @click="handleUpdate(scope.row)">查看
+          <el-button size="small" type="success" @click="handleCheck(scope.row.projectId)">查看
           </el-button>
-          <!-- <el-button v-if="allProjects_btn_edit" size="small" type="primary" @click="handleUpdate(scope.row)">编辑
-          </el-button> -->
-          <!-- <el-button v-if="allProjects_btn_del" size="small" type="danger" @click="handleDelete(scope.row)">删除
-          </el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -70,21 +70,27 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
+        <!-- <el-form-item label="项目id" prop="projectId">
+          <el-input v-model="form.projectId" placeholder="请输入项目id"></el-input>
+        </el-form-item>
+        <el-form-item label="项目size" prop="size">
+          <el-input v-model="form.size" placeholder="请输入项目id"></el-input>
+        </el-form-item> -->
         <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="form.projectName" placeholder="请输入项目名称"></el-input>
         </el-form-item>
         <el-form-item label="当前所处阶段" prop="projectPhase">
-          <el-select class="filter-item" v-model="form.projectPhase" placeholder="请选择">
-            <el-option v-for="item in  projectPhaseOptions" :key="item" :label="item" :value="item"> </el-option>
+          <el-select class="filter-item" v-model="form.projectPhase" placeholder="请选择" style="width: 100%">
+            <el-option v-for="item in  projectPhaseOptions" :key="item.value" :label="item.key" :value="item.value"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="计划完成时间" prop="projectPlanEnd">
-          <el-input v-model="form.projectPlanEnd" placeholder="请选择时间"></el-input>
+          <el-date-picker editable v-model="form.projectPlanEnd" type="datetime" placeholder="选择完成时间" align="center" :picker-options="pickerOptions" format="yyyy年MM月dd日HH:MM" style="width: 100%">
+          </el-date-picker>
         </el-form-item>
-        <el-form-item label="开始时间">
-          <!-- <el-select class="filter-item" v-model="form.projectTimeStart" placeholder="请选择时间">
-            <el-option v-for="item in  orgtypeOptions" :key="item" :label="item" :value="item"> </el-option>
-          </el-select> -->
+        <el-form-item label="开始时间" prop="projectTimeStart">
+          <el-date-picker editable v-model="form.projectTimeStart" type="datetime" placeholder="选择开始时间" align="center" format="yyyy年MM月dd日HH:MM" style="width: 100%">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="描述" prop="projectDes">
           <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5}" placeholder="请输入内容" v-model="form.projectDes"> </el-input>
@@ -97,6 +103,10 @@
         <el-button v-else-if="dialogStatus=='update'" type="primary" @click="update('form')">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 项目详情 -->
+
+    <router-view></router-view>
+
   </div>
 </template>
 
@@ -109,46 +119,70 @@ export default {
   },
   data() {
     return {
+      pickerOptions: {
+        shortcuts: [{
+          text: '明天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() + 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周后',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() + 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一个月后',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
       form: {
+        size: undefined,
+        projectId: 2,
         projectName: undefined,
-        projectPhase: 'a',
+        projectPhase: '1',
         projectPlanEnd: undefined,
         projectTimeStart: undefined,
         projectDes: undefined
       },
       rules: {
-        // projectName: [
-        //   {
-        //     required: true,
-        //     message: '请输入组织名称',
-        //     trigger: 'blur'
-        //   },
-        //   {
-        //     min: 2,
-        //     max: 20,
-        //     message: '长度在 2 到 20 个字符',
-        //     trigger: 'blur'
-        //   }
-        // ],
-        // projectPhase: [
-        //   {
-        //     required: true,
-        //     message: '请输入组织代码',
-        //     trigger: 'blur'
-        //   },
-        //   {
-        //     min: 1,
-        //     max: 20,
-        //     message: '长度在 1 到 20 个字符',
-        //     trigger: 'blur'
-        //   }
-        // ],
-        // projectPlanEnd: [
-        //   {
-        //     required: true,
-        //     message: '请输入上级组织id'
-        //   }
-        // ]
+        projectName: [
+          {
+            required: true,
+            message: '项目名称不能为空'
+          }
+        ],
+        projectPhase: [
+          {
+            required: true,
+            message: '请选择'
+          }
+        ],
+        projectPlanEnd: [
+          {
+            required: true,
+            message: '计划完成时间不能为空'
+          }
+        ],
+        projectDes: [
+          {
+            required: true,
+            message: '项目描述不能为空'
+          }
+        ],
+        projectTimeStart: [
+          {
+            required: true,
+            message: '项目完成时间不能为空'
+          }
+        ]
       },
       list: null,
       total: null,
@@ -158,7 +192,7 @@ export default {
         limit: 10,
         projectName: undefined
       },
-      projectPhaseOptions: ['a', 'b', 'c', 'd'],
+      projectPhaseOptions: [{ key: '需求调研阶段', value: 1 }, { key: '技术论证阶段', value: 2 }, { key: '设计阶段', value: 3 }, { key: '开发阶段', value: 4 }],
       dialogFormVisible: false,
       dialogUserVisible: false,
       dialogStatus: '',
@@ -205,6 +239,10 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
+    },
+    handleCheck(projectId) {
+      console.log(projectId)
+      this.$router.push({ path: '/projectSys/allProjects/test' })
     },
     handleUser() {
       this.dialogStatus = 'orgUser'
@@ -302,4 +340,9 @@ export default {
   }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss">
+@import "src/styles/index.scss";
+</style>
+
 

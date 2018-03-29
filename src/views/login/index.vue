@@ -4,31 +4,24 @@
       <h3 class="title">系统登录</h3>
       <el-form-item prop="username">
         <span class="svg-container">
-          <icon-svg icon-class="jiedianyoujian"></icon-svg>
+          <icon name="user" class="username-icon"></icon>
         </span>
         <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="账户"></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
-          <icon-svg icon-class="mima"></icon-svg>
+          <icon name="lock" class="username-icon"></icon>
         </span>
         <el-input name="password" type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="密码"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-          登录
+          登 录
         </el-button>
       </el-form-item>
     </el-form>
-
-    <el-dialog title="第三方验证" :visible.sync="showDialog">
-      邮箱登录成功,请选择第三方验证
-      <social-sign></social-sign>
-    </el-dialog>
-
   </div>
 </template>
-
 <script>
 import socialSign from './socialsignin'
 
@@ -68,8 +61,7 @@ export default {
           validator: validatePass
         }]
       },
-      loading: false,
-      showDialog: false
+      loading: false
     }
   },
   methods: {
@@ -82,74 +74,25 @@ export default {
             this.$router.push({
               path: '/'
             })
-            // this.showDialog = true;
           }).catch(() => {
             this.loading = false
           })
-          // this.$http.post('/oauth/token', {
-          //   username: this.loginForm.username,
-          //   password: this.loginForm.password
-          // }, {
-          //   headers: {
-          //     Authorization: 'Basic enV1bDp6dXVs'
-          //   },
-          //   emulateJSON: true,
-          //   emulateHTTP: true
-          // }).then(function(response) {
-          //   if (response.status === 200) {
-          //     this.$store.dispatch('LoginByEmail', this.loginForm).then(() => {
-          //       this.loading = false;
-          //       this.$router.push({
-          //         path: '/'
-          //       });
-          //       // this.showDialog = true;
-          //     }).catch(() => {
-          //       this.loading = false;
-          //     });
-          //   } else {
-          //     this.loading = false;
-          //     return false;
-          //   }
-          // }, function(error) {
-          //   console.log('server error!!');
-          //   this.loading = false;
-          //   return false;
-          // });
         } else {
           console.log('error submit!!')
           return false
         }
       })
-    },
-    afterQRScan() {
-      // const hash = window.location.hash.slice(1);
-      // const hashObj = getQueryObject(hash);
-      // const originUrl = window.location.origin;
-      // history.replaceState({}, '', originUrl);
-      // const codeMap = {
-      //   wechat: 'code',
-      //   tencent: 'code'
-      // };
-      // const codeName = hashObj[codeMap[this.auth_type]];
-      // if (!codeName) {
-      //   alert('第三方登录失败');
-      // } else {
-      //   this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-      //     this.$router.push({ path: '/' });
-      //   });
-      // }
     }
   },
   created() {
-    // window.addEventListener('hashchange', this.afterQRScan);
   },
   destroyed() {
-    // window.removeEventListener('hashchange', this.afterQRScan);
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
+@import "src/styles/index.scss";
 @import "src/styles/mixin.scss";
 .tips {
   font-size: 14px;
@@ -159,8 +102,9 @@ export default {
 
 .login-container {
   @include relative;
-  height: 200vh;
-  background-color: #2d3a4b;
+  height: 100vh;
+  background-size: 100% 100%;
+  background-image: url(../../../static/images/login_bg.jpg);
   input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 1000px #293444 inset !important;
     -webkit-text-fill-color: #fff !important;
@@ -170,18 +114,26 @@ export default {
     border: 0;
     -webkit-appearance: none;
     border-radius: 0;
-    padding: 12px 5px 12px 15px;
+    padding: 12px 40px 12px 0px;
     color: #eeeeee;
-    height: 47px;
+    height: 43px;
+    text-align: center;
+    // margin-left: 45%;
   }
   .el-input {
     display: inline-block;
-    height: 47px;
-    width: 85%;
+    height: 43px;
+    width: 83%;
+    font-size: 18px;
+    text-align: center;
   }
   .svg-container {
-    padding: 6px 5px 6px 15px;
+    padding: 6px 5px 6px 26px;
     color: #889aa4;
+    .username-icon {
+      margin: 0px 11px -5px -5px;
+      font-size: 20px;
+    }
   }
   .title {
     font-size: 26px;
@@ -198,10 +150,11 @@ export default {
     width: 400px;
     padding: 35px 35px 15px;
     margin: 120px auto;
+    background: rgba(0, 0, 0, 0.4);
   }
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 5px;
     color: #454545;
   }
