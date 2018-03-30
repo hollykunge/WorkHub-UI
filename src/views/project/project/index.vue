@@ -25,7 +25,7 @@
           <span>{{ scope.row.projectName }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="120" label="创建者" show-overflow-tooltip>
+      <el-table-column align="center" label="创建者" show-overflow-tooltip>
         <template scope="scope">
           <!-- 通过项目创建者id获取创建者姓名-->
           <span>{{ scope.row.projectCreatorId }}</span>
@@ -41,7 +41,7 @@
           <span>{{ scope.row.projectPlanEnd }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="120" label="所处阶段" show-overflow-tooltip>
+      <el-table-column align="center" label="所处阶段" show-overflow-tooltip>
         <template scope="scope">
           <span v-if="scope.row.projectPhase==1">需求调研阶段</span>
           <span v-if="scope.row.projectPhase==2">技术论证阶段</span>
@@ -49,12 +49,12 @@
           <span v-if="scope.row.projectPhase==4">开发阶段</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="320" label="描述" show-overflow-tooltip>
+      <el-table-column align="center" label="描述" show-overflow-tooltip>
         <template scope="scope">
           <span>{{ scope.row.projectDes }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="80" label="操作" fixed="right">
+      <el-table-column align="center" label="操作" fixed="right">
         <template scope="scope">
           <el-button size="small" type="success" @click="handleCheck(scope.row.projectId)">查看
           </el-button>
@@ -242,7 +242,7 @@ export default {
     },
     handleCheck(projectId) {
       console.log(projectId)
-      this.$router.push({ path: '/projectSys/allProjects/test' })
+      this.$router.push({ name: '项目详情', params: { projectId: projectId }})
     },
     handleUser() {
       this.dialogStatus = 'orgUser'
@@ -343,6 +343,9 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 @import "src/styles/index.scss";
+.el-table__fixed-right {
+  overflow: hidden;
+}
 </style>
 
 
