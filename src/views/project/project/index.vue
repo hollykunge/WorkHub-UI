@@ -69,7 +69,7 @@
     </el-row>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form :model="form" :rules="rules" ref="form" label-width="100px">
+      <el-form :model="form" :rules="rules" ref="form" label-width="150px">
         <!-- <el-form-item label="项目id" prop="projectId">
           <el-input v-model="form.projectId" placeholder="请输入项目id"></el-input>
         </el-form-item>

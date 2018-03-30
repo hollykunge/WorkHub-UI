@@ -57,6 +57,9 @@ export const constantRouterMap = [{
     component: _import('introduction/index'),
     name: '简述'
   }]
+},
+{
+  path: '/'
 }
 ]
 
