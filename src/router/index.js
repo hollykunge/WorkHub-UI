@@ -44,6 +44,10 @@ export const constantRouterMap = [{
   children: [{
     path: 'dashboard',
     component: _import('dashboard/index')
+  }, {
+    path: 'projectSys/allProjects/:projectId',
+    component: _import('project/project/details/index'),
+    name: '项目详情'
   }]
 },
 {
