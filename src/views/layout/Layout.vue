@@ -1,6 +1,11 @@
 <template>
 	<div class="app-wrapper" :class="{hideSidebar:!sidebar.opened}">
-		<sidebar class="sidebar-container"></sidebar>
+		<sidebar class="sidebar-container">
+			<div slot="top" class="logo-con">
+				<img v-show="sidebar.opened"  src="../../../static/images/logo.jpg" key="max-logo" />
+				<img v-show="!sidebar.opened" src="../../../static/images/logo-min.jpg" key="min-logo" />
+			</div>
+		</sidebar>
 		<div class="main-container">
 			<navbar></navbar>
 			<app-main></app-main>
@@ -35,11 +40,11 @@
 		width: 100%;
 		&.hideSidebar {
 			.sidebar-container{
-				width:36px;
+				width:58px;
 				overflow: inherit;
 			}
 			.main-container {
-				margin-left: 36px;
+				margin-left: 58px;
 			}
 		}
 		.sidebar-container {

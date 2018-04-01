@@ -1,7 +1,13 @@
 <template>
-  <el-menu mode="vertical" theme="dark" unique-opened :default-active="$route.path" :collapse="isCollapse">
-    <sidebar-item :routes='permissionMenus'></sidebar-item>
-  </el-menu>
+  <div>
+    <div class="logo-con">
+      <img v-show="!isCollapse" src="../../../static/images/logo.jpg" key="max-logo" />
+      <img v-show="isCollapse" src="../../../static/images/logo-min.jpg" key="min-logo" />
+    </div>
+    <el-menu mode="vertical" theme="dark" unique-opened :default-active="$route.path" :collapse="isCollapse">
+      <sidebar-item :routes='permissionMenus'></sidebar-item>
+    </el-menu>
+  </div>
 </template>
 
 
@@ -21,3 +27,16 @@ export default {
   }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.logo-con {
+  height: 50px;
+  background-color: #eef1f6;
+  text-align: center;
+  .img {
+    height: 50px;
+    width: auto;
+  }
+}
+</style>
+
