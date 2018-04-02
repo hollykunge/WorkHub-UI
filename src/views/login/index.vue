@@ -145,6 +145,7 @@ export default {
   }
   .login-form {
     position: absolute;
+    top: 15%;
     left: 0;
     right: 0;
     width: 400px;
