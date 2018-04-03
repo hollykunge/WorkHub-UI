@@ -65,9 +65,9 @@
             项目团队</el-tab-pane>
           <el-tab-pane name="projectSetting">
             <span slot="label">
-              <icon name="users"></icon> 设置
+              <icon name="gears"></icon> 设置
             </span>
-            设置</el-tab-pane>
+            设置 {{ projectId }}</el-tab-pane>
           <!-- <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
         </el-tabs>
       </el-col>
@@ -76,18 +76,46 @@
 </template>
 
 <script>
+import { getObj } from 'api/project/index'
 export default {
+  props: ['projectId'],
   data() {
-    return {
-      activeName: 'projectTask'
+    return {     /* 用解构赋值的方式来解project的数据*/
+      activeName: 'projectTask' // 进去详情页首先显示的标签
+      // projectName: undefined,
+      // projectDes: undefined,
+      // projectGroupId: undefined,
+      // projectLabel: undefined,
+      // projectPhase: undefined,
+      // projectPlanEnd: undefined,
+      // projectProcess: undefined,
+      // projectResourceId: null,
+      // projectState:1,"projectTimeEnd":"2018-03-30T00:50:00.000+0000","projectTimeStart":"2018-03-29T00:50:00.000+0000","projectType":1,"projectUserId":1,"defaultBranch":"","size":null,"numWatches":null,"numStars":null,"numForks":null,"numIssues":null,"numClosedIssues":null,"numPulls":null,"numClosedPulls":null,"numMilestones":null,"numClosedMilestones":null,"enableIssues":null,"allowPublicIssues":null,"isFork":null,"forkId":null,"crtName":null,"crtUser":null,"crtHost":null,"crtTime":null,"updTime":null,"updUser":null,"updName":null,"updHost":null,
+      // taskEntityList:[]
     }
+  },
+  created() {
+    // 组件创建完后获取数据，
+    // 此时 data 已经被 observed 了
+    this.getProBasicInfo(this.projectId)
+  },
+  watch: {
+    // 如果路由有变化，会再次执行该方法
+    // '$route': 'fetchData'
   },
   methods: {
     handleTabClick(tab, event) {
-      console.log(tab, event)
+      // console.log(tab, event)
+      console.log(this.projectId)
+    },
+    getProBasicInfo(projectId) {
+      getObj(projectId).then(res => {
+        const data = res.data
+        console.log(data)
+      })
     }
-  }
 
+  }
 }
 </script>
 
@@ -127,7 +155,27 @@ export default {
   .el-tabs__nav {
     .el-tabs__item {
       margin: 0px 35px;
+      // :active {
+      .mark {
+        margin-top: 8px;
+        line-height: 1;
+        .el-badge__content {
+          background-color: #52626d85;
+        }
+      }
+      // }
     }
+
+    .el-tabs__item.is-active {
+      // :active {
+      .mark {
+        .el-badge__content {
+          background-color: #20aaff;
+        }
+      }
+      // }
+    }
+
     // .setting {
     //   margin-left: 100%;
     // }
@@ -146,11 +194,11 @@ export default {
 // .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
 //   margin-left: 58%;
 // }
-.mark {
-  margin-top: 8px;
-  line-height: 1;
-  .el-badge__content {
-    background-color: #52626d9a;
-  }
-}
+// .mark {
+//   margin-top: 8px;
+//   line-height: 1;
+//   .el-badge__content {
+//     background-color: #52626d85;
+//   }
+// }
 </style>

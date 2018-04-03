@@ -56,7 +56,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" fixed="right">
         <template scope="scope">
-          <el-button size="small" type="success" @click="handleCheck(scope.row.projectId)">查看
+          <el-button size="small" type="success" @click="handleCheck(scope.row)">查看
           </el-button>
         </template>
       </el-table-column>
@@ -240,9 +240,9 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
-    handleCheck(projectId) {
-      console.log(projectId)
-      this.$router.push({ name: '项目详情', params: { projectId: projectId }})
+    handleCheck(project) {
+      console.log(project)
+      this.$router.push({ name: '项目详情', params: { projectId: project.projectId }})
     },
     handleUser() {
       this.dialogStatus = 'orgUser'

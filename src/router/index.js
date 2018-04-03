@@ -47,7 +47,8 @@ export const constantRouterMap = [{
   }, {
     path: 'projectSys/allProjects/:projectId',
     component: _import('project/project/details/index'),
-    name: '项目详情'
+    name: '项目详情',
+    props: true
   }]
 },
 {
