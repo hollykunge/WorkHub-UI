@@ -43,31 +43,35 @@
             <span slot="label">
               <icon name="file-text-o"></icon> 项目详情
             </span>
-            项目详情
+            <detail></detail>
           </el-tab-pane>
           <el-tab-pane name="projectTask">
             <span slot="label">
               <icon name="list-ul"></icon> 任务
               <el-badge class="mark" :value="taskNum"></el-badge>
             </span>
-            <task-list></task-list>
+            <task></task>
           </el-tab-pane>
           <el-tab-pane name="projectIssues">
             <span slot="label">
               <icon name="question-circle-o"></icon> 问题
               <el-badge class="mark" :value="project.numIssues"></el-badge>
-            </span>问题
+            </span>
+            <issue></issue>
           </el-tab-pane>
           <el-tab-pane name="projectTeam">
             <span slot="label">
               <icon name="users"></icon> 项目团队
             </span>
-            项目团队</el-tab-pane>
+            <team></team>
+          </el-tab-pane>
           <el-tab-pane name="projectSetting">
             <span slot="label">
               <icon name="gears"></icon> 设置
             </span>
-            设置 {{ projectId }}</el-tab-pane>
+            {{ projectId }}
+            <setting></setting>
+          </el-tab-pane>
           <!-- <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
         </el-tabs>
       </el-col>
@@ -77,11 +81,15 @@
 
 <script>
 import { getObj } from 'api/project/index'
-import taskList from './task'
+import detail from './components/detail'
+import task from './components/task'
+import issue from './components/issue'
+import team from './components/team'
+import setting from './components/setting'
 export default {
   props: ['projectId'], // 获取路由上项目的id
   components: {
-    taskList
+    detail, task, issue, team, setting
   },
   data() {
     return {     /* 用解构赋值的方式来解project的数据 */
