@@ -1,5 +1,5 @@
 <template>
-  <!--项目详情页-->
+  <!--项目详情页首页-->
   <div>
     <el-row justify="start">
       <el-col :span="10">
