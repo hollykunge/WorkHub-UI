@@ -1,5 +1,5 @@
 <template>
-  <!--项目详情页-->
+  <!--项目详情页首页-->
   <div>
     <el-row justify="start">
       <el-col :span="10">
@@ -7,7 +7,7 @@
           <icon name="link"></icon>
           <!-- <el-button type="text">用户名</el-button>
           <icon name="long-arrow-right"></icon> -->
-          <el-button type="text">项目名称</el-button>
+          <el-button type="text">{{ project.projectName }}</el-button>
         </div>
       </el-col>
       <el-col :span="8">
@@ -16,18 +16,18 @@
             <el-button type="warning" size="small">
               <icon name="eye"></icon>
               浏览</el-button>
-            <el-button type="warning" size="small" plain>12</el-button>
+            <el-button type="warning" size="small" plain>{{ project.numWatches }}</el-button>
           </el-button-group>
           <el-button-group>
             <el-button type="primary" size="small">
               <icon name="heart-o"></icon>收藏</el-button>
             <!-- <icon name="star"></icon> -->
-            <el-button type="primary" size="small" plain>12</el-button>
+            <el-button type="primary" size="small" plain>{{ project.numStars }}</el-button>
           </el-button-group>
           <el-button-group>
             <el-button type="success" size="small">
               <icon name="download"></icon>下载</el-button>
-            <el-button type="success" size="small" plain>12</el-button>
+            <el-button type="success" size="small" plain>{{ project.numForks }}</el-button>
           </el-button-group>
           <!-- <el-button type="success" size="small" plain>浏览num_watches</el-button>
           <el-button type="warning" size="small" plain>收藏num_stars</el-button>
@@ -43,31 +43,35 @@
             <span slot="label">
               <icon name="file-text-o"></icon> 项目详情
             </span>
-            项目详情
+            <detail></detail>
           </el-tab-pane>
           <el-tab-pane name="projectTask">
             <span slot="label">
               <icon name="list-ul"></icon> 任务
-              <el-badge class="mark" :value="3"></el-badge>
+              <el-badge class="mark" :value="taskNum"></el-badge>
             </span>
-            任务
+            <task></task>
           </el-tab-pane>
           <el-tab-pane name="projectIssues">
             <span slot="label">
               <icon name="question-circle-o"></icon> 问题
-              <el-badge class="mark" :value="3"></el-badge>
-            </span>问题
+              <el-badge class="mark" :value="project.numIssues"></el-badge>
+            </span>
+            <issue></issue>
           </el-tab-pane>
           <el-tab-pane name="projectTeam">
             <span slot="label">
               <icon name="users"></icon> 项目团队
             </span>
-            项目团队</el-tab-pane>
+            <team></team>
+          </el-tab-pane>
           <el-tab-pane name="projectSetting">
             <span slot="label">
               <icon name="gears"></icon> 设置
             </span>
-            设置 {{ projectId }}</el-tab-pane>
+            {{ projectId }}
+            <setting></setting>
+          </el-tab-pane>
           <!-- <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
         </el-tabs>
       </el-col>
@@ -77,27 +81,64 @@
 
 <script>
 import { getObj } from 'api/project/index'
+import detail from './components/detail'
+import task from './components/task'
+import issue from './components/issue'
+import team from './components/team'
+import setting from './components/setting'
 export default {
-  props: ['projectId'],
+  props: ['projectId'], // 获取路由上项目的id
+  components: {
+    detail, task, issue, team, setting
+  },
   data() {
-    return {     /* 用解构赋值的方式来解project的数据*/
-      activeName: 'projectTask' // 进去详情页首先显示的标签
-      // projectName: undefined,
-      // projectDes: undefined,
-      // projectGroupId: undefined,
-      // projectLabel: undefined,
-      // projectPhase: undefined,
-      // projectPlanEnd: undefined,
-      // projectProcess: undefined,
-      // projectResourceId: null,
-      // projectState:1,"projectTimeEnd":"2018-03-30T00:50:00.000+0000","projectTimeStart":"2018-03-29T00:50:00.000+0000","projectType":1,"projectUserId":1,"defaultBranch":"","size":null,"numWatches":null,"numStars":null,"numForks":null,"numIssues":null,"numClosedIssues":null,"numPulls":null,"numClosedPulls":null,"numMilestones":null,"numClosedMilestones":null,"enableIssues":null,"allowPublicIssues":null,"isFork":null,"forkId":null,"crtName":null,"crtUser":null,"crtHost":null,"crtTime":null,"updTime":null,"updUser":null,"updName":null,"updHost":null,
-      // taskEntityList:[]
+    return {     /* 用解构赋值的方式来解project的数据 */
+      activeName: 'projectTask', // 进去详情页首先显示的标签
+      project: {},
+      taskNum: '0'
+      /* projectName: undefined,
+      projectDes: undefined,
+      projectGroupId: undefined,
+      projectLabel: undefined,
+      projectPhase: undefined,
+      projectPlanEnd: undefined,
+      projectProcess: undefined,
+      projectResourceId: null,
+      projectState:1,"projectTimeEnd":"2018-03-30T00:50:00.000+0000",
+      "projectTimeStart":"2018-03-29T00:50:00.000+0000",
+      "projectType":1,
+      "projectUserId":1,
+      "defaultBranch":"",
+      "size":null,
+      "numWatches":null,
+      "numStars":null,
+      "numForks":null,
+      "numIssues":null,
+      "numClosedIssues":null,
+      "numPulls":null,
+      "numClosedPulls":null,
+      "numMilestones":null,
+      "numClosedMilestones":null,
+      "enableIssues":null,
+      "allowPublicIssues":null,
+      "isFork":null,
+      "forkId":null,
+      "crtName":null,
+      "crtUser":null,
+      "crtHost":null,
+      "crtTime":null,
+      "updTime":null,
+      "updUser":null,
+      "updName":null,
+      "updHost":null,
+      taskEntityList:[]*/
     }
   },
   created() {
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
     this.getProBasicInfo(this.projectId)
+    console.log(this.getTaskNum())
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -110,9 +151,18 @@ export default {
     },
     getProBasicInfo(projectId) {
       getObj(projectId).then(res => {
-        const data = res.data
-        console.log(data)
+        const data = res.data;
+        // console.log(data);
+        (this.project = data) // 结构赋值
+        console.log(this.project)
+      }).then(() => {
+        this.taskNum = (String)(this.getTaskNum().length)
+        console.log(this.getTaskNum().length)
       })
+    },
+    getTaskNum() {
+      // this.project.taskEntityList
+      return this.project.taskEntityList
     }
 
   }
