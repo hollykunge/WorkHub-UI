@@ -13,19 +13,19 @@
       <el-col :span="8">
         <div class="project-button-group">
           <el-button-group>
-            <el-button type="warning" size="small">
+            <el-button type="warning" size="small" plain>
               <icon name="eye"></icon>
               浏览</el-button>
             <el-button type="warning" size="small" plain>{{ project.numWatches }}</el-button>
           </el-button-group>
           <el-button-group>
-            <el-button type="primary" size="small">
-              <icon name="heart-o"></icon>收藏</el-button>
+            <el-button type="primary" size="small" plain>
+              <icon name="heart"></icon>收藏</el-button>
             <!-- <icon name="star"></icon> -->
             <el-button type="primary" size="small" plain>{{ project.numStars }}</el-button>
           </el-button-group>
           <el-button-group>
-            <el-button type="success" size="small">
+            <el-button type="success" size="small" plain>
               <icon name="download"></icon>下载</el-button>
             <el-button type="success" size="small" plain>{{ project.numForks }}</el-button>
           </el-button-group>
@@ -193,6 +193,9 @@ export default {
   padding: 12px;
   .el-button {
     margin-left: 30px;
+    &:not(:last-child) {
+      margin-right: 0px;
+    }
     .fa-icon {
       font-size: 13px;
       margin-bottom: -3px;

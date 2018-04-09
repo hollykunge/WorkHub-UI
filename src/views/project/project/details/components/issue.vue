@@ -4,11 +4,11 @@
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="15" :offset="1">
           <!-- <el-button class="filter-item" v-if="allProjects_btn_add" @click="handleCreate" type="primary" icon="edit">新建项目</el-button> -->
-          <el-button class="filter-item" @click="handleCreateIssues" type="primary" icon="plus" size="small">新建问题</el-button>
-          <el-button class="filter-item" @click="handleFilterLable" type="warning" icon="lable" size="small">
+          <el-button class="filter-item" @click="handleCreateIssues" type="success" icon="plus" size="small">新建问题</el-button>
+          <el-button class="filter-item" @click="handleFilterLable" type="warning" icon="lable" size="small" plain>
             <icon name="bookmark" class="issue-icon"></icon>标签
           </el-button>
-          <el-button class="filter-item" @click="handleFilterMilestone" type="success" size="small">
+          <el-button class="filter-item" @click="handleFilterMilestone" type="success" size="small" plain>
             <icon name="flag" class="issue-icon"></icon>里程碑
           </el-button>
         </el-col>

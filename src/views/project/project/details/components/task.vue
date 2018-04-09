@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="15" :offset="1">
           <!-- <el-button class="filter-item" v-if="allProjects_btn_add" @click="handleCreate" type="primary" icon="edit">新建项目</el-button> -->
-          <el-button class="filter-item" @click="handleCreateTask" type="primary" icon="plus" size="small">创建任务</el-button>
+          <el-button class="filter-item" @click="handleCreateTask" type="success" icon="plus" size="small">创建任务</el-button>
         </el-col>
         <el-col :span="6">
           <!-- <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="项目名称" v-model="listQuery.projectName"> </el-input> -->
