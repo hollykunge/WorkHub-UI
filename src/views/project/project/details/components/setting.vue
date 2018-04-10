@@ -1,27 +1,30 @@
 <template>
   <!--以纵向的tab页展示-->
   <div class="project-setting-container">
-    <!-- <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-      <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
-      <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-      <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-      <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
-    </el-tabs> -->
     <el-row justify="center" align="start">
       <el-col :span="6">
         <div class="setting-nav-bar">
-          <el-menu mode="vertical" default-active="1" class="el-menu-vertical-demo">
-            <el-menu-item index="1">
-              <i class="el-icon-message"></i>导航一</el-menu-item>
-            <icon name="inbox"></icon>
-            <el-menu-item index="2">
-              <i class="el-icon-message"></i>导航二</el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-message"></i>导航三</el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-message"></i>导航四</el-menu-item>
-
+          <el-menu mode="vertical" default-active="baseInfo" @select="handleClick">
+            <el-menu-item index="baseInfo">
+              <icon name="inbox"></icon>项目基本信息设置
+            </el-menu-item>
+            <el-menu-item index="versionInfo">
+              <icon name="puzzle-piece"></icon>版本管理
+            </el-menu-item>
+            <el-menu-item index="authInfo">
+              <icon name="retweet"></icon>相关权限设置
+            </el-menu-item>
+            <el-menu-item index="archiveMagt">
+              <icon name="file"></icon>归档管理</el-menu-item>
           </el-menu>
+        </div>
+      </el-col>
+      <el-col :span="18">
+        <div class="setting-content-container">
+          <div class="setting-content-container-header">
+            <p v-if="activeItem=='baseInfo'">基本设置</p>
+          </div>
+          <div></div>
         </div>
       </el-col>
     </el-row>
@@ -32,12 +35,13 @@
 export default {
   data() {
     return {
-      activeName2: 'first'
+      activeItem: 'baseInfo'
     }
   },
   methods: {
     handleClick(tab, event) {
-      console.log(tab, event)
+      console.log(tab)
+      this.activeItem = tab
     }
   }
 }
@@ -67,15 +71,39 @@ export default {
 .setting-nav-bar {
   padding: 20% 5% 0 10%;
   width: 72%;
-  text-align: center;
+  text-align: left;
   .el-menu {
-    border: 0.5px ridge rgb(129, 144, 148);
+    // border: 0.5px ridge rgb(129, 144, 148);
     background-color: #ffffff;
+    // border-radius: 13px;
     .el-menu-item {
+      border-radius: 13px;
       border: 0.5px ridge rgb(129, 144, 148);
       height: 38px;
       line-height: 40px;
     }
+    .is-active {
+      // position: absolute;
+      // top: 0;
+      // bottom: 0;
+      // left: 0;
+      // width: 2px;
+      // content: "";
+      // background-color: #e36209;
+      // margin-left: 100px;
+      border-left: 4px solid #e36209;
+    }
   }
 }
+.setting-content-container {
+  padding: 0px 10% 0 0;
+  // background-color: rgba(193, 199, 201, 0.589);
+  &-header {
+    color: #24292e;
+    border-bottom: 1px solid #dbdedf;
+  }
+}
+// .fa-icon {
+//   margin-top: 50px;
+// }
 </style>

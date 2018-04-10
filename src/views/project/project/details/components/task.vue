@@ -93,7 +93,8 @@ export default {
         taskProcess: undefined,
         // task_project_id task_resource_id
         taskState: undefined,
-        taskDes: undefined
+        taskDes: undefined,
+        taskProjectId: undefined
       },
       taskProcessOptions: [{ key: '第一阶段', value: 1 }, { key: '第二阶段', value: 2 }, { key: '第三阶段', value: 3 }, { key: '第四阶段', value: 4 }]
     }
@@ -103,6 +104,7 @@ export default {
       console.log('新建任务')
       // this.resetTemp()
       // this.dialogStatus = 'create'
+      // console.log(this.$route.params.projectId)
       this.dialogFormVisible = true
     },
     handleTaskFilter() {
@@ -112,6 +114,7 @@ export default {
       // const set = this.$refs
       // set[formName].validate(valid => {
       //   if (valid) {
+      this.form.taskProjectId = this.$route.params.projectId
       addObj(this.form).then(() => {
         this.dialogFormVisible = false
         this.getList()
