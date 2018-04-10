@@ -105,7 +105,7 @@
     </el-dialog>
     <!-- 项目详情 -->
 
-    <router-view></router-view>
+    <!-- <router-view></router-view> -->
 
   </div>
 </template>
