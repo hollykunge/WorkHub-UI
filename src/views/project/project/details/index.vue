@@ -69,7 +69,7 @@
             <span slot="label">
               <icon name="gears"></icon> 设置
             </span>
-            {{ projectId }}
+            <!-- {{ projectId }} -->
             <setting></setting>
           </el-tab-pane>
           <!-- <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
@@ -195,6 +195,7 @@ export default {
     margin-left: 30px;
     &:not(:last-child) {
       margin-right: 0px;
+      border-right-color: #acb1b7;
     }
     .fa-icon {
       font-size: 13px;
