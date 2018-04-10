@@ -24,7 +24,19 @@
           <div class="setting-content-container-header">
             <p v-if="activeItem=='baseInfo'">基本设置</p>
           </div>
-          <div></div>
+          <div class="baseInfo-container">
+            <el-form :model="projectInfo" label-width="100px">
+              <el-form-item label="项目名称">
+                <el-input v-model="projectInfo.projectName" placeholder="请输入项目名称"></el-input>
+              </el-form-item>
+              <el-form-item label="项目负责人">
+                <el-input v-model="projectInfo.projectUser" placeholder="输入姓名进行搜索"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit">确认更改</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -35,7 +47,11 @@
 export default {
   data() {
     return {
-      activeItem: 'baseInfo'
+      activeItem: 'baseInfo',
+      projectInfo: {
+        projectName: undefined,
+        projectUser: undefined
+      }
     }
   },
   methods: {
@@ -101,6 +117,17 @@ export default {
   &-header {
     color: #24292e;
     border-bottom: 1px solid #dbdedf;
+  }
+  .baseInfo-container {
+    padding: 2% 0 0 1%;
+    form {
+      // .el-form-item {
+      // }
+      width: 50%;
+      .el-button {
+        margin-left: 80%;
+      }
+    }
   }
 }
 // .fa-icon {
