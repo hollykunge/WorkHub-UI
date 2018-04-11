@@ -16,12 +16,12 @@ export function addObj(obj) {
   })
 }
 
-// export function getObj(id) {
-//   return fetch({
-//     url: '/api/project/project/' + id,
-//     method: 'get'
-//   })
-// }
+export function getObj(id) {
+  return fetch({
+    url: '/api/project/task/' + id,
+    method: 'get'
+  })
+}
 
 // export function delObj(id) {
 //   return fetch({
@@ -38,9 +38,9 @@ export function addObj(obj) {
 //   })
 // }
 
-// export function all() {
-//   return fetch({
-//     url: '/api/project/project/all',
-//     method: 'get'
-//   })
-// }
+export function all() {
+  return fetch({
+    url: '/api/project/task/all',
+    method: 'get'
+  })
+}

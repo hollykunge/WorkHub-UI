@@ -20,7 +20,7 @@
         <el-button type="warning">警告按钮</el-button>
         <el-button type="danger">危险按钮</el-button>
         <el-button type="info">信息按钮</el-button>
-       </span>
+      </span>
     </div>
 
     <div class="block">
@@ -45,62 +45,62 @@
 
 
 <script>
-  import { toggleClass } from 'utils';
+import { toggleClass } from 'utils'
 
-  export default {
-    data() {
-      return {
-        theme: false,
-        tags: [{
-          name: '标签一',
-          type: ''
-        },
-        {
-          name: '标签二',
-          type: 'gray'
-        },
-        {
-          name: '标签三',
-          type: 'primary'
-        },
-        {
-          name: '标签四',
-          type: 'success'
-        },
-        {
-          name: '标签五',
-          type: 'warning'
-        },
-        {
-          name: '标签六',
-          type: 'danger'
-        }
-        ],
-        inputVisible: false,
-        inputValue: ''
+export default {
+  data() {
+    return {
+      theme: false,
+      tags: [{
+        name: '标签一',
+        type: ''
+      },
+      {
+        name: '标签二',
+        type: 'gray'
+      },
+      {
+        name: '标签三',
+        type: 'primary'
+      },
+      {
+        name: '标签四',
+        type: 'success'
+      },
+      {
+        name: '标签五',
+        type: 'warning'
+      },
+      {
+        name: '标签六',
+        type: 'danger'
       }
-    },
-    watch: {
-      theme() {
-        toggleClass(document.body, 'custom-theme')
-        //   this.$store.dispatch('setTheme', value);
-      }
+      ],
+      inputVisible: false,
+      inputValue: ''
     }
-  };
+  },
+  watch: {
+    theme() {
+      toggleClass(document.body, 'custom-theme')
+      //   this.$store.dispatch('setTheme', value);
+    }
+  }
+}
 </script>
 
 <style scoped>
-  .box-card{
-    width: 400px;
-    margin: 20px auto;
-  }
-  .block{
-    padding: 30px 24px;
-  }
-  .alert-item{
-    margin-bottom: 10px;
-  }
-  .tag-item{
-    margin-right: 15px;
-  }
+.box-card {
+  width: 400px;
+  margin: 20px auto;
+}
+.block {
+  padding: 30px 24px;
+}
+.alert-item {
+  margin-bottom: 10px;
+}
+.tag-item {
+  margin-right: 15px;
+}
 </style>

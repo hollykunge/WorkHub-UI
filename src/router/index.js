@@ -45,9 +45,18 @@ export const constantRouterMap = [{
     path: 'dashboard',
     component: _import('dashboard/index')
   }, {
+    path: 'userHome',
+    component: _import('zone/index'),
+    name: '个人中心'
+  }, {
     path: 'projectSys/allProjects/:projectId',
     component: _import('project/project/details/index'),
     name: '项目详情',
+    props: true
+  }, {
+    path: 'projectSys/allProjects/:projectId/:taskId',
+    component: _import('project/task/index'),
+    name: '任务详情',
     props: true
   }]
 },

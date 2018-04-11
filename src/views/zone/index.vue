@@ -6,34 +6,34 @@
         <div class="setting-nav-bar">
           <el-menu mode="vertical" default-active="baseInfo" @select="handleClick">
             <el-menu-item index="baseInfo">
-              <icon name="inbox"></icon>项目基本信息设置
+              <icon name="inbox"></icon>基础设置
             </el-menu-item>
-            <el-menu-item index="versionInfo">
-              <icon name="puzzle-piece"></icon>版本管理
+            <el-menu-item index="userAvatar">
+              <icon name="puzzle-piece"></icon>头像设置
             </el-menu-item>
-            <el-menu-item index="authInfo">
-              <icon name="retweet"></icon>相关权限设置
+            <el-menu-item index="password">
+              <icon name="retweet"></icon>修改密码
             </el-menu-item>
-            <el-menu-item index="archiveMagt">
-              <icon name="file"></icon>归档管理</el-menu-item>
+            <el-menu-item index="systemSetting">
+              <icon name="file"></icon>系统设置</el-menu-item>
           </el-menu>
         </div>
       </el-col>
       <el-col :span="18">
         <div class="setting-content-container">
           <div class="setting-content-container-header">
-            <p v-if="activeItem=='baseInfo'">基本设置</p>
-            <p v-if="activeItem=='versionInfo'">版本管理</p>
-            <p v-if="activeItem=='authInfo'">相关权限设置</p>
-            <p v-if="activeItem=='archiveMagt'">归档管理</p>
+            <p v-if="activeItem=='baseInfo'">基础设置</p>
+            <p v-if="activeItem=='userAvatar'">头像设置</p>
+            <p v-if="activeItem=='password'">修改密码</p>
+            <p v-if="activeItem=='systemSetting'">系统设置</p>
           </div>
           <div class="baseInfo-container" v-if="activeItem=='baseInfo'">
-            <el-form :model="projectInfo" label-width="100px">
+            <el-form :model="userInfo" label-width="100px">
               <el-form-item label="项目名称">
-                <el-input v-model="projectInfo.projectName" placeholder="请输入项目名称"></el-input>
+                <el-input v-model="userInfo.userName" placeholder="请输入新的用户名"></el-input>
               </el-form-item>
               <el-form-item label="项目负责人">
-                <el-input v-model="projectInfo.projectUser" placeholder="输入姓名进行搜索"></el-input>
+                <el-input v-model="userInfo.userOrgName" placeholder="请选择新的部门"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary">确认更改</el-button>
@@ -51,9 +51,9 @@ export default {
   data() {
     return {
       activeItem: 'baseInfo',
-      projectInfo: {
-        projectName: undefined,
-        projectUser: undefined
+      userInfo: {
+        userName: undefined,
+        userOrgName: undefined
       }
     }
   },
