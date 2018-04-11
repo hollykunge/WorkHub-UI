@@ -4,7 +4,9 @@
 
       <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
       <levelbar></levelbar>
-      <tabs-view></tabs-view>
+      <!-- 暂时取消 -->
+      <!-- <tabs-view></tabs-view> -->
+
       <error-log v-if="log.length>0" class="errLog-container" :logsList="log"></error-log>
       <screenfull class='screenfull'></screenfull>
       <div class="username">
@@ -18,9 +20,9 @@
           <router-link class='inlineBlock' to="/">
             <el-dropdown-item> 首页 </el-dropdown-item>
           </router-link>
-          <!-- <a target='_blank' href="">
-            <el-dropdown-item> 项目地址 </el-dropdown-item>
-          </a> -->
+          <router-link class='inlineBlock' to="/userHome">
+            <el-dropdown-item> 个人中心 </el-dropdown-item>
+          </router-link>
           <el-dropdown-item divided>
             <span @click="logout" style="display:block;">退出登录</span>
           </el-dropdown-item>

@@ -20,11 +20,17 @@
         <el-col>
           <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row empty-text="暂无任务数据" style="width: 100%">
             <!-- <el-table-column label="任务列表"> -->
-            <el-table-column label="序号" prop="taskId"></el-table-column>
-            <el-table-column label="任务名称" prop="taskName"></el-table-column>
-            <el-table-column label="负责人" prop="taskReser"></el-table-column>
-            <el-table-column label="创建时间" prop="taskCrtTime"></el-table-column>
-            <el-table-column label="计划完成时间" prop="taskPlanEndTime"></el-table-column>
+            <el-table-column label="序号" prop="taskId" align="center" width="65"></el-table-column>
+            <el-table-column label="任务名称" prop="taskName" align="center"></el-table-column>
+            <el-table-column label="负责人id" prop="taskExecutorId" align="center"></el-table-column>
+            <el-table-column label="创建时间" prop="crtTime" align="center"></el-table-column>
+            <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center"></el-table-column>
+            <el-table-column align="center" label="操作" fixed="right">
+              <template scope="scope">
+                <el-button size="small" type="success" @click="handleCheck(scope.row)">查看
+                </el-button>
+              </template>
+            </el-table-column>
             <!-- </el-table-column> -->
           </el-table>
         </el-col>
@@ -73,8 +79,9 @@
 </template>
 
 <script>
-import { addObj } from 'api/project/task/index'
+import { addObj, all } from 'api/project/task/index'
 export default {
+  props: { projectId: undefined },
   data() {
     return {
       listQuery: {
@@ -114,10 +121,10 @@ export default {
       // const set = this.$refs
       // set[formName].validate(valid => {
       //   if (valid) {
-      this.form.taskProjectId = this.$route.params.projectId
+      this.form.taskProjectId = this.projectId
       addObj(this.form).then(() => {
         this.dialogFormVisible = false
-        this.getList()
+        this.getAllTask()
         this.$notify({
           title: '成功',
           message: '创建成功',
@@ -133,7 +140,20 @@ export default {
     cancel(formName) {
       this.dialogFormVisible = false
       this.$refs[formName].resetFields()
+    },
+    getAllTask() {
+      all().then(res => {
+        // console.log(res)
+        this.list = res
+      })
+    },
+    handleCheck(task) {
+      console.log(task)
+      this.$router.push({ name: '任务详情', params: { projectId: this.projectId, taskId: task.taskId }})
     }
+  },
+  created() {
+    this.getAllTask()
   }
 }
 </script>

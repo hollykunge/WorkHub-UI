@@ -50,7 +50,7 @@
               <icon name="list-ul"></icon> 任务
               <el-badge class="mark" :value="taskNum"></el-badge>
             </span>
-            <task></task>
+            <task :projectId="projectId"></task>
           </el-tab-pane>
           <el-tab-pane name="projectIssues">
             <span slot="label">
@@ -138,7 +138,7 @@ export default {
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
     this.getProBasicInfo(this.projectId)
-    console.log(this.getTaskNum())
+    // console.log(this.getTaskNum())
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -147,17 +147,17 @@ export default {
   methods: {
     handleTabClick(tab, event) {
       // console.log(tab, event)
-      console.log(this.projectId)
+      // console.log(this.projectId)
     },
     getProBasicInfo(projectId) {
       getObj(projectId).then(res => {
         const data = res.data;
         // console.log(data);
         (this.project = data) // 结构赋值
-        console.log(this.project)
+        // console.log(this.project)
       }).then(() => {
         this.taskNum = (String)(this.getTaskNum().length)
-        console.log(this.getTaskNum().length)
+        // console.log(this.getTaskNum().length)
       })
     },
     getTaskNum() {
