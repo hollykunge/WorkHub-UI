@@ -71,6 +71,9 @@ export const constantRouterMap = [{
     component: _import('introduction/index'),
     name: '简述'
   }]
+},
+{
+  path: '/'
 }
 ]
 
@@ -171,8 +174,14 @@ export const asyncRouterMap = [{
   children: [{
     path: 'allProjects',
     component: _import('project/project/index'),
-    name: '全部任务',
+    name: '全部项目',
     authority: 'allProjects'
+    // children: [{
+    //   path: '',
+    //   component: _import('project/project/index'),
+    //   name: '项目详情',
+    //   authority: 'projDetails'
+    // }]
   }]
 }
 ]
