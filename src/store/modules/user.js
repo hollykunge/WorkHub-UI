@@ -3,6 +3,7 @@ import { getToken, setToken, removeToken } from 'utils/auth'
 import { Message } from 'element-ui'
 const user = {
   state: {
+    userId: '',
     user: '',
     status: '',
     code: '',
@@ -20,6 +21,9 @@ const user = {
   },
 
   mutations: {
+    SET_USERID: (state, userId) => {
+      state.userId = userId
+    },
     SET_CODE: (state, code) => {
       state.code = code
     },
@@ -97,9 +101,10 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = response
+          commit('SET_USERID', data.id)
           commit('SET_ROLES', 'admin')
           commit('SET_NAME', data.name)
-          commit('SET_AVATAR', 'http://git.oschina.net/uploads/42/547642_geek_qi.png?1499487420')
+          commit('SET_AVATAR', '../../../static/images/logo-min.png')
           commit('SET_INTRODUCTION', data.description)
           const menus = {}
           for (let i = 0; i < data.menus.length; i++) {
