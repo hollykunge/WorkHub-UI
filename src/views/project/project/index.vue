@@ -27,8 +27,7 @@
       </el-table-column>
       <el-table-column align="center" label="创建者" show-overflow-tooltip>
         <template scope="scope">
-          <!-- 通过项目创建者id获取创建者姓名-->
-          <span>{{ scope.row.projectCreatorId }}</span>
+          <span>{{ scope.row.crtName }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="开始时间" show-overflow-tooltip>
@@ -67,17 +66,16 @@
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total"> </el-pagination>
       </div>
     </el-row>
-
+    
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form :model="form" :rules="rules" ref="form" label-width="150px">
-        <!-- <el-form-item label="项目id" prop="projectId">
-          <el-input v-model="form.projectId" placeholder="请输入项目id"></el-input>
-        </el-form-item>
-        <el-form-item label="项目size" prop="size">
-          <el-input v-model="form.size" placeholder="请输入项目id"></el-input>
-        </el-form-item> -->
+      <el-form :model="form" :rules="rules" ref="form" label-width="120px">
         <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="form.projectName" placeholder="请输入项目名称"></el-input>
+        </el-form-item>
+        <el-form-item label="项目负责人" prop="projectUserId">
+          <el-select v-model="form.projectUserId" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteProUserMethod" :loading="loading" style="width: 100%">
+            <el-option v-for="item in userItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="当前所处阶段" prop="projectPhase">
           <el-select class="filter-item" v-model="form.projectPhase" placeholder="请选择" style="width: 100%">
@@ -103,15 +101,12 @@
         <el-button v-else-if="dialogStatus=='update'" type="primary" @click="update('form')">确 定</el-button>
       </div>
     </el-dialog>
-    <!-- 项目详情 -->
-
-    <!-- <router-view></router-view> -->
-
   </div>
 </template>
 
 <script>
-import { page, addObj, getObj, delObj, putObj, all } from 'api/project/index'
+import { page, addObj, getObj, delObj, putObj } from 'api/project/index'
+import { page as userPage } from 'api/admin/user/index'
 import { mapGetters } from 'vuex'
 export default {
   name: 'project',
@@ -144,9 +139,8 @@ export default {
         }]
       },
       form: {
-        size: undefined,
-        projectId: 2,
         projectName: undefined,
+        projectUserId: '', // 执行者id
         projectPhase: '1',
         projectPlanEnd: undefined,
         projectTimeStart: undefined,
@@ -159,6 +153,10 @@ export default {
             message: '项目名称不能为空'
           }
         ],
+        projectUserId: {
+          required: true,
+          message: '请选择'
+        },
         projectPhase: [
           {
             required: true,
@@ -186,12 +184,14 @@ export default {
       },
       list: null,
       total: null,
-      listLoading: true,
+      userItems: [],
+      listLoading: false,
+      loading: false,
       listQuery: {
         page: 1,
         limit: 10,
         projectName: undefined,
-        userId: '1'
+        projectUserId: ''
       },
       projectPhaseOptions: [{ key: '需求调研阶段', value: 1 }, { key: '技术论证阶段', value: 2 }, { key: '设计阶段', value: 3 }, { key: '开发阶段', value: 4 }],
       dialogFormVisible: false,
@@ -208,22 +208,21 @@ export default {
     }
   },
   created() {
-    this.getList()
+    this.listQuery.projectUserId = this.userId
     this.allProjects_btn_edit = this.elements['allProjects:btn_edit']
-    // this.allProjects_btn_del = this.elements['allProject:btn_del']
     this.allProjects_btn_add = this.elements['allProjects:btn_add']
+    this.getList()
   },
   computed: {
     ...mapGetters([
-      'elements'
+      'elements',
+      'userId'
     ])
   },
   methods: {
     getList() {
       this.listLoading = true
-      page(this.listQuery).then(response => {  // 这个方法有问题  后台=-=
-        // console.log(response)
-        // this.list = response.data.rows
+      page(this.listQuery).then(response => {
         this.total = response.data.total
         this.listLoading = false
         this.list = response.data.rows
@@ -241,7 +240,6 @@ export default {
       this.getList()
     },
     handleCheck(project) {
-      console.log(project)
       this.$router.push({ name: '项目详情', params: { projectId: project.projectId }})
     },
     handleUser() {
@@ -278,6 +276,21 @@ export default {
           this.list.splice(index, 1)
         })
       })
+    },
+    remoteProUserMethod(query) {
+      if (query !== '') {
+        this.loading = true
+        this.loading = false
+        userPage({
+          name: query
+        }).then(response => {
+          console.log(response)
+          this.userItems = response.data.rows
+          this.loading = false
+        })
+      } else {
+        this.userItems = []
+      }
     },
     create(formName) {
       const set = this.$refs
@@ -325,24 +338,18 @@ export default {
     resetTemp() {
       this.form = {
         projectName: undefined,
+        projectUserId: '', // 执行者id
         projectPhase: 1,
         projectPlanEnd: undefined,
         projectTimeStart: undefined,
         projectDes: undefined
       }
-    },
-    getAllProject() {
-      all().then(res => {
-        // console.log(res)
-        this.list = res
-      })
     }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@import "src/styles/index.scss";
 .el-table__fixed-right {
   overflow: hidden;
 }
