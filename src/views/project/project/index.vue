@@ -190,7 +190,8 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        projectName: undefined
+        projectName: undefined,
+        userId: '1'
       },
       projectPhaseOptions: [{ key: '需求调研阶段', value: 1 }, { key: '技术论证阶段', value: 2 }, { key: '设计阶段', value: 3 }, { key: '开发阶段', value: 4 }],
       dialogFormVisible: false,
@@ -221,12 +222,11 @@ export default {
     getList() {
       this.listLoading = true
       page(this.listQuery).then(response => {  // 这个方法有问题  后台=-=
-        // console.log(response.data.rows)
+        // console.log(response)
         // this.list = response.data.rows
         this.total = response.data.total
         this.listLoading = false
-      }).then(() => {
-        this.getAllProject()
+        this.list = response.data.rows
       })
     },
     handleFilter() {
