@@ -8,7 +8,7 @@
         </el-col>
         <el-col :span="6">
           <!-- <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="项目名称" v-model="listQuery.projectName"> </el-input> -->
-          <el-input @keyup.enter.native="handleTaskFilter" class="filter-item" placeholder="任务名称" size="small"></el-input>
+          <el-input @keyup.enter.native="handleTaskFilter" class="filter-item" placeholder="任务名称" size="small" v-model="listQuery.taskName"></el-input>
         </el-col>
         <el-col :span="2">
           <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleTaskFilter" size="small">搜索</el-button>
@@ -34,6 +34,11 @@
             <!-- </el-table-column> -->
           </el-table>
         </el-col>
+      </el-row>
+      <el-row type="flex" justify="center">
+        <div v-show="!listLoading" class="pagination-container">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total"> </el-pagination>
+        </div>
       </el-row>
     </div>
     <!-- 创建任务对话框 -->
@@ -79,43 +84,46 @@
 </template>
 
 <script>
-import { addObj, all } from 'api/project/task/index'
+import { addObj, all, page } from 'api/project/task/index'
+import { mapGetters } from 'vuex'
 export default {
-  props: { projectId: undefined },
+  props: ['projectId'],
   data() {
     return {
       listQuery: {
         page: 1,
         limit: 10,
-        projectName: undefined
+        taskName: undefined,
+        taskProjectId: undefined,
+        taskExecutorId: undefined
       },
       list: [],
+      total: null,
       listLoading: false,
       dialogFormVisible: false,
       form: {
         taskName: undefined,
-        // taskIsLeaf: undefined,
-        // task_parent_id
         taskPlanEnd: undefined,
         taskProcess: undefined,
-        // task_project_id task_resource_id
-        taskState: undefined,
         taskDes: undefined,
-        taskProjectId: undefined
+        taskProjectId: undefined,
+        taskExecutorId: undefined
       },
       taskProcessOptions: [{ key: '第一阶段', value: 1 }, { key: '第二阶段', value: 2 }, { key: '第三阶段', value: 3 }, { key: '第四阶段', value: 4 }]
     }
   },
+  computed: {
+    ...mapGetters([
+      'userId'
+    ])
+  },
   methods: {
     handleCreateTask() {
-      console.log('新建任务')
-      // this.resetTemp()
-      // this.dialogStatus = 'create'
-      // console.log(this.$route.params.projectId)
+      this.restCreateTaskForm()
       this.dialogFormVisible = true
     },
     handleTaskFilter() {
-      console.log('筛选任务')
+      this.getTaskByProIdExeId()
     },
     create(formName) {
       // const set = this.$refs
@@ -124,7 +132,7 @@ export default {
       this.form.taskProjectId = this.projectId
       addObj(this.form).then(() => {
         this.dialogFormVisible = false
-        this.getAllTask()
+        this.getTaskByProIdExeId()
         this.$notify({
           title: '成功',
           message: '创建成功',
@@ -150,10 +158,38 @@ export default {
     handleCheck(task) {
       console.log(task)
       this.$router.push({ name: '任务详情', params: { projectId: this.projectId, taskId: task.taskId }})
+    },
+    getTaskByProIdExeId() { // 通过项目id和负责人id获取任务
+      this.listLoading = true
+      this.listQuery.taskProjectId = this.projectId
+      this.listQuery.taskExecutorId = this.userId
+      page(this.listQuery).then(res => {
+        this.total = res.data.total
+        this.listLoading = false
+        this.list = res.data.rows
+      })
+    },
+    handleSizeChange(val) {
+      this.listQuery.limit = val
+      this.getTaskByProIdExeId()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.page = val
+      this.getTaskByProIdExeId()
+    },
+    restCreateTaskForm() { // 重置表单，同时写入项目id和负责人id
+      this.form = {
+        taskName: undefined,
+        taskPlanEnd: undefined,
+        taskProcess: undefined,
+        taskDes: undefined,
+        taskProjectId: this.projectId,
+        taskExecutorId: this.userId
+      }
     }
   },
   created() {
-    this.getAllTask()
+    this.getTaskByProIdExeId()
   }
 }
 </script>

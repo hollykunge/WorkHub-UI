@@ -4,9 +4,7 @@
     <el-row justify="start">
       <el-col :span="10">
         <div class="index-project">
-          <icon name="link"></icon>
-          <!-- <el-button type="text">用户名</el-button>
-          <icon name="long-arrow-right"></icon> -->
+          <icon name="folder-open"></icon>
           <el-button type="text">{{ project.projectName }}</el-button>
         </div>
       </el-col>
@@ -21,7 +19,6 @@
           <el-button-group>
             <el-button type="primary" size="small" plain>
               <icon name="heart"></icon>收藏</el-button>
-            <!-- <icon name="star"></icon> -->
             <el-button type="primary" size="small" plain>{{ project.numStars }}</el-button>
           </el-button-group>
           <el-button-group>
@@ -29,13 +26,9 @@
               <icon name="download"></icon>下载</el-button>
             <el-button type="success" size="small" plain>{{ project.numForks }}</el-button>
           </el-button-group>
-          <!-- <el-button type="success" size="small" plain>浏览num_watches</el-button>
-          <el-button type="warning" size="small" plain>收藏num_stars</el-button>
-          <el-button type="danger" size="small" plain>下载num_forks</el-button> -->
         </div>
       </el-col>
     </el-row>
-    <!-- <h1>项目详情页{{ $route.params.projectId }}</h1> -->
     <el-row type="flex" justify="center">
       <el-col>
         <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
@@ -69,10 +62,8 @@
             <span slot="label">
               <icon name="gears"></icon> 设置
             </span>
-            <!-- {{ projectId }} -->
             <setting></setting>
           </el-tab-pane>
-          <!-- <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
         </el-tabs>
       </el-col>
     </el-row>
@@ -95,50 +86,13 @@ export default {
     return {     /* 用解构赋值的方式来解project的数据 */
       activeName: 'projectTask', // 进去详情页首先显示的标签
       project: {},
-      taskNum: '0'
-      /* projectName: undefined,
-      projectDes: undefined,
-      projectGroupId: undefined,
-      projectLabel: undefined,
-      projectPhase: undefined,
-      projectPlanEnd: undefined,
-      projectProcess: undefined,
-      projectResourceId: null,
-      projectState:1,"projectTimeEnd":"2018-03-30T00:50:00.000+0000",
-      "projectTimeStart":"2018-03-29T00:50:00.000+0000",
-      "projectType":1,
-      "projectUserId":1,
-      "defaultBranch":"",
-      "size":null,
-      "numWatches":null,
-      "numStars":null,
-      "numForks":null,
-      "numIssues":null,
-      "numClosedIssues":null,
-      "numPulls":null,
-      "numClosedPulls":null,
-      "numMilestones":null,
-      "numClosedMilestones":null,
-      "enableIssues":null,
-      "allowPublicIssues":null,
-      "isFork":null,
-      "forkId":null,
-      "crtName":null,
-      "crtUser":null,
-      "crtHost":null,
-      "crtTime":null,
-      "updTime":null,
-      "updUser":null,
-      "updName":null,
-      "updHost":null,
-      taskEntityList:[]*/
+      taskNum: ''
     }
   },
   created() {
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
     this.getProBasicInfo(this.projectId)
-    // console.log(this.getTaskNum())
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -146,22 +100,16 @@ export default {
   },
   methods: {
     handleTabClick(tab, event) {
-      // console.log(tab, event)
-      // console.log(this.projectId)
     },
     getProBasicInfo(projectId) {
       getObj(projectId).then(res => {
         const data = res.data;
-        // console.log(data);
         (this.project = data) // 结构赋值
-        // console.log(this.project)
       }).then(() => {
         this.taskNum = (String)(this.getTaskNum().length)
-        // console.log(this.getTaskNum().length)
       })
     },
     getTaskNum() {
-      // this.project.taskEntityList
       return this.project.taskEntityList
     }
 
@@ -209,7 +157,6 @@ export default {
   .el-tabs__nav {
     .el-tabs__item {
       margin: 0px 35px;
-      // :active {
       .mark {
         margin-top: 8px;
         line-height: 1;
@@ -217,42 +164,14 @@ export default {
           background-color: #52626d85;
         }
       }
-      // }
     }
-
     .el-tabs__item.is-active {
-      // :active {
       .mark {
         .el-badge__content {
           background-color: #20aaff;
         }
       }
-      // }
     }
-
-    // .setting {
-    //   margin-left: 100%;
-    // }
   }
 }
-// el-tab-pane {
-//   .setting {
-//     margin-left: 100%;
-//   }
-// }
-// .el-tabs__item {
-// .setting {
-//   margin-left: 100%;
-// }
-// }
-// .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
-//   margin-left: 58%;
-// }
-// .mark {
-//   margin-top: 8px;
-//   line-height: 1;
-//   .el-badge__content {
-//     background-color: #52626d85;
-//   }
-// }
 </style>

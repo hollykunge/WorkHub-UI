@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import EditorDashboard from './editor/index'
+// import { mapGetters } from 'vuex'
+import EditorDashboard from './components/index'
 
 export default {
   name: 'dashboard',
@@ -15,14 +15,14 @@ export default {
     return {
       currentRole: 'EditorDashboard'
     }
-  },
-  computed: {
-    ...mapGetters([
-      'name',
-      'avatar',
-      'email',
-      'introduction'
-    ])
   }
+  // computed: {
+  //   ...mapGetters([
+  //     'name',
+  //     'avatar',
+  //     'email',
+  //     'introduction'
+  //   ])
+  // }
 }
 </script>

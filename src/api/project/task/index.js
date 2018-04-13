@@ -1,12 +1,12 @@
 import fetch from 'utils/fetch'
 
-// export function page(query) {
-//   return fetch({
-//     url: '/api/project/project/page',
-//     method: 'get',
-//     params: query
-//   })
-// }
+export function page(query) {
+  return fetch({
+    url: '/api/project/task/page',
+    method: 'get',
+    params: query
+  })
+}
 
 export function addObj(obj) {
   return fetch({
