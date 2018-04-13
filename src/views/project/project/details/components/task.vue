@@ -3,11 +3,9 @@
     <div class="filter-container">
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="15" :offset="1">
-          <!-- <el-button class="filter-item" v-if="allProjects_btn_add" @click="handleCreate" type="primary" icon="edit">新建项目</el-button> -->
           <el-button class="filter-item" @click="handleCreateTask" type="success" icon="plus" size="small">创建任务</el-button>
         </el-col>
         <el-col :span="6">
-          <!-- <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="项目名称" v-model="listQuery.projectName"> </el-input> -->
           <el-input @keyup.enter.native="handleTaskFilter" class="filter-item" placeholder="任务名称" size="small" v-model="listQuery.taskName"></el-input>
         </el-col>
         <el-col :span="2">
@@ -19,7 +17,6 @@
       <el-row type="flex" justify="center">
         <el-col>
           <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row empty-text="暂无任务数据" style="width: 100%">
-            <!-- <el-table-column label="任务列表"> -->
             <el-table-column label="序号" prop="taskId" align="center" width="65"></el-table-column>
             <el-table-column label="任务名称" prop="taskName" align="center"></el-table-column>
             <el-table-column label="负责人id" prop="taskExecutorId" align="center"></el-table-column>
@@ -31,7 +28,6 @@
                 </el-button>
               </template>
             </el-table-column>
-            <!-- </el-table-column> -->
           </el-table>
         </el-col>
       </el-row>
@@ -42,18 +38,15 @@
       </el-row>
     </div>
     <!-- 创建任务对话框 -->
-
     <el-dialog title="创建新的任务" :visible.sync="dialogFormVisible">
-      <!-- <el-form :model="form" :rules="rules" ref="form" label-width="100px"> -->
-      <el-form :model="form" ref="form" label-width="100px">
-        <!-- <el-form-item label="项目id" prop="projectId">
-          <el-input v-model="form.projectId" placeholder="请输入项目id"></el-input>
-        </el-form-item>
-        <el-form-item label="项目size" prop="size">
-          <el-input v-model="form.size" placeholder="请输入项目id"></el-input>
-        </el-form-item> -->
+      <el-form :model="form" ref="form" :rules="rules" label-width="120px">
         <el-form-item label="任务名称" prop="taskName">
           <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
+        </el-form-item>
+        <el-form-item label="项目负责人" prop="taskExecutorId">
+          <el-select v-model="form.taskExecutorId" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteTaskUserMethod" :loading="loading" style="width: 100%">
+            <el-option v-for="item in userItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="当前所处阶段" prop="taskProcess">
           <el-select class="filter-item" v-model="form.taskProcess" placeholder="请选择" style="width: 100%">
@@ -64,19 +57,13 @@
           <el-date-picker editable v-model="form.taskPlanEnd" type="datetime" placeholder="选择完成时间" align="center" format="yyyy年MM月dd日HH:MM" style="width: 100%">
           </el-date-picker>
         </el-form-item>
-        <!-- <el-form-item label="开始时间" prop="projectTimeStart">
-          <el-date-picker editable v-model="form.projectTimeStart" type="datetime" placeholder="选择开始时间" align="center" format="yyyy年MM月dd日HH:MM" style="width: 100%">
-          </el-date-picker>
-        </el-form-item> -->
         <el-form-item label="描述" prop="taskDes">
           <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5}" placeholder="请输入内容" v-model="form.taskDes"> </el-input>
         </el-form-item>
       </el-form>
-
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel('form')">取 消</el-button>
         <el-button type="primary" @click="create('form')">创 建</el-button>
-        <!-- <el-button v-else-if="dialogStatus=='update'" type="primary" @click="update('form')">确 定</el-button> -->
       </div>
     </el-dialog>
 
@@ -84,7 +71,8 @@
 </template>
 
 <script>
-import { addObj, all, page } from 'api/project/task/index'
+import { addObj, page } from 'api/project/task/index'
+import { page as userPage } from 'api/admin/user/index'
 import { mapGetters } from 'vuex'
 export default {
   props: ['projectId'],
@@ -99,6 +87,8 @@ export default {
       },
       list: [],
       total: null,
+      userItems: [],
+      loading: false,
       listLoading: false,
       dialogFormVisible: false,
       form: {
@@ -108,6 +98,28 @@ export default {
         taskDes: undefined,
         taskProjectId: undefined,
         taskExecutorId: undefined
+      },
+      rules: {
+        taskName: {
+          required: true,
+          message: '任务名称不能为空'
+        },
+        taskExecutorId: {
+          required: true,
+          message: '任务负责人不能为空'
+        },
+        taskProcess: {
+          required: true,
+          message: '请选择'
+        },
+        taskPlanEnd: {
+          required: true,
+          message: '请选择'
+        },
+        taskDes: {
+          required: true,
+          message: '描述信息不能为空'
+        }
       },
       taskProcessOptions: [{ key: '第一阶段', value: 1 }, { key: '第二阶段', value: 2 }, { key: '第三阶段', value: 3 }, { key: '第四阶段', value: 4 }]
     }
@@ -126,37 +138,30 @@ export default {
       this.getTaskByProIdExeId()
     },
     create(formName) {
-      // const set = this.$refs
-      // set[formName].validate(valid => {
-      //   if (valid) {
-      this.form.taskProjectId = this.projectId
-      addObj(this.form).then(() => {
-        this.dialogFormVisible = false
-        this.getTaskByProIdExeId()
-        this.$notify({
-          title: '成功',
-          message: '创建成功',
-          type: 'success',
-          duration: 2000
-        })
+      const set = this.$refs
+      set[formName].validate(valid => {
+        if (valid) {
+          this.form.taskProjectId = this.projectId
+          addObj(this.form).then(() => {
+            this.dialogFormVisible = false
+            this.getTaskByProIdExeId()
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        } else {
+          return false
+        }
       })
-      //   } else {
-      //     return false
-      //   }
-      // })
     },
     cancel(formName) {
       this.dialogFormVisible = false
       this.$refs[formName].resetFields()
     },
-    getAllTask() {
-      all().then(res => {
-        // console.log(res)
-        this.list = res
-      })
-    },
     handleCheck(task) {
-      console.log(task)
       this.$router.push({ name: '任务详情', params: { projectId: this.projectId, taskId: task.taskId }})
     },
     getTaskByProIdExeId() { // 通过项目id和负责人id获取任务
@@ -164,6 +169,7 @@ export default {
       this.listQuery.taskProjectId = this.projectId
       this.listQuery.taskExecutorId = this.userId
       page(this.listQuery).then(res => {
+        this.$emit('taskTotalNum', res.data.total) // 获取完数据触发该事件，返回总的任务数
         this.total = res.data.total
         this.listLoading = false
         this.list = res.data.rows
@@ -177,6 +183,20 @@ export default {
       this.listQuery.page = val
       this.getTaskByProIdExeId()
     },
+    remoteTaskUserMethod(query) {
+      if (query !== '') {
+        this.loading = true
+        this.loading = false
+        userPage({
+          name: query
+        }).then(response => {
+          this.userItems = response.data.rows
+          this.loading = false
+        })
+      } else {
+        this.userItems = []
+      }
+    },
     restCreateTaskForm() { // 重置表单，同时写入项目id和负责人id
       this.form = {
         taskName: undefined,
@@ -184,7 +204,7 @@ export default {
         taskProcess: undefined,
         taskDes: undefined,
         taskProjectId: this.projectId,
-        taskExecutorId: this.userId
+        taskExecutorId: undefined
       }
     }
   },
