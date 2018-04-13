@@ -273,7 +273,8 @@ code {
 .fa-icon {
   width: auto;
   height: 1em; /* 或任意其它字体大小相对值 */
-
+  margin-bottom: -2px;
+  margin-right: 2px;
   /* 要在 Safari 中正常工作，需要再引入如下两行代码 */
   max-width: 100%;
   max-height: 100%;

@@ -5,24 +5,24 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
-  import EditorDashboard from './editor/index';
+// import { mapGetters } from 'vuex'
+import EditorDashboard from './components/index'
 
-  export default {
-    name: 'dashboard',
-    components: { EditorDashboard },
-    data() {
-      return {
-        currentRole: 'EditorDashboard'
-      }
-    },
-    computed: {
-      ...mapGetters([
-        'name',
-        'avatar',
-        'email',
-        'introduction'
-      ])
+export default {
+  name: 'dashboard',
+  components: { EditorDashboard },
+  data() {
+    return {
+      currentRole: 'EditorDashboard'
     }
   }
+  // computed: {
+  //   ...mapGetters([
+  //     'name',
+  //     'avatar',
+  //     'email',
+  //     'introduction'
+  //   ])
+  // }
+}
 </script>
