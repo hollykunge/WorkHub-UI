@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import { getObj } from 'api/project/task/index'
+import { getObj as getTaskObj } from 'api/project/task/index'
+import { getObj as getProjectObj } from 'api/project/index'
 export default {
   props: ['projectId', 'taskId'], // 获取路由上项目的id
   components: {
@@ -50,24 +51,19 @@ export default {
     }
   },
   created() {
-    // 组件创建完后获取数据，
-    // 此时 data 已经被 observed 了
-    this.getTaskBasicInfo(this.taskId)
-  },
-  watch: {
-    // 如果路由有变化，会再次执行该方法
-    // '$route': 'fetchData'
+    this.getTaskBasicInfo(this.taskId, this.projectId)
   },
   methods: {
     handleTabClick(tab, event) {
-      // console.log(tab, event)
-      // console.log(this.projectId)
     },
-    getTaskBasicInfo(taskId) {
-      getObj(taskId).then(res => {
+    getTaskBasicInfo(taskId, projectId) {
+      getTaskObj(taskId).then(res => {
         const data = res.data;
-        (this.task = data); // 解构赋值
-        (this.project = data.projectEntity)
+        (this.task = data) // 解构赋值
+      })
+      getProjectObj(projectId).then(res => {
+        const data = res.data;
+        (this.project = data) // 解构赋值
       })
     },
     ToProject() {
