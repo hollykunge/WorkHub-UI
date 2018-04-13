@@ -24,7 +24,7 @@
             <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center"></el-table-column>
             <el-table-column align="center" label="操作" fixed="right">
               <template scope="scope">
-                <el-button size="small" type="success" @click="handleCheck(scope.row)">查看
+                <el-button size="small" type="primary" @click="handleCheck(scope.row)">查看
                 </el-button>
               </template>
             </el-table-column>
@@ -126,7 +126,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userId'
+      'userId',
+      'name'
     ])
   },
   methods: {
@@ -204,7 +205,7 @@ export default {
         taskProcess: undefined,
         taskDes: undefined,
         taskProjectId: this.projectId,
-        taskExecutorId: undefined
+        taskExecutorId: (Number)(this.userId)
       }
     }
   },

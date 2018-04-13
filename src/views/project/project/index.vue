@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="16">
-          <el-button class="filter-item" v-if="allProjects_btn_add" @click="handleCreate" type="primary" icon="edit">新建项目</el-button>
+          <el-button class="filter-item" v-if="allProjects_btn_add" @click="handleCreate" type="success" icon="edit">新建项目</el-button>
         </el-col>
         <el-col :span="6">
           <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="项目名称" v-model="listQuery.projectName"> </el-input>
@@ -55,7 +55,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" fixed="right">
         <template scope="scope">
-          <el-button size="small" type="success" @click="handleCheck(scope.row)">查看
+          <el-button size="small" type="primary" @click="handleCheck(scope.row)">查看
           </el-button>
         </template>
       </el-table-column>
@@ -66,7 +66,7 @@
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total"> </el-pagination>
       </div>
     </el-row>
-    
+
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :model="form" :rules="rules" ref="form" label-width="120px">
         <el-form-item label="项目名称" prop="projectName">
