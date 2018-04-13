@@ -14,17 +14,17 @@
             <el-button type="warning" size="small" plain>
               <icon name="eye"></icon>
               浏览</el-button>
-            <el-button type="warning" size="small" plain>{{ project.numWatches }}</el-button>
+            <el-button type="warning" size="small" plain>{{ 0 }}</el-button>
           </el-button-group>
           <el-button-group>
             <el-button type="primary" size="small" plain>
               <icon name="heart"></icon>收藏</el-button>
-            <el-button type="primary" size="small" plain>{{ project.numStars }}</el-button>
+            <el-button type="primary" size="small" plain>{{ 0 }}</el-button>
           </el-button-group>
           <el-button-group>
             <el-button type="success" size="small" plain>
               <icon name="download"></icon>下载</el-button>
-            <el-button type="success" size="small" plain>{{ project.numForks }}</el-button>
+            <el-button type="success" size="small" plain>{{ 0 }}</el-button>
           </el-button-group>
         </div>
       </el-col>
@@ -43,12 +43,12 @@
               <icon name="list-ul"></icon> 任务
               <el-badge class="mark" :value="taskNum"></el-badge>
             </span>
-            <task :projectId="projectId"></task>
+            <task :projectId="projectId" @taskTotalNum="setTaskNum"></task>
           </el-tab-pane>
           <el-tab-pane name="projectIssues">
             <span slot="label">
               <icon name="question-circle-o"></icon> 问题
-              <el-badge class="mark" :value="project.numIssues"></el-badge>
+              <el-badge class="mark" :value="1"></el-badge>
             </span>
             <issue></issue>
           </el-tab-pane>
@@ -83,20 +83,14 @@ export default {
     detail, task, issue, team, setting
   },
   data() {
-    return {     /* 用解构赋值的方式来解project的数据 */
+    return {     // 用解构赋值的方式来解project的数据
       activeName: 'projectTask', // 进去详情页首先显示的标签
       project: {},
       taskNum: ''
     }
   },
   created() {
-    // 组件创建完后获取数据，
-    // 此时 data 已经被 observed 了
     this.getProBasicInfo(this.projectId)
-  },
-  watch: {
-    // 如果路由有变化，会再次执行该方法
-    // '$route': 'fetchData'
   },
   methods: {
     handleTabClick(tab, event) {
@@ -104,13 +98,11 @@ export default {
     getProBasicInfo(projectId) {
       getObj(projectId).then(res => {
         const data = res.data;
-        (this.project = data) // 结构赋值
-      }).then(() => {
-        this.taskNum = (String)(this.getTaskNum().length)
+        (this.project = data) // 解构赋值
       })
     },
-    getTaskNum() {
-      return this.project.taskEntityList
+    setTaskNum(taskNum) {
+      this.taskNum = taskNum
     }
 
   }
