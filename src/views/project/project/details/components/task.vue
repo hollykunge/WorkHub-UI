@@ -72,7 +72,7 @@
 
 <script>
 import { addObj, page } from 'api/project/task/index'
-import { page as userPage } from 'api/admin/user/index'
+import { page as userPage, all as userAll } from 'api/admin/user/index'
 import { mapGetters } from 'vuex'
 export default {
   props: ['projectId'],
@@ -133,6 +133,7 @@ export default {
   methods: {
     handleCreateTask() {
       this.restCreateTaskForm()
+      this.getUserItems() // 为了能正常显示默认负责人
       this.dialogFormVisible = true
     },
     handleTaskFilter() {
@@ -197,6 +198,11 @@ export default {
       } else {
         this.userItems = []
       }
+    },
+    getUserItems() {
+      userAll().then(res => {
+        this.userItems = res
+      })
     },
     restCreateTaskForm() { // 重置表单，同时写入项目id和负责人id
       this.form = {
