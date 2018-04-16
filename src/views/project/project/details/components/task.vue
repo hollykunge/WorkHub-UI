@@ -126,8 +126,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userId',
-      'name'
+      'userId'
     ])
   },
   methods: {
