@@ -19,6 +19,7 @@ import IconSvg from 'components/Icon-svg'// svg 组件
 import vueWaves from './directive/waves'// 水波纹指令
 import errLog from 'store/errLog'// error log组件
 import './mock/index.js'  // 该项目所有请求使用mockjs模拟
+import Avatar from 'vue-avatar' // 根据用户名生成头像的插件
 import { getToken } from 'utils/auth'
 
 /* 项目中用的icon图标 具体图标见https://fontawesome.com/v4.7.0/icons/
@@ -31,6 +32,7 @@ Vue.component('icon', Icon)
 Vue.component('multiselect', Multiselect)
 Vue.component('Sticky', Sticky)
 Vue.component('icon-svg', IconSvg)
+Vue.component('Avatar', Avatar)
 Vue.use(ElementUI)
 Vue.use(vueWaves)
 
