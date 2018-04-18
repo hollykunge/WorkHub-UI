@@ -176,12 +176,29 @@ export const asyncRouterMap = [{
     component: _import('project/project/index'),
     name: '全部项目',
     authority: 'allProjects'
-    // children: [{
-    //   path: '',
-    //   component: _import('project/project/index'),
-    //   name: '项目详情',
-    //   authority: 'projDetails'
-    // }]
+  }, {
+    path: 'allTasks',
+    component: _import('project/project/index'),
+    name: '全部任务',
+    authority: 'allTasks'
+  }]
+},
+{
+  path: '/teamManager',
+  component: Layout,
+  name: '团队管理',
+  icon: 'group_fill',
+  authority: 'teamManager',
+  children: [{
+    path: 'myTeams',
+    component: _import('team/myTeams'),
+    name: '创建的团队',
+    authority: 'myTeams'
+  }, {
+    path: 'joinedTeams',
+    component: _import('team/joinedTeams'),
+    name: '参与的团队',
+    authority: 'joinedTeams'
   }]
 }
 ]
