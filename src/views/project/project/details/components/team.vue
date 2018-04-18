@@ -20,13 +20,44 @@
       </el-col>
       <el-col :xs="23" :sm="11" :md="7" :offset="1">
         <el-card class="card-create-team">
-          <span class="tooltips">
+          <span class="tooltips" @click="handleCreateTeam">
             <icon name="plus"></icon>
-            <span>创建团队</span>
+            <a>
+              <span>创建团队</span>
+            </a>
           </span>
         </el-card>
       </el-col>
     </el-row>
+    <!-- 创建团队对话框 -->
+    <el-dialog title="创建团队" :visible.sync="dialogFormVisible">
+      <!-- <el-form :model="form" ref="form" :rules="rules" label-width="120px">
+        <el-form-item label="任务名称" prop="taskName">
+          <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
+        </el-form-item>
+        <el-form-item label="项目负责人" prop="taskExecutorId">
+          <el-select v-model="form.taskExecutorId" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteTaskUserMethod" :loading="loading" style="width: 100%">
+            <el-option v-for="item in userItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="当前所处阶段" prop="taskProcess">
+          <el-select class="filter-item" v-model="form.taskProcess" placeholder="请选择" style="width: 100%">
+            <el-option v-for="item in  taskProcessOptions" :key="item.value" :label="item.key" :value="item.value"> </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="计划完成时间" prop="taskPlanEnd">
+          <el-date-picker editable v-model="form.taskPlanEnd" type="datetime" placeholder="选择完成时间" align="center" format="yyyy年MM月dd日HH:MM" style="width: 100%">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="描述" prop="taskDes">
+          <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5}" placeholder="请输入内容" v-model="form.taskDes"> </el-input>
+        </el-form-item>
+      </el-form>-->
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel('form')">取 消</el-button>
+        <el-button type="primary" @click="create('form')">创 建</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -39,6 +70,7 @@ export default {
       { teamName: 'XX型号-MM任务组', teamMumbers: [{ id: '7', name: '王准忠' }, { id: '8', name: '姬航' }], pdatesave: 3, ppageview: 3 },
       { teamName: 'XX型号-TT任务组', teamMumbers: [{ id: '9', name: '测试一' }, { id: '10', name: '试二' }], pdatesave: 3, ppageview: 3 },
       { teamName: 'XX型号-AA任务组', teamMumbers: [{ id: '15', name: '测试八' }], pdatesave: 3, ppageview: 3 }],
+      dialogFormVisible: false,
       teamList: undefined,
       listLoading: false,
       currentTeamDetail: {
@@ -96,13 +128,32 @@ export default {
         console.log('离开团队')
       })
     },
-    handleSizeChange(val) {
-      this.listQuery.limit = val
-      // this.getList()
+    handleCreateTeam() {
+      this.dialogFormVisible = true
     },
-    handleCurrentChange(val) {
-      this.listQuery.page = val
-      // this.getList()
+    create(formName) {
+      // const set = this.$refs
+      // set[formName].validate(valid => {
+      //   if (valid) {
+      // this.form.taskProjectId = this.projectId
+      // addObj(this.form).then(() => {
+      //   this.dialogFormVisible = false
+      //   this.getTaskByProIdExeId()
+      //   this.$notify({
+      //     title: '成功',
+      //     message: '创建成功',
+      //     type: 'success',
+      //     duration: 2000
+      //   })
+      // })
+      //   } else {
+      //     return false
+      //   }
+      // })
+    },
+    cancel(formName) {
+      this.dialogFormVisible = false
+      // this.$refs[formName].resetFields()
     }
   }
 }
@@ -162,10 +213,11 @@ export default {
       .tooltips:hover span {
         display: block;
         position: absolute;
-        top: -28px;
-        left: -10px;
+        top: -30px;
+        left: -15px;
         width: 20em;
         height: 20em;
+        font-size: 17px;
         background-color: #d8f3f8;
         color: rgb(21, 184, 29);
       }
