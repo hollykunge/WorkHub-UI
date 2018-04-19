@@ -36,7 +36,7 @@
           <span>{{scope.row.updTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="200" align="center" label="最后更新人">
+      <el-table-column align="center" label="最后更新人">
         <template scope="scope">
           <span>{{scope.row.updName}}</span>
         </template>
