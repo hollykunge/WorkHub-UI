@@ -63,7 +63,7 @@
           <span>{{ scope.row.updName }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="150" label="备注">
+      <el-table-column align="center" label="备注">
         <template scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>

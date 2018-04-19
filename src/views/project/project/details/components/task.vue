@@ -44,7 +44,7 @@
           <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
         </el-form-item>
         <el-form-item label="项目负责人" prop="taskExecutorId">
-          <el-select v-model="form.taskExecutorId" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteTaskUserMethod" :loading="loading" style="width: 100%">
+          <el-select v-model="form.taskExecutorId" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteQueryUsers" :loading="loading" style="width: 100%">
             <el-option v-for="item in userItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
           </el-select>
         </el-form-item>
@@ -184,7 +184,7 @@ export default {
       this.listQuery.page = val
       this.getTaskByProIdExeId()
     },
-    remoteTaskUserMethod(query) {
+    remoteQueryUsers(query) {
       if (query !== '') {
         this.loading = true
         this.loading = false

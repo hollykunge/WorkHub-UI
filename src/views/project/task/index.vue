@@ -24,6 +24,12 @@
               <icon name="list-ul"></icon> 数据
             </span>
           </el-tab-pane>
+          <el-tab-pane name="taskMember">
+            <span slot="label">
+              <icon name="users"></icon> 成员
+            </span>
+            <member-list></member-list>
+          </el-tab-pane>
           <el-tab-pane name="taskSetting">
             <span slot="label">
               <icon name="gears"></icon> 设置
@@ -39,9 +45,11 @@
 <script>
 import { getObj as getTaskObj } from 'api/project/task/index'
 import { getObj as getProjectObj } from 'api/project/index'
+import memberList from './components/memberList'
 export default {
   props: ['projectId', 'taskId'], // 获取路由上项目的id
   components: {
+    memberList
   },
   data() {
     return {

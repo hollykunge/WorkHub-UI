@@ -14,7 +14,7 @@
             </div>
           </el-card>
           <div class="card-content-footer">
-            <el-button type="primary" size="small" plain>编辑</el-button>
+            <el-button type="primary" size="small" @click="handleUpdateTeam(team)" plain>编辑</el-button>
           </div>
         </div>
       </el-col>
@@ -30,32 +30,25 @@
       </el-col>
     </el-row>
     <!-- 创建团队对话框 -->
-    <el-dialog title="创建团队" :visible.sync="dialogFormVisible">
-      <!-- <el-form :model="form" ref="form" :rules="rules" label-width="120px">
-        <el-form-item label="任务名称" prop="taskName">
-          <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form :model="form" ref="form" :rules="rules" label-width="120px">
+        <el-form-item label="团队名称" prop="teamName">
+          <el-input v-model="form.teamName" placeholder="请输入团队名称"></el-input>
         </el-form-item>
-        <el-form-item label="项目负责人" prop="taskExecutorId">
-          <el-select v-model="form.taskExecutorId" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteTaskUserMethod" :loading="loading" style="width: 100%">
+        <el-form-item label="团队负责人" prop="teamLeader">
+          <el-select v-model="form.teamLeader" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteQueryUsers" :loading="loading" @change="isChanged" style="width: 100%">
             <el-option v-for="item in userItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="当前所处阶段" prop="taskProcess">
-          <el-select class="filter-item" v-model="form.taskProcess" placeholder="请选择" style="width: 100%">
-            <el-option v-for="item in  taskProcessOptions" :key="item.value" :label="item.key" :value="item.value"> </el-option>
-          </el-select>
+        <el-form-item v-if="form.teamLeader!=undefined" label="添加成员" prop="teamMumbers" class="team-mumber-transfer">
+          <el-transfer v-model="form.teamMumbers" :props="{key: 'id',label: 'name'}" :data="allUsers" :titles="['所有用户', '当前团队成员']" :button-texts="['移除成员', '添加成员']" @change="isChanged" filter-placeholder="输入姓名进行搜索" filterable>
+          </el-transfer>
         </el-form-item>
-        <el-form-item label="计划完成时间" prop="taskPlanEnd">
-          <el-date-picker editable v-model="form.taskPlanEnd" type="datetime" placeholder="选择完成时间" align="center" format="yyyy年MM月dd日HH:MM" style="width: 100%">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="描述" prop="taskDes">
-          <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5}" placeholder="请输入内容" v-model="form.taskDes"> </el-input>
-        </el-form-item>
-      </el-form>-->
+      </el-form>
       <div slot="footer" class="dialog-footer">
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="create('form')">创 建</el-button>
+        <el-button v-else-if="dialogStatus=='update'" type="primary" @click="update('form')">修 改</el-button>
         <el-button @click="cancel('form')">取 消</el-button>
-        <el-button type="primary" @click="create('form')">创 建</el-button>
       </div>
     </el-dialog>
   </div>
@@ -63,35 +56,45 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { page as userPage, all as userAll } from 'api/admin/user/index'
 export default {
   data() {
     return {
-      allTeams: [{ teamName: 'XX型号-XX任务组', teamMumbers: [{ id: '1', name: 'hollykunge' }, { id: '6', name: '姬海南' }, { id: '9', name: '方法' }, { id: '9', name: '搜索' }, { id: '9', name: '嗯嗯' }, { id: '9', name: '天天' }, { id: '10', name: '二测试' }, { id: '15', name: '八等等' }], pdatesave: 3, ppageview: 3 },
-      { teamName: 'XX型号-MM任务组', teamMumbers: [{ id: '7', name: '王准忠' }, { id: '8', name: '姬航' }], pdatesave: 3, ppageview: 3 },
-      { teamName: 'XX型号-TT任务组', teamMumbers: [{ id: '9', name: '测试一' }, { id: '10', name: '试二' }], pdatesave: 3, ppageview: 3 },
-      { teamName: 'XX型号-AA任务组', teamMumbers: [{ id: '15', name: '测试八' }], pdatesave: 3, ppageview: 3 }],
+      allTeams: [{ teamName: 'XX型号-XX任务组', teamLeader: 1, teamMumbers: [{ id: '1', name: 'hollykunge' }, { id: '6', name: '姬海南' }, { id: '9', name: '方法' }, { id: '9', name: '搜索' }, { id: '9', name: '嗯嗯' }, { id: '9', name: '天天' }, { id: '10', name: '二测试' }, { id: '15', name: '八等等' }], pdatesave: 3, ppageview: 3 },
+      { teamName: 'XX型号-MM任务组', teamLeader: 1, teamMumbers: [{ id: '7', name: '王准忠' }, { id: '8', name: '姬航' }], pdatesave: 3, ppageview: 3 },
+      { teamName: 'XX型号-TT任务组', teamLeader: 1, teamMumbers: [{ id: '9', name: '测试一' }, { id: '10', name: '试二' }], pdatesave: 3, ppageview: 3 },
+      { teamName: 'XX型号-AA任务组', teamLeader: 1, teamMumbers: [{ id: '15', name: '测试八' }], pdatesave: 3, ppageview: 3 }],
       dialogFormVisible: false,
-      teamList: undefined,
-      listLoading: false,
-      currentTeamDetail: {
-        team1: undefined,
-        team2: undefined,
-        team3: undefined,
-        team4: undefined,
-        team5: undefined
+      form: {
+        teamName: undefined,
+        teamLeader: undefined,
+        teamMumbers: []
       },
-      test: '123',
+      rules: {
+        teamName: {
+          required: true,
+          message: '团队名称不能为空'
+        },
+        teamLeader: {
+          required: true,
+          message: '请选择团队负责热'
+        }
+      },
+      userItems: [],
+      allUsers: [],
+      listLoading: false,
+      loading: false,
       listQuery: {
         page: 1,
         limit: 10,
         name: undefined
       },
+      transferDataChanged: false,
       total: null,
       dialogStatus: 'create',
       textMap: {
-        check: '团队详细信息',
         update: '编辑团队信息',
-        create: '创建新的团队'
+        create: '创建团队'
       },
       allUser: undefined,
       currentTeamNum: undefined
@@ -129,31 +132,105 @@ export default {
       })
     },
     handleCreateTeam() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
       this.dialogFormVisible = true
+      this.getUserItems() // 为了能正常显示默认负责人
+    },
+    handleUpdateTeam(team) {
+      this.form = team
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.getUserItems()
+      this.userFliter(this.allUsers, team.teamLeader) // 有问题
     },
     create(formName) {
-      // const set = this.$refs
-      // set[formName].validate(valid => {
-      //   if (valid) {
-      // this.form.taskProjectId = this.projectId
-      // addObj(this.form).then(() => {
-      //   this.dialogFormVisible = false
-      //   this.getTaskByProIdExeId()
-      //   this.$notify({
-      //     title: '成功',
-      //     message: '创建成功',
-      //     type: 'success',
-      //     duration: 2000
-      //   })
-      // })
-      //   } else {
-      //     return false
-      //   }
-      // })
+      const set = this.$refs
+      set[formName].validate(valid => {
+        if (valid) {
+          // this.form.taskProjectId = this.projectId
+          // addObj(this.form).then(() => {
+          this.allTeams.push(this.form) // 新增一条数据
+          this.dialogFormVisible = false
+          //   this.getTaskByProIdExeId()
+          this.$notify({
+            title: '成功',
+            message: '创建成功',
+            type: 'success',
+            duration: 2000
+          })
+          // })
+          //   } else {
+          //     return false
+        }
+      })
+    },
+    update(formName) {
+      const set = this.$refs
+      set[formName].validate(valid => {
+        if (valid) {
+          this.dialogFormVisible = false
+          // putObj(this.form.id, this.form).then(() => {
+          this.dialogFormVisible = false
+          this.getList()
+          this.$notify({
+            title: '成功',
+            message: '修改成功',
+            type: 'success',
+            duration: 2000
+          })
+          //   })
+          // } else {
+          //   return false
+        }
+      })
     },
     cancel(formName) {
       this.dialogFormVisible = false
       // this.$refs[formName].resetFields()
+    },
+    getUserItems() {
+      userAll().then(res => {
+        this.userItems = res
+        this.allUsers = res
+      })
+    },
+    remoteQueryUsers(query) {
+      if (query !== '') {
+        this.loading = true
+        this.loading = false
+        userPage({
+          name: query
+        }).then(response => {
+          this.userItems = response.data.rows
+          this.loading = false
+        })
+      } else {
+        this.userItems = []
+      }
+    },
+    isChanged() {
+      this.transferDataChanged = true
+      this.allUsers.forEach(element => {
+        element.disabled = false
+      })
+      this.userFliter(this.allUsers, this.form.teamLeader)
+    },
+    resetTemp() {
+      this.form = {
+        teamName: undefined,
+        teamLeader: undefined,
+        teamMumbers: []
+      }
+    },
+    /* 对所有用户中包含的领导进行特殊处理 a：所有用户 Array b: 领导 String */
+    userFliter(a, b) {
+      for (let j = 0; j < a.length; j++) {
+        if (a[j].id === b) {
+          a[j].disabled = true
+        }
+      }
+      return a
     }
   }
 }
@@ -222,6 +299,14 @@ export default {
         color: rgb(21, 184, 29);
       }
     }
+  }
+}
+.team-mumber-transfer {
+  .el-form-item__content {
+    line-height: initial;
+  }
+  .el-transfer {
+    margin-left: 10%;
   }
 }
 </style>
