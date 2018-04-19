@@ -127,8 +127,8 @@ export default {
       })
     },
     /* 对所有用户中包含的领导进行特殊处理
-      a：所有用户
-      b: 领导
+      a：所有用户 Array
+      b: 领导 Array
      */
     userFliter(a, b) {
       for (let i = 0; i < b.length; i++) {
