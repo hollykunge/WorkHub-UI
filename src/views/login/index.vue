@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container" id="login">
     <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px" class="card-box login-form">
       <h3 class="title">系统登录</h3>
       <el-form-item prop="username">
@@ -82,9 +82,23 @@ export default {
           return false
         }
       })
+    },
+    generateBackground() {
+      const loginContainer = document.getElementById('login')
+      const i = Math.random()
+      if (i < 0.3) {
+        loginContainer.style.backgroundImage = 'url(../../../static/images/login_bg_dark.jpg)'
+      } else if (i > 0.7) {
+        loginContainer.style.backgroundImage = 'url(../../../static/images/login_bg_fireworks.jpg)'
+      } else {
+        loginContainer.style.backgroundImage = 'url(../../../static/images/login_bg_green.jpg)'
+      }
     }
   },
   created() {
+  },
+  mounted() {
+    this.generateBackground()
   },
   destroyed() {
   }
@@ -104,7 +118,7 @@ export default {
   @include relative;
   height: 100vh;
   background-size: 100% 100%;
-  background-image: url(../../../static/images/login_bg.jpg);
+  background-image: url(../../../static/images/login_bg_green.jpg);
   input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 1000px #293444 inset !important;
     -webkit-text-fill-color: #fff !important;
@@ -145,7 +159,7 @@ export default {
   }
   .login-form {
     position: absolute;
-    top: 15%;
+    // top: 15%;
     left: 0;
     right: 0;
     width: 400px;
