@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-form>
-      <el-form-item label="组织名称">
+      <el-form-item label="团队名称">
         <el-select class="filter-item" v-model="orgId" placeholder="请选择" size="65px" @change="handleChange">
-          <el-option v-for="item in orgList" :key="item.id" :label="item.orgname" :value="item.id"> </el-option>
+          <el-option v-for="item in teamList" :key="item.id" :label="item.name" :value="item.id"> </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="组织领导">
+      <el-form-item label="团队领导">
         <el-select v-model="leaders" multiple filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteLeaderMethod" :loading="loading" size="65px" @change="isChanged">
           <el-option v-for="item in lItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
         </el-select>
@@ -14,7 +14,7 @@
       <el-form-item label="成员选择">
       </el-form-item>
     </el-form>
-    <el-transfer v-model="members" :data="allUsers" :titles="['所有用户', '当前组织成员']" :button-texts="['移除用户', '添加用户']" style="margin: -50px 0 0 0" @change="isChanged" filter-placeholder="输入姓名进行搜索" filterable>
+    <el-transfer v-model="members" :data="allUsers" :titles="['所有用户', '当前团队成员']" :button-texts="['移除用户', '添加用户']" style="margin: -50px 0 0 0" @change="isChanged" filter-placeholder="输入姓名进行搜索" filterable>
     </el-transfer>
     <el-button class="transfer-footer" type="primary" v-if="orgManager_btn_user&&transferDataChanged" @click="onSubmit">保存更改</el-button>
 
@@ -27,7 +27,7 @@ import { getUsers, modifyUsers } from 'api/admin/organize/index'
 import { mapGetters } from 'vuex'
 export default {
   props: {
-    orgList: {
+    teamList: {
       type: Array
     }
   },

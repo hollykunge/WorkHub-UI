@@ -305,8 +305,5 @@ export default {
   .el-form-item__content {
     line-height: initial;
   }
-  .el-transfer {
-    margin-left: 10%;
-  }
 }
 </style>
