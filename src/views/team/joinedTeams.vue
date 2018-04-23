@@ -3,12 +3,12 @@
     <div class="filter-container">
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="16">
-          <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary" icon="edit">添加组织</el-button>
+          <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary" icon="edit">创建团队</el-button>
           <el-button class="filter-item" v-if="orgManager_btn_user" @click="handleUser()" type="success">
-            <icon-svg icon-class="27"></icon-svg>关联用户</el-button>
+            <icon-svg icon-class="27"></icon-svg>编辑成员</el-button>
         </el-col>
         <el-col :span="6">
-          <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="组织名称" v-model="listQuery.orgName"> </el-input>
+          <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="团队名称" v-model="listQuery.name"> </el-input>
         </el-col>
         <el-col :span="2">
           <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
@@ -21,24 +21,29 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="80" label="组织">
+      <el-table-column align="center" width="100" label="团队名称">
         <template scope="scope">
-          <span>{{ scope.row.orgname }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="65" label="编号">
+      <el-table-column align="center" width="100" label="别名">
         <template scope="scope">
-          <span>{{ scope.row.orgcode }}</span>
+          <span>{{ scope.row.lowerName }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="110" label="上级组织id">
+      <el-table-column align="center" width="100" label="成员数量">
         <template scope="scope">
-          <span>{{ scope.row.parentid }}</span>
+          <span>{{ scope.row.numMembers }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="65" label="类型">
+      <el-table-column align="center" width="110" label="任务数">
         <template scope="scope">
-          <span>{{ scope.row.orgtype }}</span>
+          <span>{{ scope.row.numTask }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="120" label="所属于项目id">
+        <template scope="scope">
+          <span>{{ scope.row.projectId }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" width="200" label="创建时间" show-overflow-tooltip>
@@ -52,6 +57,11 @@
           <span>{{ scope.row.crtName }}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" width="110" label="创建人地址">
+        <template scope="scope">
+          <span>{{ scope.row.crtHost }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" width="200" label="更新时间" show-overflow-tooltip>
         <template scope="scope">
           <el-icon name="time"></el-icon>
@@ -63,16 +73,21 @@
           <span>{{ scope.row.updName }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="备注">
+      <el-table-column align="center" width="110" label="更新人地址">
+        <template scope="scope">
+          <span>{{ scope.row.updHost }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="150" label="备注/描述">
         <template scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" fixed="right" v-if="orgManager_btn_edit||orgManager_btn_del||orgManager_btn_user">
+      <el-table-column align="center" label="操作" width="140" fixed="right" v-if="orgManager_btn_edit||orgManager_btn_del||orgManager_btn_user">
         <template scope="scope">
           <el-button v-if="orgManager_btn_edit" size="small" type="success" @click="handleUpdate(scope.row)">编辑
           </el-button>
-          <el-button v-if="orgManager_btn_del" size="small" type="danger" @click="handleDelete(scope.row)">删除(离开)
+          <el-button v-if="orgManager_btn_del" size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
         </template>
       </el-table-column>
@@ -84,20 +99,20 @@
     </el-row>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form v-if="dialogStatus!='orgUser'" :model="form" :rules="rules" ref="form" label-width="100px">
-        <el-form-item label="组织名称" prop="orgname">
-          <el-input v-model="form.orgname" placeholder="请输入组织名称"></el-input>
+        <el-form-item label="团队名称" prop="name">
+          <el-input v-model="form.name" placeholder="请输入团队名称"></el-input>
         </el-form-item>
-        <el-form-item label="组织代码" prop="orgcode">
-          <el-input v-model="form.orgcode" placeholder="请输入组织代码"></el-input>
+        <el-form-item label="别名" prop="lowerName">
+          <el-input v-model="form.lowerName" placeholder="请输入别名"></el-input>
         </el-form-item>
-        <el-form-item label="上级组织id" prop="parentid">
-          <el-input v-model="form.parentid" placeholder="请填写上级组织id"></el-input>
-        </el-form-item>
-        <el-form-item label="选择类型">
+        <!-- <el-form-item label="上级团队id" prop="parentid">
+          <el-input v-model="form.parentid" placeholder="请填写上级团队id"></el-input>
+        </el-form-item> -->
+        <!-- <el-form-item label="选择类型">
           <el-select class="filter-item" v-model="form.orgtype" placeholder="请选择">
-            <el-option v-for="item in  orgtypeOptions" :key="item" :label="item" :value="item"> </el-option>
+            <el-option v-for="item in orgtypeOptions" :key="item" :label="item" :value="item"> </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="描述">
           <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5}" placeholder="请输入内容" v-model="form.description"> </el-input>
         </el-form-item>
@@ -109,32 +124,35 @@
       </div>
     </el-dialog>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUserVisible">
-      <!-- <org-user :orgList="list" @closeUserDialog="cancel()" ref="orgUser"></org-user> -->
+      <team-user :teamList="list" @closeUserDialog="cancel()" ref="orgUser"></team-user>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { page, addObj, getObj, delObj, putObj } from 'api/admin/organize/index'
+import { page, addObj, getObj, delObj, putObj } from 'api/project/team/index'
 import { mapGetters } from 'vuex'
+import teamUser from './components/teamUser'
 export default {
   name: 'organize',
   components: {
+    teamUser
   },
   data() {
     return {
       form: {
-        orgname: undefined,
-        orgcode: undefined,
-        parentid: undefined,
-        orgtype: 'b',
+        name: undefined,
+        lowerName: undefined,
+        numMembers: 0,
+        numTask: 0,
+        projectId: undefined,
         description: undefined
       },
       rules: {
-        orgname: [
+        name: [
           {
             required: true,
-            message: '请输入组织名称',
+            message: '请输入团队名称',
             trigger: 'blur'
           },
           {
@@ -144,10 +162,10 @@ export default {
             trigger: 'blur'
           }
         ],
-        orgcode: [
+        lowerName: [
           {
             required: true,
-            message: '请输入组织代码',
+            message: '请输入团队别名',
             trigger: 'blur'
           },
           {
@@ -155,12 +173,6 @@ export default {
             max: 20,
             message: '长度在 1 到 20 个字符',
             trigger: 'blur'
-          }
-        ],
-        parentid: [
-          {
-            required: true,
-            message: '请输入上级组织id'
           }
         ]
       },
@@ -170,9 +182,8 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        orgName: undefined
+        name: undefined
       },
-      orgtypeOptions: ['a', 'b', 'c', 'd'],
       dialogFormVisible: false,
       dialogUserVisible: false,
       dialogStatus: '',
@@ -238,7 +249,7 @@ export default {
         })
     },
     handleDelete(row) {
-      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+      this.$confirm('此操作将该团队永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -304,10 +315,11 @@ export default {
     },
     resetTemp() {
       this.form = {
-        orgname: undefined,
-        orgcode: undefined,
-        parentid: undefined,
-        orgtype: 'b',
+        name: undefined,
+        lowerName: undefined,
+        numMembers: 0,
+        numTask: 0,
+        projectId: undefined,
         description: undefined
       }
     }
