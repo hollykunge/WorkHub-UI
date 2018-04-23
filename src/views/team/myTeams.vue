@@ -6,6 +6,7 @@
           <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary" icon="edit">创建团队</el-button>
           <el-button class="filter-item" v-if="orgManager_btn_user" @click="handleUser()" type="success">
             <icon-svg icon-class="27"></icon-svg>编辑成员</el-button>
+          <el-button class="filter-item" type="danger" @click="testLinkUser">测试关联用户组件</el-button>
         </el-col>
         <el-col :span="6">
           <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="团队名称" v-model="listQuery.name"> </el-input>
@@ -125,6 +126,7 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUserVisible">
       <team-user :teamList="list" @closeUserDialog="cancel()" ref="orgUser"></team-user>
     </el-dialog>
+    <link-user :showDialog="showLinkUserDialog"></link-user>
   </div>
 </template>
 
@@ -132,10 +134,11 @@
 import { page, addObj, getObj, delObj, putObj } from 'api/project/team/index'
 import { mapGetters } from 'vuex'
 import teamUser from './components/teamUser'
+import linkUser from './components/linkUser'
 export default {
   name: 'organize',
   components: {
-    teamUser
+    teamUser, linkUser
   },
   data() {
     return {
@@ -185,6 +188,7 @@ export default {
       },
       dialogFormVisible: false,
       dialogUserVisible: false,
+      showLinkUserDialog: false,
       dialogStatus: '',
       orgManager_btn_edit: false,
       orgManager_btn_del: false,
@@ -211,6 +215,9 @@ export default {
     ])
   },
   methods: {
+    testLinkUser() {
+      this.showLinkUserDialog = true
+    },
     getList() {
       this.listLoading = true
       page(this.listQuery).then(response => {
