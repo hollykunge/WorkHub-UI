@@ -10,7 +10,7 @@
 
 .hideSidebar .el-submenu>.el-submenu__title,
 .hideSidebar .submenu-title-noDropdown {
-  padding-left: 10px!important;
+  // padding-left: 10px!important;
 }
 
 .hideSidebar .submenu-title-noDropdown span,
@@ -45,6 +45,7 @@
 .hideSidebar .el-menu-item .el-submenu__icon-arrow,
 .hideSidebar .el-submenu .el-submenu__title .el-submenu__icon-arrow {
   display: none;
+  right: 5px;
 }
 
 .hideSidebar .submenu-title-noDropdown {
