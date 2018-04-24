@@ -105,14 +105,6 @@
         <el-form-item label="别名" prop="lowerName">
           <el-input v-model="form.lowerName" placeholder="请输入别名"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="上级团队id" prop="parentid">
-          <el-input v-model="form.parentid" placeholder="请填写上级团队id"></el-input>
-        </el-form-item> -->
-        <!-- <el-form-item label="选择类型">
-          <el-select class="filter-item" v-model="form.orgtype" placeholder="请选择">
-            <el-option v-for="item in orgtypeOptions" :key="item" :label="item" :value="item"> </el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item label="描述">
           <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5}" placeholder="请输入内容" v-model="form.description"> </el-input>
         </el-form-item>
@@ -126,7 +118,7 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUserVisible">
       <team-user :teamList="list" @closeUserDialog="cancel()" ref="orgUser"></team-user>
     </el-dialog>
-    <link-user :showDialog="showLinkUserDialog"></link-user>
+    <link-user :show.sync="showLinkUserDialog"></link-user>
   </div>
 </template>
 
