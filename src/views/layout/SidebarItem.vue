@@ -10,7 +10,6 @@
 		</router-link> -->
 			<el-submenu :index="item.title" :key="item.title">
 				<template slot="title">
-					<!-- <icon-svg v-if='item.icon' :icon-class="item.icon"></icon-svg> -->
 					<icon v-if='item.icon' :name="item.icon"></icon>
 					<span>{{item.title}}</span>
 				</template>
@@ -18,7 +17,6 @@
 					<sidebar-item class='nest-menu' v-if='child.children&&child.children.length>0' :routes='[child]' :key="child.title"> </sidebar-item>
 					<router-link v-else :to="'/'+item.code+'/'+child.code" :key="child.code">
 						<el-menu-item :index="item.code+'/'+child.code">
-							<!-- <icon-svg v-if='child.icon' :icon-class="child.icon"></icon-svg> -->
 							<icon v-if='child.icon' :name="child.icon"></icon>
 							<span>{{child.title}}</span>
 						</el-menu-item>

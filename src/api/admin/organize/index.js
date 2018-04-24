@@ -38,6 +38,12 @@ export function putObj(id, obj) {
   })
 }
 
+export function all() {
+  return fetch({
+    url: '/api/admin/org/all',
+    method: 'get'
+  })
+}
 export function getUsers(id) {
   return fetch({
     url: '/api/admin/org/' + id + '/user',
