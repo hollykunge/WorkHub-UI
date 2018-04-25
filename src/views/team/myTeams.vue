@@ -3,10 +3,8 @@
     <div class="filter-container">
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="16">
-          <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="primary" icon="edit">创建团队</el-button>
-          <el-button class="filter-item" v-if="orgManager_btn_user" @click="handleUser()" type="success">
-            <icon-svg icon-class="27"></icon-svg>编辑成员</el-button>
-          <el-button class="filter-item" type="danger" @click="testLinkUser">测试关联用户组件</el-button>
+          <el-button class="filter-item" v-if="orgManager_btn_add" @click="handleCreate" type="success" icon="edit">创建团队</el-button>
+          <el-button class="filter-item" type="primary" @click="handleLinkUser">编辑成员</el-button>
         </el-col>
         <el-col :span="6">
           <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="团队名称" v-model="listQuery.name"> </el-input>
@@ -86,7 +84,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="230" fixed="right" v-if="orgManager_btn_edit||orgManager_btn_del||orgManager_btn_user">
         <template scope="scope">
-          <el-button v-if="orgManager_btn_edit" size="small" type="success" @click="handleUpdate(scope.row)">编辑</el-button>
+          <el-button v-if="orgManager_btn_edit" size="small" type="primary" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="primary" size="small">关联项目</el-button>
           <el-button v-if="orgManager_btn_del" size="small" type="danger" @click="handleDelete(scope.row)">删除</el-button>
         </template>
@@ -115,9 +113,6 @@
         <el-button v-else-if="dialogStatus=='update'" type="primary" @click="update('form')">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUserVisible">
-      <team-user :teamList="list" @closeUserDialog="cancel()" ref="orgUser"></team-user>
-    </el-dialog>
     <link-user :show.sync="showLinkUserDialog"></link-user>
   </div>
 </template>
@@ -125,12 +120,11 @@
 <script>
 import { page, addObj, getObj, delObj, putObj } from 'api/project/team/index'
 import { mapGetters } from 'vuex'
-import teamUser from './components/teamUser'
 import linkUser from './components/linkUser'
 export default {
   name: 'organize',
   components: {
-    teamUser, linkUser
+    linkUser
   },
   data() {
     return {
@@ -179,7 +173,6 @@ export default {
         name: undefined
       },
       dialogFormVisible: false,
-      dialogUserVisible: false,
       showLinkUserDialog: false,
       dialogStatus: '',
       orgManager_btn_edit: false,
@@ -207,7 +200,7 @@ export default {
     ])
   },
   methods: {
-    testLinkUser() {
+    handleLinkUser() {
       this.showLinkUserDialog = true
     },
     getList() {
@@ -228,10 +221,6 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
-    },
-    handleUser() {
-      this.dialogStatus = 'orgUser'
-      this.dialogUserVisible = true
     },
     handleCreate() {
       this.resetTemp()
