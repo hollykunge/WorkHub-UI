@@ -43,7 +43,7 @@
       </el-row>
     </div>
     <div class="list-dialog-box">
-      <el-dialog title="邀请新成员" :visible.sync="dialogVisible" top="20%" :close-on-click-modal="false">
+      <!-- <el-dialog title="邀请新成员" :visible.sync="dialogVisible" top="20%" :close-on-click-modal="false">
         <span>选择组织</span>
         <el-cascader :options="orgTree" v-model="selectedOrg" @change="handleCascaderChange" placeholder="请选择组织" style="width: 80%;" change-on-select clearable></el-cascader>
         <el-table :data="userlist" stripe>
@@ -57,7 +57,8 @@
         <span slot="footer">
           <el-button @click="dialogVisible = false" size="small">关闭</el-button>
         </span>
-      </el-dialog>
+      </el-dialog> -->
+      <link-user :show.sync="dialogVisible"></link-user>
       <el-dialog title="修改权限权限" :visible.sync="modifyVisible" top="20%" :close-on-click-modal="false">
         <el-form :model="form" label-position="right" label-width="100px">
           <el-form-item label="用户名">
@@ -84,7 +85,9 @@
 </template>
 
 <script>
+import linkUser from '../../../team/components/linkUser'
 export default {
+  components: { linkUser },
   data() {
     return {
       memberList: [{ name: '姬海南', orgName: '十一室', authrioty: '读写', role: '设计师' }],
@@ -214,13 +217,13 @@ export default {
   .list-header {
     margin-bottom: 10px;
   }
-  .el-dialog__body {
-    text-align: center;
-    .el-table {
-      width: 80%;
-      margin-left: 13%;
-      margin-top: 20px;
-    }
-  }
+  // .el-dialog__body {
+  //   text-align: center;
+  //   .el-table {
+  //     width: 80%;
+  //     margin-left: 13%;
+  //     margin-top: 20px;
+  //   }
+  // }
 }
 </style>
