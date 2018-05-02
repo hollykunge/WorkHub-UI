@@ -11,8 +11,10 @@
       <el-table :data="memberList" :show-header="false" v-loading.body="listLoading" empty-text="当前任务无成员" fit highlight-current-row style="width: 100%">
         <el-table-column align="center">
           <template scope="scope">
-            <icon name="user"></icon>
-            <span>{{ scope.row.name }}/{{ scope.row.orgName }}</span>
+            <el-button type="text">
+              <icon name="user"></icon>
+              <span>{{ scope.row.name }}/{{ scope.row.orgName }}</span>
+            </el-button>
           </template>
         </el-table-column>
         <el-table-column align="center">
@@ -29,8 +31,8 @@
         </el-table-column>
         <el-table-column align="center">
           <template scope="scope">
-            <el-button type="primary" size="small" @click="handleUpdate(scope.row)">修改权限</el-button>
-            <el-button type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button type="primary" size="small" @click="handleUpdate(scope.row)" plain>修改权限</el-button>
+            <el-button type="danger" size="small" @click="handleDelete(scope.row)" plain>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -43,21 +45,6 @@
       </el-row>
     </div>
     <div class="list-dialog-box">
-      <!-- <el-dialog title="邀请新成员" :visible.sync="dialogVisible" top="20%" :close-on-click-modal="false">
-        <span>选择组织</span>
-        <el-cascader :options="orgTree" v-model="selectedOrg" @change="handleCascaderChange" placeholder="请选择组织" style="width: 80%;" change-on-select clearable></el-cascader>
-        <el-table :data="userlist" stripe>
-          <el-table-column prop="name" label="姓名" align="center"></el-table-column>
-          <el-table-column label="操作" align="center">
-            <template scope="scope">
-              <el-button @click="handleAddMember(scope.row)" type="text" size="small">添加</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <span slot="footer">
-          <el-button @click="dialogVisible = false" size="small">关闭</el-button>
-        </span>
-      </el-dialog> -->
       <link-user :show.sync="dialogVisible"></link-user>
       <el-dialog title="修改权限权限" :visible.sync="modifyVisible" top="20%" :close-on-click-modal="false">
         <el-form :model="form" label-position="right" label-width="100px">
@@ -146,15 +133,15 @@ export default {
   created() {
   },
   methods: {
+    handleTabClick() {
+      console.log('-----')
+    },
     // 处理邀请成员点击事件的方法
     handleInvite() {
       this.dialogVisible = true
     },
     handleCascaderChange(value) {
       console.log(value)
-    },
-    handleAddMember(row) {
-      console.log(row)
     },
     // 还要有一个判断当前用户是否已经在该小组的方法
     handleSizeChange(val) {
