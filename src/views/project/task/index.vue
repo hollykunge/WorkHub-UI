@@ -33,7 +33,7 @@
             <span slot="label">
               <icon name="list-ul"></icon> 数据
             </span>
-            <task-data ref="taskData"></task-data>
+            <task-data :taskId="taskId" ref="taskData"></task-data>
           </el-tab-pane>
           <el-tab-pane name="pullRequests">
             <span slot="label">
@@ -121,6 +121,9 @@ export default {
     },
     ToProject() {
       this.$router.push({ name: '项目详情', params: { projectId: this.projectId }})
+    },
+    getTaskId() {
+      return this.taskId
     }
   }
 }

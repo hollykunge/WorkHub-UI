@@ -45,10 +45,10 @@ module.exports = {
         },
       },
       // 用来做测试的mock数据
-      '/mock': {
-        target: 'https://www.easy-mock.com/mock/5a976850371a4725188755d6',
+      '/sys': {
+        target: 'https://www.easy-mock.com/mock/5a976850371a4725188755d6/sys',
         pathRewrite: {
-          '^/mock': '/sys'
+          '^/sys': ''
         }
       }
     },
