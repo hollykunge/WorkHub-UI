@@ -10,8 +10,8 @@
             <el-dropdown-menu slot="dropdown" class="branch-dropdown-content">
               <el-card>
                 <span slot="header">切换分支</span>
-                <el-input placeholder="搜索分支" v-model="fliterText" size="small"></el-input>
-                <el-table @row-click="filteredBranch" :data="branches" :show-header="false" empty-text="Nothing to show">
+                <el-input placeholder="搜索分支" v-model="fliterText" size="small" autofocus></el-input>
+                <el-table @row-click="changeBranch" :data="filteredBranch" :show-header="false" empty-text="Nothing to show">
                   <el-table-column>
                     <template scope="scope">
                       <span>{{ scope.row.name }}</span>
@@ -28,6 +28,17 @@
               </el-card>
             </el-dropdown-menu>
           </el-dropdown>
+        </el-col>
+        <el-col :span="4" :offset="10">
+          <el-button-group class="task-options-button">
+            <el-button size="small" plain>
+              <icon name="file-o"></icon>
+              新 建</el-button>
+            <el-button size="small" plain>
+              <icon name="upload"></icon>文件上传</el-button>
+            <el-button size="small" plain>
+              <icon name="cloud-download"></icon>下 载</el-button>
+          </el-button-group>
         </el-col>
       </el-row>
     </div>
@@ -71,7 +82,17 @@ export default {
       })
     },
     filterBranch(val) {
-
+      if (!val) {
+        this.filteredBranch = this.branches
+      } else {
+        this.filteredBranch = []
+        this.branches.forEach(element => {
+          if (element.name.indexOf(val) >= 0) {
+            this.filteredBranch.push(element)
+          }
+        })
+        // this.filteredBranch = []
+      }
     },
     changeBranch(row) {
       this.currentBranch = row.name
@@ -82,22 +103,39 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.branch-dropdown {
-  &-button {
-    margin-left: 20px;
-  }
-  &-content {
-    .el-card {
-      &__header {
-        font-size: 12px;
-        padding: 5px 10px;
+.task-data-header {
+  margin-bottom: 10px;
+  .branch-dropdown {
+    &-button {
+      margin-left: 20px;
+    }
+    &-content {
+      .el-card {
+        &__header {
+          font-size: 12px;
+          padding: 5px 10px;
+        }
+        &__body {
+          padding: 4px 0px;
+        }
       }
-      &__body {
-        padding: 4px 0px;
+      padding: 0;
+      border-radius: 5px;
+    }
+  }
+  .task-options-button {
+    position: absolute;
+    right: 18px;
+    padding-right: 12px;
+    .el-button {
+      &:not(:last-child) {
+        margin-right: 0px;
+      }
+      &:not(:first-child):not(:last-child) {
+        border-left-color: #acb1b7;
+        border-right-color: #acb1b7;
       }
     }
-    padding: 0;
-    border-radius: 5px;
   }
 }
 </style>

@@ -33,7 +33,9 @@
             <span slot="label">
               <icon name="list-ul"></icon> 数据
             </span>
-            <task-data :taskId="taskId" ref="taskData"></task-data>
+            <keep-alive>
+              <task-data :taskId="taskId" ref="taskData"></task-data>
+            </keep-alive>
           </el-tab-pane>
           <el-tab-pane name="pullRequests">
             <span slot="label">
@@ -81,18 +83,12 @@
 <script>
 import { getObj as getTaskObj } from 'api/project/task/index'
 import { getObj as getProjectObj } from 'api/project/index'
-import memberList from './components/memberList'
-import taskData from './components/taskData'
-import pullRequests from './components/pullRequests'
-import chartManage from './components/chartManage'
-import taskIntro from './components/taskIntro'
-import taskSetting from './components/taskSetting'
-import versionHistory from './components/versionHistory'
+import { memberList, taskData, pullRequests, chartManage, taskIntro, taskSetting, versionHistory, createFile } from './components/index'
 
 export default {
   props: ['projectId', 'taskId'], // 获取路由上项目的id
   components: {
-    memberList, taskData, pullRequests, chartManage, taskIntro, taskSetting, versionHistory
+    memberList, taskData, pullRequests, chartManage, taskIntro, taskSetting, versionHistory, createFile
   },
   data() {
     return {
