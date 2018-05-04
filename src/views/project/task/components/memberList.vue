@@ -135,6 +135,7 @@ export default {
   methods: {
     handleTabClick() {
       console.log('-----')
+      this.$emit('toggleStatus')
     },
     // 处理邀请成员点击事件的方法
     handleInvite() {

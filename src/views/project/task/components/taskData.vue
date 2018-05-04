@@ -31,10 +31,10 @@
         </el-col>
         <el-col :span="4" :offset="10">
           <el-button-group class="task-options-button">
-            <el-button size="small" plain>
+            <el-button size="small" @click="handleCreate" plain>
               <icon name="file-o"></icon>
               新 建</el-button>
-            <el-button size="small" plain>
+            <el-button size="small" @click="handleUpload" plain>
               <icon name="upload"></icon>文件上传</el-button>
             <el-button size="small" plain>
               <icon name="cloud-download"></icon>下 载</el-button>
@@ -74,6 +74,7 @@ export default {
   methods: {
     handleTabClick() {
       console.log('任务数据')
+      this.$emit('toggleStatus')
       // this.getTaskData()
     },
     getTaskData() {
@@ -91,12 +92,17 @@ export default {
             this.filteredBranch.push(element)
           }
         })
-        // this.filteredBranch = []
       }
     },
     changeBranch(row) {
       this.currentBranch = row.name
       console.log('分支切换成功')
+    },
+    handleCreate() {
+      this.$emit('toggleStatus', 'create')
+    },
+    handleUpload() {
+      this.$emit('toggleStatus', 'upload')
     }
   }
 }
@@ -105,36 +111,36 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .task-data-header {
   margin-bottom: 10px;
-  .branch-dropdown {
-    &-button {
-      margin-left: 20px;
-    }
-    &-content {
-      .el-card {
-        &__header {
-          font-size: 12px;
-          padding: 5px 10px;
-        }
-        &__body {
-          padding: 4px 0px;
-        }
-      }
-      padding: 0;
-      border-radius: 5px;
-    }
+}
+.branch-dropdown {
+  &-button {
+    margin-left: 20px;
   }
-  .task-options-button {
-    position: absolute;
-    right: 18px;
-    padding-right: 12px;
-    .el-button {
-      &:not(:last-child) {
-        margin-right: 0px;
+  &-content {
+    .el-card {
+      &__header {
+        font-size: 12px;
+        padding: 5px 10px;
       }
-      &:not(:first-child):not(:last-child) {
-        border-left-color: #acb1b7;
-        border-right-color: #acb1b7;
+      &__body {
+        padding: 4px 0px;
       }
+    }
+    padding: 0;
+    border-radius: 5px;
+  }
+}
+.task-options-button {
+  position: absolute;
+  right: 18px;
+  padding-right: 12px;
+  .el-button {
+    &:not(:last-child) {
+      margin-right: 0px;
+    }
+    &:not(:first-child):not(:last-child) {
+      border-left-color: #acb1b7;
+      border-right-color: #acb1b7;
     }
   }
 }

@@ -13,3 +13,5 @@ export { default as taskSetting } from './taskSetting'
 export { default as versionHistory } from './versionHistory'
 
 export { default as createFile } from './createFile'
+
+export { default as uploadFile } from './uploadFile'

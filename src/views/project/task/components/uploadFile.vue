@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h2>创建新的文件</h2>
-    <el-input placeholder="test"></el-input>
+    <h2>文件上传</h2>
   </div>
 </template>
 

@@ -29,50 +29,15 @@
     <el-row type="flex" justify="center">
       <el-col>
         <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
-          <el-tab-pane name="taskData">
+          <el-tab-pane v-for="(tab, index) in tabs" :key="index" :name="tab.name">
             <span slot="label">
-              <icon name="list-ul"></icon> 数据
+              <icon :name="tab.icon"></icon> {{tab.lable}}
             </span>
             <keep-alive>
-              <task-data :taskId="taskId" ref="taskData"></task-data>
+              <component v-show="status==''" v-bind:is="tab.name" :ref="tab.name" @toggleStatus="changeStatue"></component>
             </keep-alive>
-          </el-tab-pane>
-          <el-tab-pane name="pullRequests">
-            <span slot="label">
-              <icon name="mail-forward"></icon> 合并请求
-            </span>
-            <pull-requests ref="pullRequests"></pull-requests>
-          </el-tab-pane>
-          <el-tab-pane name="chartManage">
-            <span slot="label">
-              <icon name="bar-chart-o"></icon> 图表管理
-            </span>
-            <chart-manage ref="chartManage"></chart-manage>
-          </el-tab-pane>
-          <el-tab-pane name="versionHistory">
-            <span slot="label">
-              <icon name="gg"></icon> 版本历史
-            </span>
-            <version-history ref="versionHistory"></version-history>
-          </el-tab-pane>
-          <el-tab-pane name="taskMember">
-            <span slot="label">
-              <icon name="users"></icon> 任务成员
-            </span>
-            <member-list ref="taskMember"></member-list>
-          </el-tab-pane>
-          <el-tab-pane name="taskIntro">
-            <span slot="label">
-              <icon name="info"></icon> 任务介绍
-            </span>
-            <task-intro ref="taskIntro"></task-intro>
-          </el-tab-pane>
-          <el-tab-pane name="taskSetting">
-            <span slot="label">
-              <icon name="gears"></icon> 设置
-            </span>
-            <task-setting ref="taskSetting"></task-setting>
-            {{ projectId }} {{ taskId }}
+            <create-file v-show="status=='create'"></create-file>
+            <upload-file v-show="status=='upload'"></upload-file>
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -83,18 +48,25 @@
 <script>
 import { getObj as getTaskObj } from 'api/project/task/index'
 import { getObj as getProjectObj } from 'api/project/index'
-import { memberList, taskData, pullRequests, chartManage, taskIntro, taskSetting, versionHistory, createFile } from './components/index'
-
+import { memberList, taskData, pullRequests, chartManage, taskIntro, taskSetting, versionHistory, createFile, uploadFile } from './components/index'
 export default {
   props: ['projectId', 'taskId'], // 获取路由上项目的id
   components: {
-    memberList, taskData, pullRequests, chartManage, taskIntro, taskSetting, versionHistory, createFile
+    memberList, taskData, pullRequests, chartManage, taskIntro, taskSetting, versionHistory, createFile, uploadFile
   },
   data() {
     return {
       activeName: 'taskData', // 进去详情页首先显示的标签
       task: {}, /* 用解构赋值的方式来解的数据 */
-      project: {}
+      project: {},
+      tabs: [{ name: 'taskData', icon: 'list-ul', lable: '数据' },
+      { name: 'pullRequests', icon: 'mail-forward', lable: '合并请求' },
+      { name: 'chartManage', icon: 'bar-chart-o', lable: '图标管理' },
+      { name: 'taskIntro', icon: 'info', lable: '任务简介' },
+      { name: 'versionHistory', icon: 'gg', lable: '历史版本' },
+      { name: 'memberList', icon: 'users', lable: '成员' },
+      { name: 'taskSetting', icon: 'gears', lable: '设置' }],
+      status: ''
     }
   },
   created() {
@@ -103,7 +75,7 @@ export default {
   methods: {
     handleTabClick(tab, event) {
       // 触发tab内组件的初始化（请求后台数据）
-      this.$refs[tab.name].handleTabClick()
+      this.$refs[tab.name][0].handleTabClick()
     },
     getTaskBasicInfo(taskId, projectId) {
       getTaskObj(taskId).then(res => {
@@ -120,6 +92,13 @@ export default {
     },
     getTaskId() {
       return this.taskId
+    },
+    changeStatue(data) {
+      if (data === undefined) {
+        this.status = ''
+      } else {
+        this.status = data
+      }
     }
   }
 }
