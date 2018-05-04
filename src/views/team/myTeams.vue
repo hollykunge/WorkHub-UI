@@ -113,7 +113,7 @@
         <el-button v-else-if="dialogStatus=='update'" type="primary" @click="update('form')">确 定</el-button>
       </div>
     </el-dialog>
-    <link-user :show.sync="showLinkUserDialog"></link-user>
+    <link-user :show.sync="showLinkUserDialog" :teamId="2"></link-user>
   </div>
 </template>
 
@@ -122,10 +122,7 @@ import { page, addObj, getObj, delObj, putObj } from 'api/project/team/index'
 import { mapGetters } from 'vuex'
 import linkUser from './components/linkUser'
 export default {
-  name: 'organize',
-  components: {
-    linkUser
-  },
+  components: { linkUser },
   data() {
     return {
       form: {

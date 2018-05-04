@@ -57,7 +57,7 @@
 <script>
 import { all as getAllOrg, getUsers as getOrgUsers } from 'api/admin/organize/index'
 import { page as queryUser } from 'api/admin/user/index'
-import { } from 'api/project/team/index'
+import { modifyTeamUsers } from 'api/project/team/index'
 export default {
   name: 'linkUser',
   props: {
@@ -106,6 +106,11 @@ export default {
         this.orgTree[0].children[0].children = res
       })
       // 通过teamId获取当前的成员，存到userSelected中
+      // const vals = {}
+      modifyTeamUsers(this.teamId, [7]).then(res => {
+        console.log('---------')
+        console.log(res)
+      })
     },
     filterOrgNode(value, data) { // 筛选组织树节点
       if (!value) return true
@@ -142,7 +147,11 @@ export default {
       }
     },
     handleLink() {
-      console.log(this.userSelected)
+      // console.log(this.userSelected)
+      modifyTeamUsers(this.teamId, this.userSelected).then(res => {
+        console.log('---------')
+        console.log(res)
+      })
     },
     /* ----------------------------------------------------------------- */
     filterUser() {

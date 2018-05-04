@@ -44,3 +44,11 @@ export function all() {
     method: 'get'
   })
 }
+
+// mock测试数据接口
+export function getTaskData(taskId) {
+  return fetch({
+    url: '/sys/project/task/' + taskId,
+    method: 'get'
+  })
+}

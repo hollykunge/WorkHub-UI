@@ -11,3 +11,4 @@ selenium-debug.log
 .vscode
 npm-debug.log.3365733778
 src/views/backup
+src/mock
