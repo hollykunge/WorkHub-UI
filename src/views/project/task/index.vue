@@ -1,5 +1,5 @@
 <template>
-  <!--项目详情页首页-->
+  <!--任务详情页首页-->
   <div>
     <el-row type="flex" justify="start">
       <el-col :span="10">
@@ -28,18 +28,21 @@
     </el-row>
     <el-row type="flex" justify="center">
       <el-col>
-        <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
+        <el-tabs v-model="activeName" type="card">
           <el-tab-pane v-for="(tab, index) in tabs" :key="index" :name="tab.name">
-            <span slot="label">
+            <span slot="label" @click="handleTest(tab.name)">
               <icon :name="tab.icon"></icon> {{tab.lable}}
             </span>
-            <keep-alive>
+
+            <!-- <keep-alive>
               <component v-show="status==''" v-bind:is="tab.name" :ref="tab.name" @toggleStatus="changeStatue"></component>
             </keep-alive>
-            <create-file v-show="status=='create'"></create-file>
-            <upload-file v-show="status=='upload'"></upload-file>
+            <create-file v-show="status=='create'" @toggleStatus="changeStatue"></create-file>
+            <upload-file v-show="status=='upload'" @toggleStatus="changeStatue"></upload-file>
+            <request-content v-show="status=='request'" @toggleStatus="changeStatue"></request-content> -->
           </el-tab-pane>
         </el-tabs>
+        <router-view></router-view>
       </el-col>
     </el-row>
   </div>
@@ -48,19 +51,21 @@
 <script>
 import { getObj as getTaskObj } from 'api/project/task/index'
 import { getObj as getProjectObj } from 'api/project/index'
-import { memberList, taskData, pullRequests, chartManage, taskIntro, taskSetting, versionHistory, createFile, uploadFile } from './components/index'
+import { memberList, taskData, pullRequest, chartManage,
+  taskIntro, taskSetting, versionHistory, createFile,
+  uploadFile, requestContent } from './components/index'
 export default {
   props: ['projectId', 'taskId'], // 获取路由上项目的id
   components: {
-    memberList, taskData, pullRequests, chartManage, taskIntro, taskSetting, versionHistory, createFile, uploadFile
+    memberList, taskData, pullRequest, chartManage, taskIntro, taskSetting, versionHistory, createFile, uploadFile, requestContent
   },
   data() {
     return {
-      activeName: 'taskData', // 进去详情页首先显示的标签
+      activeName: 'pullRequest', // 进去详情页首先显示的标签
       task: {}, /* 用解构赋值的方式来解的数据 */
       project: {},
       tabs: [{ name: 'taskData', icon: 'list-ul', lable: '数据' },
-      { name: 'pullRequests', icon: 'mail-forward', lable: '合并请求' },
+      { name: 'pullRequest', icon: 'mail-forward', lable: '合并请求' },
       { name: 'chartManage', icon: 'bar-chart-o', lable: '图标管理' },
       { name: 'taskIntro', icon: 'info', lable: '任务简介' },
       { name: 'versionHistory', icon: 'gg', lable: '历史版本' },
@@ -70,12 +75,30 @@ export default {
     }
   },
   created() {
+    var str = window.location.href
+    var index = str.lastIndexOf('\/')
     this.getTaskBasicInfo(this.taskId, this.projectId)
+    this.activeName = str.substring(index + 1, str.length)
+  },
+  watch: {
+    activeName(val) {
+      // this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + val)
+      // console.log(val)
+    }
   },
   methods: {
+    handleTest(val) {
+      console.log(val)
+      this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + val)
+    },
     handleTabClick(tab, event) {
       // 触发tab内组件的初始化（请求后台数据）
-      this.$refs[tab.name][0].handleTabClick()
+      // this.$refs[tab.name][0].handleTabClick()
+
+      // 用路由控制组件
+      this.activeName = tab.name
+      this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + tab.name)
+      console.log(tab.name)
     },
     getTaskBasicInfo(taskId, projectId) {
       getTaskObj(taskId).then(res => {
@@ -142,7 +165,11 @@ export default {
   margin: 0 0 0 10%;
   .el-tabs__nav {
     .el-tabs__item {
-      margin: 0px 35px;
+      margin: 0px 15px;
+      padding: 0px;
+      span {
+        padding: 16px;
+      }
       .mark {
         margin-top: 8px;
         line-height: 1;

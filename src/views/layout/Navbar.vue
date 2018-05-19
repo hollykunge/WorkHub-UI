@@ -33,9 +33,7 @@
 </template>
 
 <script>
-import {
-  mapGetters
-} from 'vuex'
+import { mapGetters } from 'vuex'
 import Levelbar from './Levelbar'
 import TabsView from './TabsView'
 import Hamburger from 'components/Hamburger'
@@ -117,7 +115,7 @@ export default {
       position: relative;
       .user-avatar {
         width: 40px;
-        height: 40px;
+        height: auto;
         border-radius: 10px;
       }
       .el-icon-caret-bottom {
