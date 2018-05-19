@@ -145,10 +145,14 @@ export default {
   }
 }
 .el-tabs__nav-scroll {
-  margin: 0 0 0 15%;
+  margin: 0 0 0 10%;
   .el-tabs__nav {
     .el-tabs__item {
-      margin: 0px 35px;
+      margin: 0px 15px;
+      padding: 0px;
+      span {
+        padding: 16px;
+      }
       .mark {
         margin-top: 8px;
         line-height: 1;

@@ -32,14 +32,14 @@ module.exports = {
     proxyTable: {
       '/jwt': {
         target: 'http://localhost:8765',
-        // target: 'http://192.168.0.101:8765',
+        // target: 'http://172.20.10.3:8765',
         pathRewrite: {
           '^/jwt': '/jwt'
         },
       },
       '/api': {
         target: 'http://localhost:8765',
-        // target: 'http://192.168.0.101:8765',
+        // target: 'http://172.20.10.3:8765',
         pathRewrite: {
           '^/api': '/api'
         },

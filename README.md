@@ -73,3 +73,42 @@
 
 ## 状态管理
 后台只有user和app配置相关状态使用vuex存在全局，其它数据都由每个业务页面自己管理。
+
+## ESLint 和 JavaScript Standard Style
+建议使用VSCode打开项目，安装 ESLint 和 JavaScript Standard Style 插件，管理代码风格，防止ESLint报错。
+settings.json文件如下
+```
+{
+    "eslint.enable": true,
+    "workbench.startupEditor": "welcomePage",
+    "vetur.format.defaultFormatter.js": "vscode-typescript",
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "editor.tabSize": 2,
+    "eslint.autoFixOnSave": true,
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        {
+            "language": "vue",
+            "autoFix": true
+        },
+        {
+            "language": "html",
+            "autoFix": true
+        }
+    ],
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "vetur.format.defaultFormatter.html": "js-beautify-html",
+    "standard.enable": false,
+    "workbench.statusBar.visible": true,
+    "workbench.activityBar.visible": true,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "none",
+    "editor.renderControlCharacters": false
+}
+```

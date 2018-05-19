@@ -1,0 +1,191 @@
+<template>
+  <div class="pull-request">
+    <div class="pull-request-header">
+      <el-row>
+        <el-col :span="12">
+          <el-button class="new-pull-request" type="success" size="small">新建合并请求</el-button>
+        </el-col>
+        <el-col :span="12">
+          <div class="pull-request-button-group">
+            <el-button-group>
+              <el-button type="warning" size="small" plain>
+                标签</el-button>
+              <el-button type="warning" size="small" plain>里程碑</el-button>
+            </el-button-group>
+            <el-input @keyup.enter.native="handleTaskFilter" placeholder="输入关键词" size="small" v-model="searchKeys"></el-input>
+            <el-button type="primary" v-waves icon="search" @click="handleTaskFilter" size="small">搜索</el-button>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="pull-request-body">
+      <el-table :data="pullRequestHeader" :show-header="false" class="file-table-header" empty-text="无更新记录">
+        <el-table-column align="left">
+          <template scope="scope">
+            <span style="font-size: 13px; color: #8391a5;">
+              <a>
+                <icon name="circle-o"></icon>
+                <strong>待解决</strong>
+              </a>&nbsp;&nbsp;&nbsp;&nbsp;
+              <a>
+                <icon name="check"></icon>
+                <strong>已完成</strong>
+              </a>
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column align="right">
+          <template scope="scope">
+            <span style="color: #7b7373; font-size: 13px;">
+              <el-dropdown trigger="click" menu-align="start" class="user-dropdown">
+                <el-button size="small" type="text" class="user-dropdown-button">筛选用户
+                  <icon name="caret-down"></icon>
+                </el-button>
+                <el-dropdown-menu slot="dropdown" class="user-dropdown-content" style="background: #eef1f6; border-radius: 8px; width: 200px;">
+                  <span style="line-height: 25px; font-size: 14px; margin-left: 10px;">通过用户筛选
+                    <el-input style="margin-bottom: 10px;" placeholder="搜索用户" v-model="fliterUserText" size="small" autofocus></el-input>
+                  </span>
+                  <el-table @row-click="changeUser" :data="filteredUser" :show-header="false" empty-text="Nothing to show">
+                    <el-table-column>
+                      <template scope="scope">
+                        <span>{{ scope.row.name }}</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column>
+                      <template scope="scope">
+                        <span v-if="scope.row.name===currentUser">
+                          <icon name="check"></icon>
+                        </span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </span>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <el-table :data="pullRequestList" :show-header="false">
+        <el-table-column align="left">
+          <template scope="scope">
+            <div class="pull-request-description">
+              <icon name="exchange" style="color: #13ce66"></icon>
+              <div class="pull-request-description-title">
+                <h3 @click="handleCheckResquest">
+                  <a>{{scope.row.title}}</a>
+                </h3>
+                <span>{{scope.row.tips}}</span>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="right">
+          <template scope="scope">
+            <span v-if="scope.row.commentNum!=0" style="color: #7b7373;">
+              <a>
+                <icon name="comment-o"></icon>
+                {{scope.row.commentNum}}
+              </a>
+            </span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      searchKeys: '',
+      // **********************************通过用户搜索************************************************
+      currentUser: '',
+      fliterUserText: '',
+      filteredUser: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
+      users: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
+
+      pullRequestHeader: [{ name: 'jihainan', hashCode: 'b2a5e260d4', comment: '修改表头样式', time: '一个小时之前' }],
+      pullRequestList: [{ title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一个小时前提交', isFolder: true }, { title: '添加window10支持', tips: '#450 test在十分钟前提交', commentNum: '0', isFolder: false }] }
+  },
+  watch: {
+    fliterUserText(val) { this.filterUser(val) }
+  },
+  methods: {
+    handleTabClick() {
+      console.log('合并请求')
+      this.$emit('toggleStatus')
+    },
+    handleTaskFilter() {
+      console.log('123')
+    },
+    changeUser(row) {
+      this.currentUser = row.name
+      console.log('分支切换成功')
+    },
+    filterUser(val) {
+      if (!val) {
+        this.filteredUser = this.users
+      } else {
+        this.filteredUser = []
+        this.users.forEach(element => {
+          if (element.name.indexOf(val) >= 0) {
+            this.filteredUser.push(element)
+          }
+        })
+      }
+    },
+    handleCheckResquest() {
+      this.$emit('toggleStatus', 'request')
+    }
+  }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss">
+.pull-request {
+  &-header {
+    margin-bottom: 10px;
+    .new-pull-request {
+      margin-left: 20px;
+    }
+    .pull-request-button-group {
+      position: absolute;
+      right: 18px;
+      padding-right: 12px;
+      .el-input {
+        width: 150px;
+      }
+      .el-button {
+        &:not(:last-child) {
+          margin-right: 0px;
+          border-right-color: #acb1b7;
+        }
+      }
+    }
+  }
+  &-body {
+    margin: 0 30px 10px 20px;
+    .file-table-header {
+      border-radius: 3px 3px 0 0;
+      .el-table__row {
+        background-color: #eef1f6;
+      }
+    }
+    .pull-request-description {
+      display: inline-flex;
+      h3 {
+        margin: -2px 10px;
+      }
+      &-title {
+        span {
+          margin-left: 12px;
+          font-size: 12px;
+          color: #7b7373;
+        }
+      }
+    }
+  }
+}
+</style>

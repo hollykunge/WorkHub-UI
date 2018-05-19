@@ -57,7 +57,51 @@ export const constantRouterMap = [{
     path: 'projectSys/allProjects/:projectId/:taskId',
     component: _import('project/task/index'),
     name: '任务详情',
-    props: true
+    redirect: 'projectSys/allProjects/:projectId/:taskId/taskData',
+    props: true,
+    children: [{
+      path: 'taskData',
+      component: _import('project/task/components/taskData'),
+      name: '数据'
+    }, {
+      path: 'pullRequest',
+      component: _import('project/task/components/pullRequest'),
+      name: '合并请求',
+      children: [{
+        path: ':pullId',
+        component: _import('project/task/components/requestContent'),
+        name: '请求详情',
+        props: true
+      }]
+    }, {
+      path: 'chartManage',
+      component: _import('project/task/components/chartManage'),
+      name: '图表管理'
+    }, {
+      path: 'taskIntro',
+      component: _import('project/task/components/taskIntro'),
+      name: '任务简介'
+    }, {
+      path: 'versionHistory',
+      component: _import('project/task/components/versionHistory'),
+      name: '历史版本'
+    }, {
+      path: 'memberList',
+      component: _import('project/task/components/memberList'),
+      name: '成员'
+    }, {
+      path: 'taskSetting',
+      component: _import('project/task/components/taskSetting'),
+      name: '设置'
+    }, {
+      path: 'new',
+      component: _import('project/task/components/createFile'),
+      name: '新建文件'
+    }, {
+      path: 'upload',
+      component: _import('project/task/components/uploadFile'),
+      name: '文件上传'
+    }]
   }]
 },
 {

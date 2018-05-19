@@ -18,7 +18,7 @@ import Sticky from 'components/Sticky' // 粘性header组件
 import IconSvg from 'components/Icon-svg'// svg 组件
 import vueWaves from './directive/waves'// 水波纹指令
 import errLog from 'store/errLog'// error log组件
-import './mock/index.js'  // 该项目所有请求使用mockjs模拟
+//import './mock/index.js'  // 该项目所有请求使用mockjs模拟
 import Avatar from 'vue-avatar' // 根据用户名生成头像的插件
 import { getToken } from 'utils/auth'
 
