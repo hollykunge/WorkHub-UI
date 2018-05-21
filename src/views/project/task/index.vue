@@ -32,13 +32,8 @@
           <el-tab-pane v-for="(tab, index) in tabs" :key="index" :name="tab.name">
             <span slot="label" @click="handleTabClick(tab.name)">
               <icon :name="tab.icon"></icon> {{tab.lable}}
+              <el-badge v-if="tab.name=='pullRequest'" class="mark" :value="pullNum"></el-badge>
             </span>
-            <!-- <keep-alive>
-              <component v-show="status==''" v-bind:is="tab.name" :ref="tab.name" @toggleStatus="changeStatue"></component>
-            </keep-alive>
-            <create-file v-show="status=='create'" @toggleStatus="changeStatue"></create-file>
-            <upload-file v-show="status=='upload'" @toggleStatus="changeStatue"></upload-file>
-            <request-content v-show="status=='request'" @toggleStatus="changeStatue"></request-content> -->
           </el-tab-pane>
         </el-tabs>
         <keep-alive>
@@ -65,8 +60,8 @@ export default {
       { name: 'taskIntro', icon: 'info', lable: '任务简介' },
       { name: 'versionHistory', icon: 'gg', lable: '历史版本' },
       { name: 'memberList', icon: 'users', lable: '成员' },
-      { name: 'taskSetting', icon: 'gears', lable: '设置' }]
-      // status: ''
+      { name: 'taskSetting', icon: 'gears', lable: '设置' }],
+      pullNum: 3 // 这个数据应该从上面的task中获得
     }
   },
   created() {
@@ -80,15 +75,6 @@ export default {
       console.log(val)
       this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + val)
     },
-    // handleTabClick(tab, event) {
-    // 触发tab内组件的初始化（请求后台数据）
-    // this.$refs[tab.name][0].handleTabClick()
-
-    // 用路由控制组件
-    // this.activeName = tab.name
-    // this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + tab.name)
-    // console.log(tab.name)
-    // },
     getTaskBasicInfo(taskId, projectId) {
       getTaskObj(taskId).then(res => {
         const data = res.data;
@@ -102,20 +88,13 @@ export default {
     ToProject() {
       this.$router.push({ name: '项目详情', params: { projectId: this.projectId }})
     },
-    // changeStatue(data) {
-    //   if (data === undefined) {
-    //     this.status = ''
-    //   } else {
-    //     this.status = data
-    //   }
-    // }
     tabNavigation() { // 根据路由地址导航到对应的tab页
       const str = window.location.href
       const index = str.lastIndexOf('\/')
       const tab = str.substring(index + 1, str.length)
       if (tab === 'new' || tab === 'upload') {
         this.activeName = 'taskData'
-      } else if (tab === 'content') {
+      } else if (tab === 'content' || tab === 'newPull') {
         this.activeName = 'pullRequest'
       } else {
         this.activeName = tab

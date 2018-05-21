@@ -17,3 +17,5 @@ export { default as createFile } from './createFile'
 export { default as uploadFile } from './uploadFile'
 
 export { default as requestContent } from './requestContent'
+
+export { default as newPull } from './newPull'

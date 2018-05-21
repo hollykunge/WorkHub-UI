@@ -3,7 +3,7 @@
     <div class="pull-request-header">
       <el-row>
         <el-col :span="12">
-          <el-button class="new-pull-request" type="success" size="small">新建合并请求</el-button>
+          <el-button class="new-pull-request" type="success" size="small" @click="handleNewPull">新建合并请求</el-button>
         </el-col>
         <el-col :span="12">
           <div class="pull-request-button-group">
@@ -113,7 +113,12 @@ export default {
   watch: {
     fliterUserText(val) { this.filterUser(val) },
     // 监听requestType，当变化时根据requestType的值重新获取request列表
-    requestType() { }
+    requestType: {
+      handler(oldValue, newValue) {
+        console.log('重新获取合并请求的列表')
+      },
+      deep: true
+    }
   },
   computed: {
     openedClass() {
@@ -124,10 +129,6 @@ export default {
     }
   },
   methods: {
-    // handleTabClick() {
-    //   console.log('合并请求')
-    //   this.$emit('toggleStatus')
-    // },
     handleTaskFilter() {
       console.log('123')
     },
@@ -136,6 +137,9 @@ export default {
     },
     handleClosed() {
       this.requestType.closed = true
+    },
+    handleNewPull() {
+      this.$router.push({ name: '新建合并请求' })
     },
     changeUser(row) {
       this.requestType.currentUser = row.name
@@ -154,9 +158,6 @@ export default {
       }
     },
     handleCheckRequest(row) {
-      // this.$emit('toggleStatus', 'request')
-      // 查看请求的详细信息
-      // this.$router.push()
       console.log(row)
       this.$router.push({ name: '合并请求详情', params: { pullId: row.id }})
     }
