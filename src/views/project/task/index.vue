@@ -33,12 +33,6 @@
             <span slot="label" @click="handleTabClick(tab.name)">
               <icon :name="tab.icon"></icon> {{tab.lable}}
             </span>
-            <!-- <keep-alive>
-              <component v-show="status==''" v-bind:is="tab.name" :ref="tab.name" @toggleStatus="changeStatue"></component>
-            </keep-alive>
-            <create-file v-show="status=='create'" @toggleStatus="changeStatue"></create-file>
-            <upload-file v-show="status=='upload'" @toggleStatus="changeStatue"></upload-file>
-            <request-content v-show="status=='request'" @toggleStatus="changeStatue"></request-content> -->
           </el-tab-pane>
         </el-tabs>
         <keep-alive>
@@ -80,15 +74,6 @@ export default {
       console.log(val)
       this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + val)
     },
-    // handleTabClick(tab, event) {
-    // 触发tab内组件的初始化（请求后台数据）
-    // this.$refs[tab.name][0].handleTabClick()
-
-    // 用路由控制组件
-    // this.activeName = tab.name
-    // this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + tab.name)
-    // console.log(tab.name)
-    // },
     getTaskBasicInfo(taskId, projectId) {
       getTaskObj(taskId).then(res => {
         const data = res.data;
@@ -102,20 +87,13 @@ export default {
     ToProject() {
       this.$router.push({ name: '项目详情', params: { projectId: this.projectId }})
     },
-    // changeStatue(data) {
-    //   if (data === undefined) {
-    //     this.status = ''
-    //   } else {
-    //     this.status = data
-    //   }
-    // }
     tabNavigation() { // 根据路由地址导航到对应的tab页
       const str = window.location.href
       const index = str.lastIndexOf('\/')
       const tab = str.substring(index + 1, str.length)
       if (tab === 'new' || tab === 'upload') {
         this.activeName = 'taskData'
-      } else if (tab === 'content') {
+      } else if (tab === 'content' || tab === 'newPull') {
         this.activeName = 'pullRequest'
       } else {
         this.activeName = tab

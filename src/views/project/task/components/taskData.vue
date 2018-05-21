@@ -119,7 +119,6 @@ export default {
   created() {
     // 进入到详情页自动获取后台数据
     // this.getTaskData()
-    console.log(this.avatar)
   },
   methods: {
     // handleTabClick() {

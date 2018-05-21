@@ -3,7 +3,7 @@
     <div class="pull-request-header">
       <el-row>
         <el-col :span="12">
-          <el-button class="new-pull-request" type="success" size="small">新建合并请求</el-button>
+          <el-button class="new-pull-request" type="success" size="small" @click="handleNewPull">新建合并请求</el-button>
         </el-col>
         <el-col :span="12">
           <div class="pull-request-button-group">
@@ -137,6 +137,9 @@ export default {
     },
     handleClosed() {
       this.requestType.closed = true
+    },
+    handleNewPull() {
+      this.$router.push({ name: '新建合并请求' })
     },
     changeUser(row) {
       this.requestType.currentUser = row.name

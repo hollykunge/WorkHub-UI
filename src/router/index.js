@@ -75,11 +75,6 @@ export const constantRouterMap = [{
       //   props: true
       // }]
     }, {
-      path: ':pullId/content',
-      component: _import('project/task/components/requestContent'),
-      name: '合并请求详情',
-      props: true
-    }, {
       path: 'chartManage',
       component: _import('project/task/components/chartManage'),
       name: '图表管理'
@@ -107,6 +102,16 @@ export const constantRouterMap = [{
       path: 'upload',
       component: _import('project/task/components/uploadFile'),
       name: '文件上传'
+    }, {
+      path: ':pullId/content',
+      component: _import('project/task/components/requestContent'),
+      name: '合并请求详情',
+      props: true
+    }, {
+      path: 'newPull',
+      component: _import('project/task/components/newPull'),
+      name: '新建合并请求',
+      props: true
     }]
   }]
 },
