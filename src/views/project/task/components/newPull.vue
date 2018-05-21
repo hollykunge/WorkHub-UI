@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="new-pull-qequest">
     <h2>新建合并请求</h2>
   </div>
 </template>
@@ -10,5 +10,5 @@ export default {
 }
 </script>
 
-<style>
+<style rel="stylesheet/scss" lang="scss">
 </style>

@@ -32,6 +32,7 @@
           <el-tab-pane v-for="(tab, index) in tabs" :key="index" :name="tab.name">
             <span slot="label" @click="handleTabClick(tab.name)">
               <icon :name="tab.icon"></icon> {{tab.lable}}
+              <el-badge v-if="tab.name=='pullRequest'" class="mark" :value="pullNum"></el-badge>
             </span>
           </el-tab-pane>
         </el-tabs>
@@ -59,8 +60,8 @@ export default {
       { name: 'taskIntro', icon: 'info', lable: '任务简介' },
       { name: 'versionHistory', icon: 'gg', lable: '历史版本' },
       { name: 'memberList', icon: 'users', lable: '成员' },
-      { name: 'taskSetting', icon: 'gears', lable: '设置' }]
-      // status: ''
+      { name: 'taskSetting', icon: 'gears', lable: '设置' }],
+      pullNum: 3 // 这个数据应该从上面的task中获得
     }
   },
   created() {
