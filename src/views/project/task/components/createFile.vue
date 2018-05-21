@@ -63,13 +63,15 @@ export default {
   },
   methods: {
     handleCreate() {
-      this.$emit('toggleStatus', '')
+      // this.$emit('toggleStatus', '')
       alert('文件创建成功')
       this.content = ''
       this.fileName = undefined
+      this.$router.push({ name: '数据' })
     },
     cancle() {
-      this.$emit('toggleStatus', '')
+      // this.$emit('toggleStatus', '')
+      this.$router.go(-1)
     }
 
   }

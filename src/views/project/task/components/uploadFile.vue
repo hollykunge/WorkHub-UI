@@ -66,12 +66,14 @@ export default {
   },
   methods: {
     handleCreate() {
-      this.$emit('toggleStatus', '')
+      // this.$emit('toggleStatus', '')
       alert('文件上传成功')
       this.fileList = []
+      this.$router.push({ name: '数据' })
     },
     cancle() {
-      this.$emit('toggleStatus', '')
+      // this.$emit('toggleStatus', '')
+      this.$router.go(-1)
     }
   }
 }

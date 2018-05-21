@@ -62,7 +62,8 @@ export const constantRouterMap = [{
     children: [{
       path: 'taskData',
       component: _import('project/task/components/taskData'),
-      name: '数据'
+      name: '数据',
+      props: true
     }, {
       path: 'pullRequest',
       component: _import('project/task/components/pullRequest'),
