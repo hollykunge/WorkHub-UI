@@ -115,6 +115,8 @@ export default {
       const tab = str.substring(index + 1, str.length)
       if (tab === 'new' || tab === 'upload') {
         this.activeName = 'taskData'
+      } else if (tab === 'content') {
+        this.activeName = 'pullRequest'
       } else {
         this.activeName = tab
       }

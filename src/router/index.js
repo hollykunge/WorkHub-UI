@@ -67,13 +67,18 @@ export const constantRouterMap = [{
     }, {
       path: 'pullRequest',
       component: _import('project/task/components/pullRequest'),
-      name: '合并请求',
-      children: [{
-        path: ':pullId',
-        component: _import('project/task/components/requestContent'),
-        name: '请求详情',
-        props: true
-      }]
+      name: '合并请求'
+      // children: [{
+      //   path: ':pullId',
+      //   component: _import('project/task/components/requestContent'),
+      //   name: '请求详情',
+      //   props: true
+      // }]
+    }, {
+      path: ':pullId/content',
+      component: _import('project/task/components/requestContent'),
+      name: '合并请求详情',
+      props: true
     }, {
       path: 'chartManage',
       component: _import('project/task/components/chartManage'),

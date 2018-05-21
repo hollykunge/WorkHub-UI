@@ -22,12 +22,12 @@
       <el-table :data="pullRequestHeader" :show-header="false" class="file-table-header" empty-text="无更新记录">
         <el-table-column align="left">
           <template scope="scope">
-            <span style="font-size: 13px; color: #8391a5;">
-              <a>
+            <span v-show="scope" style="font-size: 13px;">
+              <a :style="closedClass" @click="handleOpened">
                 <icon name="circle-o"></icon>
                 <strong>待解决</strong>
               </a>&nbsp;&nbsp;&nbsp;&nbsp;
-              <a>
+              <a :style="openedClass" @click="handleClosed">
                 <icon name="check"></icon>
                 <strong>已完成</strong>
               </a>
@@ -36,7 +36,7 @@
         </el-table-column>
         <el-table-column align="right">
           <template scope="scope">
-            <span style="color: #7b7373; font-size: 13px;">
+            <span v-show="scope" style="color: #7b7373; font-size: 13px;">
               <el-dropdown trigger="click" menu-align="start" class="user-dropdown">
                 <el-button size="small" type="text" class="user-dropdown-button">筛选用户
                   <icon name="caret-down"></icon>
@@ -53,7 +53,7 @@
                     </el-table-column>
                     <el-table-column>
                       <template scope="scope">
-                        <span v-if="scope.row.name===currentUser">
+                        <span v-if="scope.row.name===requestType.currentUser">
                           <icon name="check"></icon>
                         </span>
                       </template>
@@ -72,7 +72,7 @@
             <div class="pull-request-description">
               <icon name="exchange" style="color: #13ce66"></icon>
               <div class="pull-request-description-title">
-                <h3 @click="handleCheckResquest">
+                <h3 @click="handleCheckRequest(scope.row)">
                   <a>{{scope.row.title}}</a>
                 </h3>
                 <span>{{scope.row.tips}}</span>
@@ -100,29 +100,46 @@ export default {
   data() {
     return {
       searchKeys: '',
-      // **********************************通过用户搜索************************************************
-      currentUser: '',
+      // 通过用户搜索
       fliterUserText: '',
       filteredUser: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
       users: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
+      // 对请求进行筛选，修改筛选条件时改变相应对象的值
+      requestType: { closed: false, currentUser: '' },
 
       pullRequestHeader: [{ name: 'jihainan', hashCode: 'b2a5e260d4', comment: '修改表头样式', time: '一个小时之前' }],
-      pullRequestList: [{ title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一个小时前提交', isFolder: true }, { title: '添加window10支持', tips: '#450 test在十分钟前提交', commentNum: '0', isFolder: false }] }
+      pullRequestList: [{ id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一个小时前提交', isFolder: true }, { id: 2, title: '添加window10支持', tips: '#450 test在十分钟前提交', commentNum: '0', isFolder: false }] }
   },
   watch: {
-    fliterUserText(val) { this.filterUser(val) }
+    fliterUserText(val) { this.filterUser(val) },
+    // 监听requestType，当变化时根据requestType的值重新获取request列表
+    requestType() { }
+  },
+  computed: {
+    openedClass() {
+      return this.requestType.closed ? { color: '#24292e' } : { color: '#96989b' }
+    },
+    closedClass() {
+      return this.requestType.closed ? { color: '#96989b' } : { color: '#24292e' }
+    }
   },
   methods: {
-    handleTabClick() {
-      console.log('合并请求')
-      this.$emit('toggleStatus')
-    },
+    // handleTabClick() {
+    //   console.log('合并请求')
+    //   this.$emit('toggleStatus')
+    // },
     handleTaskFilter() {
       console.log('123')
     },
+    handleOpened() {
+      this.requestType.closed = false
+    },
+    handleClosed() {
+      this.requestType.closed = true
+    },
     changeUser(row) {
-      this.currentUser = row.name
-      console.log('分支切换成功')
+      this.requestType.currentUser = row.name
+      console.log('用户切换成功')
     },
     filterUser(val) {
       if (!val) {
@@ -136,8 +153,12 @@ export default {
         })
       }
     },
-    handleCheckResquest() {
-      this.$emit('toggleStatus', 'request')
+    handleCheckRequest(row) {
+      // this.$emit('toggleStatus', 'request')
+      // 查看请求的详细信息
+      // this.$router.push()
+      console.log(row)
+      this.$router.push({ name: '合并请求详情', params: { pullId: row.id }})
     }
   }
 }
