@@ -45,12 +45,12 @@ module.exports = {
         },
       },
       // 用来做测试的mock数据
-      '/sys': {
-        target: 'https://www.easy-mock.com/mock/5a976850371a4725188755d6/sys',
-        pathRewrite: {
-          '^/sys': ''
-        }
-      }
+      // '/sys': {
+      //   target: 'https://www.easy-mock.com/mock/5a976850371a4725188755d6/sys',
+      //   pathRewrite: {
+      //     '^/sys': ''
+      //   }
+      // }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

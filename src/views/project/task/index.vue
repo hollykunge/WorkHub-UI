@@ -30,10 +30,9 @@
       <el-col>
         <el-tabs v-model="activeName" type="card">
           <el-tab-pane v-for="(tab, index) in tabs" :key="index" :name="tab.name">
-            <span slot="label" @click="handleTest(tab.name)">
+            <span slot="label" @click="handleTabClick(tab.name)">
               <icon :name="tab.icon"></icon> {{tab.lable}}
             </span>
-
             <!-- <keep-alive>
               <component v-show="status==''" v-bind:is="tab.name" :ref="tab.name" @toggleStatus="changeStatue"></component>
             </keep-alive>
@@ -42,7 +41,9 @@
             <request-content v-show="status=='request'" @toggleStatus="changeStatue"></request-content> -->
           </el-tab-pane>
         </el-tabs>
-        <router-view></router-view>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
       </el-col>
     </el-row>
   </div>
@@ -51,17 +52,11 @@
 <script>
 import { getObj as getTaskObj } from 'api/project/task/index'
 import { getObj as getProjectObj } from 'api/project/index'
-import { memberList, taskData, pullRequest, chartManage,
-  taskIntro, taskSetting, versionHistory, createFile,
-  uploadFile, requestContent } from './components/index'
 export default {
   props: ['projectId', 'taskId'], // 获取路由上项目的id
-  components: {
-    memberList, taskData, pullRequest, chartManage, taskIntro, taskSetting, versionHistory, createFile, uploadFile, requestContent
-  },
   data() {
     return {
-      activeName: 'pullRequest', // 进去详情页首先显示的标签
+      activeName: '', // 进去详情页首先显示的标签
       task: {}, /* 用解构赋值的方式来解的数据 */
       project: {},
       tabs: [{ name: 'taskData', icon: 'list-ul', lable: '数据' },
@@ -70,36 +65,30 @@ export default {
       { name: 'taskIntro', icon: 'info', lable: '任务简介' },
       { name: 'versionHistory', icon: 'gg', lable: '历史版本' },
       { name: 'memberList', icon: 'users', lable: '成员' },
-      { name: 'taskSetting', icon: 'gears', lable: '设置' }],
-      status: ''
+      { name: 'taskSetting', icon: 'gears', lable: '设置' }]
+      // status: ''
     }
   },
   created() {
-    var str = window.location.href
-    var index = str.lastIndexOf('\/')
+    this.tabNavigation()
     this.getTaskBasicInfo(this.taskId, this.projectId)
-    this.activeName = str.substring(index + 1, str.length)
   },
   watch: {
-    activeName(val) {
-      // this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + val)
-      // console.log(val)
-    }
   },
   methods: {
-    handleTest(val) {
+    handleTabClick(val) {
       console.log(val)
       this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + val)
     },
-    handleTabClick(tab, event) {
-      // 触发tab内组件的初始化（请求后台数据）
-      // this.$refs[tab.name][0].handleTabClick()
+    // handleTabClick(tab, event) {
+    // 触发tab内组件的初始化（请求后台数据）
+    // this.$refs[tab.name][0].handleTabClick()
 
-      // 用路由控制组件
-      this.activeName = tab.name
-      this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + tab.name)
-      console.log(tab.name)
-    },
+    // 用路由控制组件
+    // this.activeName = tab.name
+    // this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + tab.name)
+    // console.log(tab.name)
+    // },
     getTaskBasicInfo(taskId, projectId) {
       getTaskObj(taskId).then(res => {
         const data = res.data;
@@ -113,14 +102,21 @@ export default {
     ToProject() {
       this.$router.push({ name: '项目详情', params: { projectId: this.projectId }})
     },
-    getTaskId() {
-      return this.taskId
-    },
-    changeStatue(data) {
-      if (data === undefined) {
-        this.status = ''
+    // changeStatue(data) {
+    //   if (data === undefined) {
+    //     this.status = ''
+    //   } else {
+    //     this.status = data
+    //   }
+    // }
+    tabNavigation() { // 根据路由地址导航到对应的tab页
+      const str = window.location.href
+      const index = str.lastIndexOf('\/')
+      const tab = str.substring(index + 1, str.length)
+      if (tab === 'new' || tab === 'upload') {
+        this.activeName = 'taskData'
       } else {
-        this.status = data
+        this.activeName = tab
       }
     }
   }

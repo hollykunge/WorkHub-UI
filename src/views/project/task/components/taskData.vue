@@ -97,7 +97,7 @@
 import { getTaskData } from 'api/project/task/index'
 import { mapGetters } from 'vuex'
 export default {
-  props: ['taskId'],
+  props: ['projectId', 'taskId'],
   data() {
     return {
       // ***************************分支数据***************************************
@@ -121,11 +121,10 @@ export default {
     // this.getTaskData()
   },
   methods: {
-    handleTabClick() {
-      console.log('任务数据')
-      this.$emit('toggleStatus')
-      // this.getTaskData()
-    },
+    // handleTabClick() {
+    //   console.log('任务数据')
+    //   this.$emit('toggleStatus')
+    // },
     getTaskData() {
       getTaskData(this.taskId).then(res => {
         this.branches = res.data.branches
@@ -148,10 +147,13 @@ export default {
       console.log('分支切换成功')
     },
     handleCreate() {
-      this.$emit('toggleStatus', 'create')
+      // this.$router.push()
+      // console.log(this.$router.props)
+      this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + 'new')
     },
     handleUpload() {
-      this.$emit('toggleStatus', 'upload')
+      // this.$emit('toggleStatus', 'upload')
+      this.$router.push({ name: '文件上传' })
     }
   }
 }
