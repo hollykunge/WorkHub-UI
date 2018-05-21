@@ -72,7 +72,7 @@
             <div class="pull-request-description">
               <icon name="exchange" style="color: #13ce66"></icon>
               <div class="pull-request-description-title">
-                <h3 @click="handleCheckResquest">
+                <h3 @click="handleCheckRequest(scope.row)">
                   <a>{{scope.row.title}}</a>
                 </h3>
                 <span>{{scope.row.tips}}</span>
@@ -100,8 +100,7 @@ export default {
   data() {
     return {
       searchKeys: '',
-      // **********************************通过用户搜索************************************************
-      // currentUser: '',
+      // 通过用户搜索
       fliterUserText: '',
       filteredUser: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
       users: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
@@ -109,7 +108,7 @@ export default {
       requestType: { closed: false, currentUser: '' },
 
       pullRequestHeader: [{ name: 'jihainan', hashCode: 'b2a5e260d4', comment: '修改表头样式', time: '一个小时之前' }],
-      pullRequestList: [{ title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一个小时前提交', isFolder: true }, { title: '添加window10支持', tips: '#450 test在十分钟前提交', commentNum: '0', isFolder: false }] }
+      pullRequestList: [{ id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一个小时前提交', isFolder: true }, { id: 2, title: '添加window10支持', tips: '#450 test在十分钟前提交', commentNum: '0', isFolder: false }] }
   },
   watch: {
     fliterUserText(val) { this.filterUser(val) },
@@ -154,8 +153,12 @@ export default {
         })
       }
     },
-    handleCheckResquest() {
-      this.$emit('toggleStatus', 'request')
+    handleCheckRequest(row) {
+      // this.$emit('toggleStatus', 'request')
+      // 查看请求的详细信息
+      // this.$router.push()
+      console.log(row)
+      this.$router.push({ name: '合并请求详情', params: { pullId: row.id }})
     }
   }
 }
