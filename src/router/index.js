@@ -106,7 +106,28 @@ export const constantRouterMap = [{
       path: ':pullId/content',
       component: _import('project/task/components/requestContent'),
       name: '合并请求详情',
-      props: true
+      props: true,
+      children: [{
+        path: 'conversation',
+        component: _import('project/task/components/conversation'),
+        name: '合并请求详情-问题讨论',
+        props: true
+      }, {
+        path: 'commit',
+        component: _import('project/task/components/commit'),
+        name: '合并请求详情-提交记录',
+        props: true
+      }, {
+        path: 'checks',
+        component: _import('project/task/components/checks'),
+        name: '合并请求详情-冲突检测',
+        props: true
+      }, {
+        path: 'filesChanged',
+        component: _import('project/task/components/filesChanged'),
+        name: '合并请求详情-文件变更',
+        props: true
+      }]
     }, {
       path: 'newPull',
       component: _import('project/task/components/newPull'),
