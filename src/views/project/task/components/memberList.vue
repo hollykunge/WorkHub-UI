@@ -8,8 +8,8 @@
       </el-row>
     </div>
     <div class="list-body">
-      <el-table :data="memberList" :show-header="false" v-loading.body="listLoading" empty-text="当前任务无成员" fit highlight-current-row style="width: 100%">
-        <el-table-column align="center">
+      <el-table :data="memberList" v-loading.body="listLoading" empty-text="当前任务无成员" fit highlight-current-row style="width: 100%">
+        <el-table-column align="center" label="姓名/单位">
           <template scope="scope">
             <el-button type="text">
               <icon name="user"></icon>
@@ -17,19 +17,21 @@
             </el-button>
           </template>
         </el-table-column>
-        <el-table-column align="center">
+        <el-table-column align="center" label="权限">
           <template scope="scope">
-            <icon name="key"></icon>
-            <span>{{ scope.row.authrioty }}</span>
+            <el-button :type="scope.row.authrioty==200? 'success':'warning'" class="authrioty-button" size="small">
+              <icon name="key"></icon>
+              <span>{{ scope.row.authrioty }}</span>
+            </el-button>
           </template>
         </el-table-column>
-        <el-table-column align="center">
+        <el-table-column align="center" label="角色">
           <template scope="scope">
             <icon name="drivers-license-o"></icon>
             <span>{{ scope.row.role }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center">
+        <el-table-column align="center" label="操作">
           <template scope="scope">
             <el-button type="primary" size="small" @click="handleUpdate(scope.row)" plain>修改权限</el-button>
             <el-button type="danger" size="small" @click="handleDelete(scope.row)" plain>删除</el-button>
@@ -79,37 +81,6 @@ export default {
     return {
       memberList: [{ name: '姬海南', orgName: '十一室', authrioty: '读写', role: '设计师' }],
       dialogVisible: false,
-      orgTree: [{
-        value: 'zhinan',
-        label: '指南',
-        children: [{
-          value: 'shejiyuanze',
-          label: '设计原则',
-          children: [{
-            value: 'yizhi',
-            label: '一致'
-          }, {
-            value: 'fankui',
-            label: '反馈'
-          }, {
-            value: 'xiaolv',
-            label: '效率'
-          }, {
-            value: 'kekong',
-            label: '可控'
-          }]
-        }, {
-          value: 'daohang',
-          label: '导航',
-          children: [{
-            value: 'cexiangdaohang',
-            label: '侧向导航'
-          }, {
-            value: 'dingbudaohang',
-            label: '顶部导航'
-          }]
-        }]
-      }],
       selectedOrg: [],
       userlist: [{ name: '姬海南' }],
       listLoading: false,
@@ -204,6 +175,9 @@ export default {
 .task-member-list {
   .list-header {
     margin-bottom: 10px;
+  }
+  .authrioty-button {
+    padding: 3px;
   }
   // .el-dialog__body {
   //   text-align: center;

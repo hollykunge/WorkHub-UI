@@ -110,7 +110,7 @@ export default {
       // content: "";
       // background-color: #e36209;
       // margin-left: 100px;
-      border-left: 4px solid #e36209;
+      border-left: 4px solid #20a0ff;
     }
   }
 }
