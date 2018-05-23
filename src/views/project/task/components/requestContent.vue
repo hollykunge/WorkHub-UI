@@ -5,7 +5,7 @@
         {{requestContent.title}}
       </span>
       <div class="request-content-header-tips">
-        <el-button size="small" type="primary">
+        <el-button size="small" type="success">
           <icon name="exchange"></icon>未合并
         </el-button>
         <span>
@@ -16,33 +16,6 @@
     </div>
 
     <div class="request-content-body">
-      <!-- <el-tabs v-model="activeIndex" type="card">
-        <el-tab-pane name="conversation">
-          <span slot="label" @click="handleTabClick(tab.name)">
-            <icon name="comments-o"></icon> 问题讨论
-            <el-badge class="mark" value="2"></el-badge>
-          </span>
-        </el-tab-pane>
-        <el-tab-pane name="commit">
-          <span slot="label" @click="handleTabClick(tab.name)">
-            <icon name="superpowers"></icon> 提交记录
-            <el-badge class="mark" value="0"></el-badge>
-          </span>
-        </el-tab-pane>
-        <el-tab-pane name="checks">
-          <span slot="label" @click="handleTabClick(tab.name)">
-            <icon name="check-square-o"></icon> 冲突检测
-            <el-badge class="mark" value="3"></el-badge>
-          </span>
-        </el-tab-pane>
-        <el-tab-pane name="filesChanged">
-          <span slot="label" @click="handleTabClick(tab.name)">
-            <icon name="file-text-o"></icon> 文件变更
-            <el-badge class="mark" value="5"></el-badge>
-          </span>
-        </el-tab-pane>
-      </el-tabs> -->
-
       <el-menu theme="light" :default-active="activeIndex" class="content-header" mode="horizontal" :router="true" @select="handleSelect">
         <el-menu-item index="conversation">
           <template slot="title">
@@ -78,11 +51,6 @@
         </el-menu-item>
       </el-menu>
       <div class="content-body">
-        <!-- <el-row>
-          <el-col :span="24"> -->
-        <p>saldhfsdlasdfhsdladdfbsda,smdbfba,sdmbfba,msd,fb,asmd,fa,sdm,fba,sdbfba,msdbfba,sdffbpasdkfnkl</p>
-        <!-- </el-col>
-        </el-row> -->
         <keep-alive>
           <router-view></router-view>
         </keep-alive>
@@ -100,9 +68,18 @@ export default {
       activeIndex: 'conversation'
     }
   },
+  created() {
+    this.indexNavigation()
+  },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath)
+    },
+    indexNavigation() { // 根据路由地址导航到对应的菜单页
+      const str = window.location.href
+      const index = str.lastIndexOf('\/')
+      const tab = str.substring(index + 1, str.length)
+      this.activeIndex = tab
     }
   }
 }
@@ -136,14 +113,14 @@ export default {
     }
   }
   &-body {
-    margin-top: 10px;
+    margin-top: 20px;
     .content-header {
       height: 40px;
       .el-menu-item {
         height: 40px;
         line-height: 40px;
         .mark {
-          margin-top: 8px;
+          margin-top: 10px;
           line-height: 1;
           .el-badge__content {
             background-color: #52626d85;
@@ -160,7 +137,7 @@ export default {
     }
     .content-body {
       width: 100%;
-      background: #20aaff;
+      // background: #20aaff;
     }
   }
 }

@@ -56,7 +56,7 @@ export default {
       project: {},
       tabs: [{ name: 'taskData', icon: 'list-ul', lable: '数据' },
       { name: 'pullRequest', icon: 'mail-forward', lable: '合并请求' },
-      { name: 'chartManage', icon: 'bar-chart-o', lable: '图标管理' },
+      { name: 'chartManage', icon: 'bar-chart-o', lable: '图表管理' },
       { name: 'taskIntro', icon: 'info', lable: '任务简介' },
       { name: 'versionHistory', icon: 'gg', lable: '历史版本' },
       { name: 'memberList', icon: 'users', lable: '成员' },
@@ -94,7 +94,7 @@ export default {
       const tab = str.substring(index + 1, str.length)
       if (tab === 'new' || tab === 'upload') {
         this.activeName = 'taskData'
-      } else if (tab === 'content' || tab === 'newPull') {
+      } else if (tab === 'conversation' || tab === 'commit' || tab === 'checks' || tab === 'filesChanged') {
         this.activeName = 'pullRequest'
       } else {
         this.activeName = tab
