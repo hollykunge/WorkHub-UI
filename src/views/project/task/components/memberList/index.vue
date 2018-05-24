@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import linkUser from '../../../team/components/linkUser'
+import linkUser from '../../../../team/components/linkUser'
 export default {
   components: { linkUser },
   data() {
