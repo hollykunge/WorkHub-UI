@@ -3,30 +3,7 @@
     <div class="task-data-header">
       <el-row type="flex" justify="start">
         <el-col :span="10">
-          <el-dropdown trigger="click" menu-align="start" class="branch-dropdown">
-            <el-button size="small" class="branch-dropdown-button">分支：{{ currentBranch }}
-              <icon name="caret-down"></icon>
-            </el-button>
-            <el-dropdown-menu slot="dropdown" class="branch-dropdown-content" style="background: #eef1f6; border-radius: 8px; width: 200px;">
-              <span style="line-height: 25px; font-size: 14px; margin-left: 10px;">切换分支
-                <el-input style="margin-bottom: 10px;" placeholder="搜索分支" v-model="fliterText" size="small" autofocus></el-input>
-              </span>
-              <el-table @row-click="changeBranch" :data="filteredBranch" :show-header="false" empty-text="Nothing to show">
-                <el-table-column>
-                  <template scope="scope">
-                    <span>{{ scope.row.name }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column>
-                  <template scope="scope">
-                    <span v-if="scope.row.name===currentBranch">
-                      <icon name="check"></icon>
-                    </span>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <branch-select :branches="branches" @changed="handelBranchChanged"></branch-select>
         </el-col>
         <el-col :span="4" :offset="10">
           <el-button-group class="task-options-button">
@@ -94,10 +71,12 @@
 </template>
 
 <script>
+import branchSelect from 'src/views/components/branchSelect'
 import { getTaskData } from 'api/project/task/index'
 import { mapGetters } from 'vuex'
 export default {
   props: ['projectId', 'taskId'],
+  components: { branchSelect },
   data() {
     return {
       // ***************************分支数据***************************************
@@ -111,7 +90,6 @@ export default {
     }
   },
   watch: {
-    fliterText(val) { this.filterBranch(val) }
   },
   computed: {
     ...mapGetters(['avatar'])
@@ -121,30 +99,13 @@ export default {
     // this.getTaskData()
   },
   methods: {
-    // handleTabClick() {
-    //   console.log('任务数据')
-    //   this.$emit('toggleStatus')
-    // },
     getTaskData() {
       getTaskData(this.taskId).then(res => {
         this.branches = res.data.branches
       })
     },
-    filterBranch(val) {
-      if (!val) {
-        this.filteredBranch = this.branches
-      } else {
-        this.filteredBranch = []
-        this.branches.forEach(element => {
-          if (element.name.indexOf(val) >= 0) {
-            this.filteredBranch.push(element)
-          }
-        })
-      }
-    },
-    changeBranch(row) {
-      this.currentBranch = row.name
-      console.log('分支切换成功')
+    handelBranchChanged(newBranch) {
+      console.log(newBranch)
     },
     handleCreate() {
       // this.$router.push()

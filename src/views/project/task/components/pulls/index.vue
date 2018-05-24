@@ -61,6 +61,7 @@
                   </el-table>
                 </el-dropdown-menu>
               </el-dropdown>
+              <branch-select :branches="users"></branch-select>
             </span>
           </template>
         </el-table-column>
@@ -96,7 +97,9 @@
 </template>
 
 <script>
+import branchSelect from 'src/views/components/branchSelect'
 export default {
+  components: { branchSelect },
   data() {
     return {
       searchKeys: '',
