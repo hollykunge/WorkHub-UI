@@ -61,71 +61,71 @@ export const constantRouterMap = [{
     props: true,
     children: [{
       path: 'taskData',
-      component: _import('project/task/components/taskData'),
+      component: _import('project/task/components/taskData/index'),
       name: '数据',
       props: true
     }, {
       path: 'pullRequest',
-      component: _import('project/task/components/pullRequest'),
+      component: _import('project/task/components/pulls/index'),
       name: '合并请求'
     }, {
       path: 'chartManage',
-      component: _import('project/task/components/chartManage'),
+      component: _import('project/task/components/chartManage/index'),
       name: '图表管理'
     }, {
       path: 'taskIntro',
-      component: _import('project/task/components/taskIntro'),
+      component: _import('project/task/components/taskIntro/index'),
       name: '任务简介'
     }, {
       path: 'versionHistory',
-      component: _import('project/task/components/versionHistory'),
+      component: _import('project/task/components/versionHistory/index'),
       name: '历史版本'
     }, {
       path: 'memberList',
-      component: _import('project/task/components/memberList'),
+      component: _import('project/task/components/memberList/index'),
       name: '成员'
     }, {
       path: 'taskSetting',
-      component: _import('project/task/components/taskSetting'),
+      component: _import('project/task/components/taskSetting/index'),
       name: '设置'
     }, {
       path: 'new',
-      component: _import('project/task/components/createFile'),
+      component: _import('project/task/components/taskData/createFile'),
       name: '新建文件'
     }, {
       path: 'upload',
-      component: _import('project/task/components/uploadFile'),
+      component: _import('project/task/components/taskData/uploadFile'),
       name: '文件上传'
     }, {
       path: ':pullId',
-      component: _import('project/task/components/requestContent'),
+      component: _import('project/task/components/pulls/content'),
       name: '合并请求详情',
       redirect: ':pullId/conversation',
       props: true,
       children: [{
         path: 'conversation',
-        component: _import('project/task/components/conversation'),
+        component: _import('project/task/components/pulls/conversation'),
         name: '问题讨论',
         props: true
       }, {
         path: 'commit',
-        component: _import('project/task/components/commit'),
+        component: _import('project/task/components/pulls/commit'),
         name: '提交记录',
         props: true
       }, {
         path: 'checks',
-        component: _import('project/task/components/checks'),
+        component: _import('project/task/components/pulls/checks'),
         name: '冲突检测',
         props: true
       }, {
         path: 'filesChanged',
-        component: _import('project/task/components/filesChanged'),
+        component: _import('project/task/components/pulls/filesChanged'),
         name: '文件变更',
         props: true
       }]
     }, {
       path: 'newPull',
-      component: _import('project/task/components/newPull'),
+      component: _import('project/task/components/pulls/newPull'),
       name: '新建合并请求',
       props: true
     }]
