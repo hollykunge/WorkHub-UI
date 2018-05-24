@@ -95,7 +95,7 @@ export default {
       font-weight: 500;
     }
     &-tips {
-      margin-top: 10px;
+      margin-top: 5px;
       button {
         padding: 5px;
       }
