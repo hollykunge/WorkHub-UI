@@ -37,31 +37,7 @@
         <el-table-column align="right">
           <template scope="scope">
             <span v-show="scope" style="color: #7b7373; font-size: 13px;">
-              <el-dropdown trigger="click" menu-align="start" class="user-dropdown">
-                <el-button size="small" type="text" class="user-dropdown-button">筛选用户
-                  <icon name="caret-down"></icon>
-                </el-button>
-                <el-dropdown-menu slot="dropdown" class="user-dropdown-content" style="background: #eef1f6; border-radius: 8px; width: 200px;">
-                  <span style="line-height: 25px; font-size: 14px; margin-left: 10px;">通过用户筛选
-                    <el-input style="margin-bottom: 10px;" placeholder="搜索用户" v-model="fliterUserText" size="small" autofocus></el-input>
-                  </span>
-                  <el-table @row-click="changeUser" :data="filteredUser" :show-header="false" empty-text="Nothing to show">
-                    <el-table-column>
-                      <template scope="scope">
-                        <span>{{ scope.row.name }}</span>
-                      </template>
-                    </el-table-column>
-                    <el-table-column>
-                      <template scope="scope">
-                        <span v-if="scope.row.name===requestType.currentUser">
-                          <icon name="check"></icon>
-                        </span>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </el-dropdown-menu>
-              </el-dropdown>
-              <branch-select :branches="users"></branch-select>
+              <property-select title="用户" :properties="users" @changed="handleUserChanged"></property-select>
             </span>
           </template>
         </el-table-column>
@@ -97,15 +73,15 @@
 </template>
 
 <script>
-import branchSelect from 'src/views/components/branchSelect'
+import propertySelect from 'src/views/components/propertySelect'
 export default {
-  components: { branchSelect },
+  components: { propertySelect },
   data() {
     return {
       searchKeys: '',
       // 通过用户搜索
-      fliterUserText: '',
-      filteredUser: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
+      // fliterUserText: '',
+      // filteredUser: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
       users: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
       // 对请求进行筛选，修改筛选条件时改变相应对象的值
       requestType: { closed: false, currentUser: '' },
@@ -114,7 +90,7 @@ export default {
       pullRequestList: [{ id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一个小时前提交', isFolder: true }, { id: 2, title: '添加window10支持', tips: '#450 test在十分钟前提交', commentNum: '0', isFolder: false }] }
   },
   watch: {
-    fliterUserText(val) { this.filterUser(val) },
+    // fliterUserText(val) { this.filterUser(val) },
     // 监听requestType，当变化时根据requestType的值重新获取request列表
     requestType: {
       handler(oldValue, newValue) {
@@ -144,22 +120,21 @@ export default {
     handleNewPull() {
       this.$router.push({ name: '新建合并请求' })
     },
-    changeUser(row) {
-      this.requestType.currentUser = row.name
-      console.log('用户切换成功')
+    handleUserChanged(newUser) {
+      console.log('当前用户' + newUser)
     },
-    filterUser(val) {
-      if (!val) {
-        this.filteredUser = this.users
-      } else {
-        this.filteredUser = []
-        this.users.forEach(element => {
-          if (element.name.indexOf(val) >= 0) {
-            this.filteredUser.push(element)
-          }
-        })
-      }
-    },
+    // filterUser(val) {
+    //   if (!val) {
+    //     this.filteredUser = this.users
+    //   } else {
+    //     this.filteredUser = []
+    //     this.users.forEach(element => {
+    //       if (element.name.indexOf(val) >= 0) {
+    //         this.filteredUser.push(element)
+    //       }
+    //     })
+    //   }
+    // },
     handleCheckRequest(row) {
       console.log(row)
       this.$router.push({ name: '合并请求详情', params: { pullId: row.id }})
