@@ -3,7 +3,7 @@
     <div class="task-data-header">
       <el-row type="flex" justify="start">
         <el-col :span="10">
-          <branch-select :branches="branches" @changed="handelBranchChanged"></branch-select>
+          <property-select title="分支" :properties="branches" @changed="handleBranchChanged"></property-select>
         </el-col>
         <el-col :span="4" :offset="10">
           <el-button-group class="task-options-button">
@@ -71,12 +71,12 @@
 </template>
 
 <script>
-import branchSelect from 'src/views/components/branchSelect'
+import propertySelect from 'src/views/components/propertySelect'
 import { getTaskData } from 'api/project/task/index'
 import { mapGetters } from 'vuex'
 export default {
   props: ['projectId', 'taskId'],
-  components: { branchSelect },
+  components: { propertySelect },
   data() {
     return {
       // ***************************分支数据***************************************
@@ -104,7 +104,7 @@ export default {
         this.branches = res.data.branches
       })
     },
-    handelBranchChanged(newBranch) {
+    handleBranchChanged(newBranch) {
       console.log(newBranch)
     },
     handleCreate() {
