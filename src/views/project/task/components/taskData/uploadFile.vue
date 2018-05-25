@@ -23,7 +23,7 @@
     </div>
     <div class="upload-file-footer">
       <div class="commit-form-wrapper">
-        <img class="commit-avatar" :src="avatar">
+        <img class="commit-avatar" :src="'../'+avatar">
         <div class="commit-bubble">
           <div class="arrow">
             <em></em>
