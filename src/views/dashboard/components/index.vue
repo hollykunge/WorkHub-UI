@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-editor-container">
-    <el-row>
+    <!--  <el-row>
       <el-col :span="6">
         <el-card class="box-card">
           <div slot="header" class="box-card-header">
@@ -14,9 +14,9 @@
               <el-col :span="12">
                 <icon name="suitcase"></icon>
                 <countTo class="info-item-num" :startVal='0' :endVal='statisticsData.article_count' :duration='3400'></countTo>
-                <span class="info-item-text">项目</span>
-                <!--点击跳转到全部项目-->
-              </el-col>
+                <span class="info-item-text">项目</span> -->
+    <!--点击跳转到全部项目-->
+    <!-- </el-col>
               <el-col :span="12">
                 <icon name="star"></icon>
                 <countTo class="info-item-num" :startVal='0' :endVal='statisticsData.pageviews_count' :duration='3600'></countTo>
@@ -44,7 +44,65 @@
       <el-col :span="9">
         <todo-list></todo-list>
       </el-col>
+    </el-row> -->
+
+    <el-row>
+      <el-col :lg="16" :md="24">
+        <el-row>
+          <el-col :md="10" :sm="24" style="padding: 50px;">
+            <el-card class="box-card">
+              <div slot="header" class="box-card-header">
+                <el-row>
+                  <el-col :span="13">
+                    <img class="display_avatar" :src="avatar">
+                    <!-- <pan-thumb class="panThumb" :image="avatar"> 你的权限:
+                      <span class="pan-info-roles" :key='item' v-for="item in roles">{{item}}</span>
+                    </pan-thumb> -->
+                  </el-col>
+                  <el-col :span="11">
+                    <span class="display_name">{{ name }}</span>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="info-item">
+                <el-row>
+                  <el-col :span="12">
+                    <icon name="suitcase"></icon>
+                    <countTo class="info-item-num" :startVal='0' :endVal='statisticsData.article_count' :duration='3400'></countTo>
+                    <span class="info-item-text">项目</span>
+                    <!--点击跳转到全部项目-->
+                  </el-col>
+                  <el-col :span="12">
+                    <icon name="star"></icon>
+                    <countTo class="info-item-num" :startVal='0' :endVal='statisticsData.pageviews_count' :duration='3600'></countTo>
+                    <span class="info-item-text">浏览量</span>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :md="{span:12, offset:1}" :sm="24" style="">
+            <!-- <p>11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 11111111111111111111111111111111111111
+            </p> -->
+            <line-chart></line-chart>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col style="background: green;">
+            <p>11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+            </p>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :lg="8" :md="24" style="">
+        <div style="background: pink;">
+          <!-- <p>1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 11111111111111111111111111111111 11111111111111111111111111111111111111 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+          </p> -->
+          <todo-list></todo-list>
+        </div>
+      </el-col>
     </el-row>
+
   </div>
 </template>
 
@@ -83,26 +141,33 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .dashboard-editor-container {
   padding: 20px;
-  .box-card-header {
-    position: relative;
-    height: 160px;
+  .box-card {
+    min-width: 330px;
+    &-header {
+      position: relative;
+      height: 150px;
+    }
   }
   .panThumb {
     z-index: 100;
     height: 150px;
     width: 150px;
-    position: absolute;
+    // position: absolute;
     left: 0px;
     right: 0px;
     margin: auto;
   }
+  .display_avatar {
+    height: 125px;
+    // width: 150px;
+  }
   .display_name {
-    font-size: 35px;
-    display: inline;
+    font-size: 32px;
+    // display: inline;
     position: absolute;
     top: 43%;
-    left: 195px;
-    margin: auto;
+    //   left: 140px;
+    //   margin: auto;
   }
   .info-item {
     .fa-icon {
