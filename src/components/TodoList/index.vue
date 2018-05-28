@@ -9,8 +9,7 @@
       <input class="toggle-all" id="toggle-all" type="checkbox" :checked="allChecked" @change="toggleAll({ done: !allChecked })">
       <label for="toggle-all"></label>
       <ul class="todo-list">
-        <todo @toggleTodo='toggleTodo' @editTodo='editTodo' @deleteTodo='deleteTodo' v-for="(todo, index) in filteredTodos" :key="index"
-          :todo="todo"></todo>
+        <todo @toggleTodo='toggleTodo' @editTodo='editTodo' @deleteTodo='deleteTodo' v-for="(todo, index) in filteredTodos" :key="index" :todo="todo"></todo>
       </ul>
     </section>
     <!-- footer -->
@@ -40,9 +39,21 @@ const filters = {
   completed: todos => todos.filter(todo => todo.done)
 }
 const defalutList = [
-  { text: 'star this repository', done: false },
-  { text: 'fork this repository', done: false },
-  { text: 'follow author', done: false }
+  { text: '1', done: false },
+  { text: '2', done: false },
+  { text: '3', done: false },
+  { text: '4', done: false },
+  { text: '5', done: false },
+  { text: '6', done: false },
+  { text: '7', done: false },
+  { text: '8', done: false },
+  { text: '9', done: false },
+  { text: '10', done: false },
+  { text: '11', done: false },
+  { text: '12', done: false },
+  { text: '13', done: false },
+  { text: '14', done: false },
+  { text: '15', done: false }
 ]
 export default {
   components: { Todo },
@@ -112,5 +123,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import './index.scss';
+@import "./index.scss";
 </style>
