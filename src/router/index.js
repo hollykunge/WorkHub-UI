@@ -52,7 +52,34 @@ export const constantRouterMap = [{
     path: 'projectSys/allProjects/:projectId',
     component: _import('project/project/details/index'),
     name: '项目详情',
-    props: true
+    redirect: 'projectSys/allProjects/:projectId/projectData',
+    props: true,
+    children: [{
+      path: 'projectData',
+      component: _import('project/project/details/data/index'),
+      name: '项目数据',
+      props: true
+    }, {
+      path: 'projectIntro',
+      component: _import('project/project/details/intro/index'),
+      name: '项目详细信息',
+      props: true
+    }, {
+      path: 'ProjectIssue',
+      component: _import('project/project/details/issue/index'),
+      name: '项目问题',
+      props: true
+    }, {
+      path: 'projectTeam',
+      component: _import('project/project/details/team/index'),
+      name: '项目团队',
+      props: true
+    }, {
+      path: 'projectSetting',
+      component: _import('project/project/details/setting/index'),
+      name: '项目设置',
+      props: true
+    }]
   }, {
     path: 'projectSys/allProjects/:projectId/:taskId',
     component: _import('project/task/index'),
