@@ -31,40 +31,19 @@
     </el-row>
     <el-row type="flex" justify="center">
       <el-col>
-        <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
-          <el-tab-pane name="projectDetail">
-            <span slot="label">
-              <icon name="file-text-o"></icon> 项目详情
+        <el-tabs v-model="activeName" type="card">
+          <el-tab-pane v-for="(tab, index) in tabs" :key="index" :name="tab.name">
+            <span slot="label" @click="handleTabClick(tab.name)">
+              <icon :name="tab.icon"></icon> {{tab.lable}}
+              <el-badge v-if="tab.name=='projectData'" class="mark" :value="taskNum"></el-badge>
+              <el-badge v-if="tab.name=='ProjectIssue'" class="mark" :value="1"></el-badge>
             </span>
-            <detail></detail>
-          </el-tab-pane>
-          <el-tab-pane name="projectTask">
-            <span slot="label">
-              <icon name="list-ul"></icon> 任务
-              <el-badge class="mark" :value="taskNum"></el-badge>
-            </span>
-            <task :projectId="projectId" @taskTotalNum="setTaskNum"></task>
-          </el-tab-pane>
-          <el-tab-pane name="projectIssues">
-            <span slot="label">
-              <icon name="question-circle-o"></icon> 问题
-              <el-badge class="mark" :value="1"></el-badge>
-            </span>
-            <issue></issue>
-          </el-tab-pane>
-          <el-tab-pane name="projectTeam">
-            <span slot="label">
-              <icon name="users"></icon> 项目团队
-            </span>
-            <team></team>
-          </el-tab-pane>
-          <el-tab-pane name="projectSetting">
-            <span slot="label">
-              <icon name="gears"></icon> 设置
-            </span>
-            <setting></setting>
           </el-tab-pane>
         </el-tabs>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
+
       </el-col>
     </el-row>
   </div>
@@ -72,28 +51,29 @@
 
 <script>
 import { getObj } from 'api/project/index'
-import detail from './components/detail'
-import task from './components/task'
-import issue from './components/issue'
-import team from './components/team'
-import setting from './components/setting'
 export default {
   props: ['projectId'], // 获取路由上项目的id
-  components: {
-    detail, task, issue, team, setting
-  },
   data() {
     return {     // 用解构赋值的方式来解project的数据
-      activeName: 'projectTask', // 进去详情页首先显示的标签
+      activeName: '', // 进去详情页首先显示的标签
       project: {},
-      taskNum: ''
+      taskNum: '?',
+      // tab页数据
+      tabs: [{ name: 'projectIntro', icon: 'file-text-o', lable: '项目简介' },
+      { name: 'projectData', icon: 'list-ul', lable: '任务列表' },
+      { name: 'ProjectIssue', icon: 'question-circle-o', lable: '问题研讨' },
+      { name: 'projectTeam', icon: 'users', lable: '团队列表' },
+      { name: 'projectSetting', icon: 'gears', lable: '项目设置' }]
     }
   },
   created() {
+    this.tabNavigation()
     this.getProBasicInfo(this.projectId)
   },
   methods: {
-    handleTabClick(tab, event) {
+    handleTabClick(val) {
+      console.log(val)
+      this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + val)
     },
     getProBasicInfo(projectId) {
       getObj(projectId).then(res => {
@@ -103,6 +83,18 @@ export default {
     },
     setTaskNum(taskNum) {
       this.taskNum = taskNum
+    },
+    tabNavigation() { // 根据路由地址导航到对应的tab页
+      const str = window.location.href
+      const index = str.lastIndexOf('\/')
+      const tab = str.substring(index + 1, str.length)
+      if (tab === 'new' || tab === 'upload') {
+        this.activeName = 'taskData'
+      } else if (tab === 'conversation' || tab === 'commit' || tab === 'checks' || tab === 'filesChanged' || tab === 'newPull') {
+        this.activeName = 'pullRequest'
+      } else {
+        this.activeName = tab
+      }
     }
 
   }
