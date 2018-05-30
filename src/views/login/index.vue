@@ -86,9 +86,9 @@ export default {
     generateBackground() {
       const loginContainer = document.getElementById('login')
       const i = Math.random()
-      if (i < 0.3) {
+      if (i < 0.1) {
         loginContainer.style.backgroundImage = 'url(../../../static/images/login_bg_dark.jpg)'
-      } else if (i > 0.7) {
+      } else if (i > 0.3) {
         loginContainer.style.backgroundImage = 'url(../../../static/images/login_bg_fireworks.jpg)'
       } else {
         loginContainer.style.backgroundImage = 'url(../../../static/images/login_bg_green.jpg)'
