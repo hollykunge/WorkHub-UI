@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>显示详情信息的组件</h1>
+  <div class="project-intro">
+    <p>项目详情。。。。。</p>
   </div>
 </template>
 
@@ -11,5 +11,4 @@ export default {
 </script>
 
 <style>
-
 </style>

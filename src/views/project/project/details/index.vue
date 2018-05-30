@@ -59,11 +59,12 @@ export default {
       project: {},
       taskNum: '?',
       // tab页数据
-      tabs: [{ name: 'projectIntro', icon: 'file-text-o', lable: '项目简介' },
-      { name: 'projectData', icon: 'list-ul', lable: '任务列表' },
-      { name: 'ProjectIssue', icon: 'question-circle-o', lable: '问题研讨' },
-      { name: 'projectTeam', icon: 'users', lable: '团队列表' },
-      { name: 'projectSetting', icon: 'gears', lable: '项目设置' }]
+      tabs: [
+        // { name: 'projectIntro', icon: 'file-text-o', lable: '项目简介' },
+        { name: 'projectData', icon: 'list-ul', lable: '任务列表' },
+        { name: 'ProjectIssue', icon: 'question-circle-o', lable: '问题研讨' },
+        { name: 'projectTeam', icon: 'users', lable: '团队列表' },
+        { name: 'projectSetting', icon: 'gears', lable: '项目设置' }]
     }
   },
   created() {
