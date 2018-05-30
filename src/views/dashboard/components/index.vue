@@ -2,8 +2,8 @@
   <div class="dashboard-editor-container">
     <el-row>
       <el-col :lg="16" :md="24">
-        <el-row>
-          <el-col :md="10" :sm="24" style="margin: 65px 0;">
+        <el-row style="padding-bottom: 0px;">
+          <el-col :md="10" :sm="24" style="margin: 50px 0 0;">
             <el-card class="box-card">
               <div slot="header" class="box-card-header">
                 <el-row>
@@ -32,19 +32,19 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :md="{span:12, offset:1}" :sm="24" style="">
-            <ve-pie :data="pieData" :settings="pieSettings"></ve-pie>
+          <el-col :md="{span:12, offset:1}" :sm="24">
+            <ve-pie style="margin-top: 20px;" :data="pieData" :settings="pieSettings"></ve-pie>
           </el-col>
         </el-row>
         <el-row>
-          <el-col style="">
-            <ve-heatmap :data="heatData"></ve-heatmap>
+          <el-col>
+            <ve-heatmap :data="heatData" style="margin-top: -75px;"></ve-heatmap>
           </el-col>
         </el-row>
       </el-col>
-      <el-col :lg="8" :md="24" style="">
-        <div style="">
-          <todo-list></todo-list>
+      <el-col :lg="8" :md="24">
+        <div>
+          <todo-list style="margin-top: 10px;background: #f3edbb30;"></todo-list>
         </div>
       </el-col>
     </el-row>
@@ -134,37 +134,37 @@ export default {
       position: relative;
       height: 150px;
     }
-  }
-  .panThumb {
-    z-index: 100;
-    height: 150px;
-    width: 150px;
-    // position: absolute;
-    left: 0px;
-    right: 0px;
-    margin: auto;
-  }
-  .display_avatar {
-    height: 125px;
-    // width: 150px;
-  }
-  .display_name {
-    font-size: 32px;
-    // display: inline;
-    position: absolute;
-    top: 43%;
-    //   left: 140px;
-    //   margin: auto;
-  }
-  .info-item {
-    .fa-icon {
-      font-size: 21px;
+    .display_avatar {
+      height: 125px;
+      // width: 150px;
     }
-    margin-top: 10px;
-    font-size: 15px;
-    &:last-of-type {
-      margin-left: 15px;
+    .display_name {
+      font-size: 32px;
+      // display: inline;
+      position: absolute;
+      top: 43%;
+      //   left: 140px;
+      //   margin: auto;
+    }
+    .info-item {
+      .fa-icon {
+        font-size: 21px;
+      }
+      margin-top: 10px;
+      font-size: 15px;
+      &:last-of-type {
+        margin-left: 15px;
+      }
     }
   }
+  // .panThumb {
+  //   z-index: 100;
+  //   height: 150px;
+  //   width: 150px;
+  //   // position: absolute;
+  //   left: 0px;
+  //   right: 0px;
+  //   margin: auto;
+  // }
 }
 </style>
