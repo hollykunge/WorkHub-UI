@@ -9,8 +9,9 @@
           <div class="pull-request-button-group">
             <el-button-group>
               <el-button type="warning" size="small" plain>
-                标签</el-button>
-              <el-button type="warning" size="small" plain>里程碑</el-button>
+                <icon name="bookmark"></icon>标签</el-button>
+              <el-button type="warning" size="small" plain>
+                <icon name="flag"></icon>里程碑</el-button>
             </el-button-group>
             <el-input @keyup.enter.native="handleTaskFilter" placeholder="输入关键词" size="small" v-model="searchKeys"></el-input>
             <el-button type="primary" v-waves icon="search" @click="handleTaskFilter" size="small">搜索</el-button>
@@ -158,6 +159,9 @@ export default {
         width: 150px;
       }
       .el-button {
+        .fa-icon {
+          margin: -3px 3px -2px -5px;
+        }
         &:not(:last-child) {
           margin-right: 0px;
           border-right-color: #acb1b7;
