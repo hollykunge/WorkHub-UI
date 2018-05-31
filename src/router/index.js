@@ -79,6 +79,11 @@ export const constantRouterMap = [{
       component: _import('project/project/details/setting/index'),
       name: '项目设置',
       props: true
+    }, {
+      path: ':issueId/conversation',
+      component: _import('project/project/details/issue/conversation'),
+      name: '项目问题详情',
+      props: true
     }]
   }, {
     path: 'projectSys/allProjects/:projectId/:taskId',
