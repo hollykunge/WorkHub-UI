@@ -97,7 +97,7 @@ export default {
     &-tips {
       margin-top: 5px;
       button {
-        padding: 5px;
+        padding: 3px;
       }
       span {
         font-size: 14px;
