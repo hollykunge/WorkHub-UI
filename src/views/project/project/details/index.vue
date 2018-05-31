@@ -103,7 +103,6 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@import "src/styles/index.scss";
 .index-project {
   padding: 12px;
   .fa-icon {
