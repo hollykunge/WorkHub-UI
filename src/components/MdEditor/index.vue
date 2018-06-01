@@ -1,5 +1,5 @@
 <template>
-  <div class='simplemde-container' :style="{height:height+'px',zIndex:zIndex}">
+  <div class='simplemde-container' :style="{height:height,zIndex:zIndex}">
     <textarea :id='id'>
     </textarea>
   </div>
@@ -26,8 +26,8 @@ export default {
       default: ''
     },
     height: {
-      type: Number,
-      default: 150
+      type: String,
+      default: '150px'
     },
     zIndex: {
       type: Number,
@@ -80,11 +80,11 @@ export default {
 <style>
 .simplemde-container .CodeMirror {
   /*height: 150px;*/
-  min-height: 150px;
+  min-height: 100px;
 }
 
 .simplemde-container .CodeMirror-scroll {
-  min-height: 150px;
+  min-height: 100px;
 }
 
 .simplemde-container .CodeMirror-code {
