@@ -48,22 +48,22 @@ export default {
     ErrorLog,
     Screenfull
   },
-  data() {
+  data () {
     return {
       log: errLogStore.state.errLog
     }
   },
-  computed: { ...mapGetters([
-    'sidebar',
-    'name',
-    'avatar'
-  ])
+  computed: {    ...mapGetters([
+      'sidebar',
+      'name',
+      'avatar'
+    ])
   },
   methods: {
-    toggleSideBar() {
+    toggleSideBar () {
       this.$store.dispatch('ToggleSideBar')
     },
-    logout() {
+    logout () {
       this.$store.dispatch('FedLogOut')
         .then(() => {
           location.reload() // 为了重新实例化vue-router对象 避免bug
@@ -75,12 +75,13 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
-  height: 50px;
-  line-height: 50px;
+  height: 64px;
+  line-height: 64px;
   border-radius: 0 !important;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   .hamburger-container {
     line-height: 58px;
-    height: 50px;
+    height: 64px;
     float: left;
     padding: 0 10px;
   }
