@@ -183,7 +183,7 @@ export default {
   .file-table-header {
     border-radius: 3px 3px 0 0;
     .el-table__row {
-      background-color: #eef1f6;
+      background-color: #ffffff;
     }
   }
   .pull-request-description {

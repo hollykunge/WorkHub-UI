@@ -7,7 +7,7 @@
     <el-button size="small" class="property-dropdown-button" style="margin-left: 20px;">{{title}}：{{ currentProperty }}
       <icon name="caret-down"></icon>
     </el-button>
-    <el-dropdown-menu slot="dropdown" class="property-dropdown-content" style="background: #eef1f6; border-radius: 8px; width: 200px;">
+    <el-dropdown-menu slot="dropdown" class="property-dropdown-content" style="background: #ffffff; border-radius: 8px; width: 200px;">
       <span style="line-height: 25px; font-size: 14px; margin-left: 10px;">切换{{title}}
         <el-input style="margin-bottom: 10px;" placeholder="搜索分支" v-model="fliterText" size="small" autofocus></el-input>
       </span>
@@ -35,7 +35,7 @@ export default {
     'properties',
     'title'
   ],
-  data() {
+  data () {
     return {
       filteredProperty: [],
       fliterText: '',
@@ -43,13 +43,13 @@ export default {
     }
   },
   watch: {
-    fliterText(val) { this.filterProperty(val) }
+    fliterText (val) { this.filterProperty(val) }
   },
-  created() {
+  created () {
     this.filteredProperty = this.properties
   },
   methods: {
-    filterProperty(val) {
+    filterProperty (val) {
       if (!val) {
         this.filteredProperty = this.properties
       } else if (this.properties === undefined) {
@@ -63,7 +63,7 @@ export default {
         })
       }
     },
-    changeProperty(row) {
+    changeProperty (row) {
       this.currentProperty = row.name
       this.$emit('changed', row.name)
       console.log(this.title + '切换成功')

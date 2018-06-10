@@ -1,13 +1,14 @@
-@import './mixin.scss';
-@import './btn.scss';
-@import './element-ui.scss';
-@import './sidebar.scss';
+@import "./mixin.scss";
+@import "./btn.scss";
+@import "./element-ui.scss";
+@import "./sidebar.scss";
 
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+    Microsoft YaHei, Arial, sans-serif;
 }
 
 label {
@@ -74,7 +75,7 @@ a:hover {
 }
 
 code {
-  background: #eef1f6;
+  background: #ffffff;
   padding: 15px 10px;
   margin-bottom: 20px;
   display: block;
@@ -90,14 +91,13 @@ code {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: all .2s ease
+  transition: all 0.2s ease;
 }
 
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
 }
-
 
 //main-container全局样式
 .app-container {
@@ -112,11 +112,11 @@ code {
 }
 
 .editor-container .CodeMirror {
-  height: 100%!important;
+  height: 100% !important;
 }
 
-.text-center{
-  text-align: center
+.text-center {
+  text-align: center;
 }
 .svg-icon {
   width: 1em;
@@ -134,7 +134,13 @@ code {
   text-align: right;
   padding-right: 20px;
   transition: 600ms ease position;
-  background: linear-gradient(90deg, rgba(32, 182, 249, 1) 0%, rgba(32, 182, 249, 1) 0%, rgba(33, 120, 241, 1) 100%, rgba(33, 120, 241, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(32, 182, 249, 1) 0%,
+    rgba(32, 182, 249, 1) 0%,
+    rgba(33, 120, 241, 1) 100%,
+    rgba(33, 120, 241, 1) 100%
+  );
   .subtitle {
     font-size: 20px;
     color: #fff;
@@ -202,7 +208,7 @@ code {
   .el-checkbox {
     margin: 0 20px 15px 0;
   }
-  .el-checkbox+.el-checkbox {
+  .el-checkbox + .el-checkbox {
     margin-left: 0px;
   }
 }
@@ -216,7 +222,6 @@ code {
   }
 }
 
-
 //refine vue-multiselect plugin
 .multiselect {
   line-height: 16px;
@@ -227,8 +232,9 @@ code {
 }
 
 //refine simplemde
-.simplemde-container{
-  .editor-toolbar.fullscreen,.CodeMirror-fullscreen{
+.simplemde-container {
+  .editor-toolbar.fullscreen,
+  .CodeMirror-fullscreen {
     z-index: 1003;
   }
 }
@@ -243,30 +249,30 @@ code {
 
 //github-corner
 .github-corner:hover .octo-arm {
-  animation: octocat-wave 560ms ease-in-out
+  animation: octocat-wave 560ms ease-in-out;
 }
 
 @keyframes octocat-wave {
   0%,
   100% {
-    transform: rotate(0)
+    transform: rotate(0);
   }
   20%,
   60% {
-    transform: rotate(-25deg)
+    transform: rotate(-25deg);
   }
   40%,
   80% {
-    transform: rotate(10deg)
+    transform: rotate(10deg);
   }
 }
 
-@media (max-width:500px) {
+@media (max-width: 500px) {
   .github-corner:hover .octo-arm {
-    animation: none
+    animation: none;
   }
   .github-corner .octo-arm {
-    animation: octocat-wave 560ms ease-in-out
+    animation: octocat-wave 560ms ease-in-out;
   }
 }
 /* 让icon图标根据当前的 font-size 动态调整尺寸*/

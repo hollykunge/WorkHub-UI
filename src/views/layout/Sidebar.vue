@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="logo-con">
-      <img v-show="!isCollapse" src="../../../static/images/logo.png" key="max-logo" />
-      <img v-show="isCollapse" src="../../../static/images/logo-min.png" key="min-logo" />
+      <img v-show="!isCollapse" src="../../../static/images/logo.svg" key="max-logo" />
+      <img v-show="isCollapse" src="../../../static/images/logo-min.svg" key="min-logo" />
     </div>
     <el-menu mode="vertical" theme="dark" unique-opened :default-active="$route.path" :collapse="isCollapse">
       <sidebar-item :routes='permissionMenus'></sidebar-item>
@@ -21,7 +21,7 @@ export default {
       'sidebar',
       'permissionMenus'
     ]),
-    isCollapse() {
+    isCollapse () {
       return !this.sidebar.opened
     }
   }
@@ -30,17 +30,21 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .logo-con {
-  height: 50px;
-  background-color: #324157f2;
+  height: 64px;
   text-align: center;
+  transition: all 0.3s;
+  background: #002140;
   img {
-    padding: 5px;
-    height: 50px;
+    padding: 8px;
+    height: 64px;
     width: auto;
   }
 }
 .el-menu {
   border-radius: 0px;
+}
+.el-menu--dark {
+  background-color: #001529 !important;
 }
 </style>
 
