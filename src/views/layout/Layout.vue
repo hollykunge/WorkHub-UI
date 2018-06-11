@@ -4,17 +4,18 @@
     <div class="main-container">
       <navbar class="navbar-content"></navbar>
       <app-main class="main-content"></app-main>
+      <page-footer class="page-footer"></page-footer>
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from 'views/layout'
+import { Navbar, Sidebar, AppMain, PageFooter } from 'views/layout'
 
 export default {
   name: 'layout',
-  components: { Navbar, Sidebar, AppMain },
-  computed: { sidebar () { return this.$store.state.app.sidebar } }
+  components: { Navbar, Sidebar, AppMain, PageFooter },
+  computed: { sidebar() { return this.$store.state.app.sidebar } }
 }
 </script>
 
@@ -57,6 +58,7 @@ export default {
     min-height: 100%;
     transition: margin-left 0.28s ease-out;
     margin-left: 256px;
+    background: #f0f2f5;
     .navbar-content {
       width: 100%;
       padding-right: 256px;
@@ -66,6 +68,8 @@ export default {
     }
     .main-content {
       margin-top: 64px;
+    }
+    .page-footer {
     }
   }
 }

@@ -3,7 +3,7 @@
     <el-menu class="navbar" mode="horizontal">
 
       <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
-      <levelbar></levelbar>
+      <!-- <levelbar></levelbar> -->
       <!-- 暂时取消 -->
       <!-- <tabs-view></tabs-view> -->
 
@@ -48,22 +48,22 @@ export default {
     ErrorLog,
     Screenfull
   },
-  data () {
+  data() {
     return {
       log: errLogStore.state.errLog
     }
   },
-  computed: {    ...mapGetters([
-      'sidebar',
-      'name',
-      'avatar'
-    ])
+  computed: { ...mapGetters([
+    'sidebar',
+    'name',
+    'avatar'
+  ])
   },
   methods: {
-    toggleSideBar () {
+    toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
-    logout () {
+    logout() {
       this.$store.dispatch('FedLogOut')
         .then(() => {
           location.reload() // 为了重新实例化vue-router对象 避免bug
@@ -75,6 +75,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
+  background-color: #fff;
   height: 64px;
   line-height: 64px;
   border-radius: 0 !important;
