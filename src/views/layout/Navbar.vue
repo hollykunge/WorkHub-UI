@@ -12,9 +12,13 @@
       <div class="username">
         <a>{{ name }}</a>
       </div>
-      <el-dropdown class="avatar-container" trigger="click">
+      <el-dropdown class="avatar-container" trigger="hover">
+        <!-- <div class="username">
+          <a>{{ name }}</a>
+        </div> -->
         <div class="avatar-wrapper"> <img class="user-avatar" :src="'../../'+avatar+'?imageView2/1/w/80/h/80'">
-          <i class="el-icon-caret-bottom"></i>
+          <!-- <i class="el-icon-caret-bottom"></i> -->
+          <icon name="angle-down"></icon>
         </div>
         <el-dropdown-menu class="user-dropdown" slot="dropdown">
           <router-link class='inlineBlock' to="/">
@@ -84,7 +88,7 @@ export default {
     line-height: 58px;
     height: 64px;
     float: left;
-    padding: 0 10px;
+    padding: 6px 20px;
   }
   .errLog-container {
     display: inline-block;
@@ -93,16 +97,16 @@ export default {
   }
   .screenfull {
     position: absolute;
-    right: 135px;
-    top: 16px;
+    right: 160px;
+    top: 21px;
     color: red;
   }
   .username {
     position: absolute;
-    right: 65px;
-    top: 0px;
+    right: 68px;
+    top: -3px;
     margin-top: 5px;
-    font-size: 13px;
+    font-size: 16px;
     color: #0e6bf7;
   }
   .avatar-container {
@@ -110,7 +114,7 @@ export default {
     display: inline-block;
     position: absolute;
     right: 10px;
-    top: 0px;
+    top: 6px;
     .avatar-wrapper {
       cursor: pointer;
       margin-top: 5px;
@@ -120,11 +124,11 @@ export default {
         height: auto;
         border-radius: 10px;
       }
-      .el-icon-caret-bottom {
+      .fa-icon {
         position: absolute;
         right: 40px;
-        top: 20px;
-        font-size: 10px;
+        top: 15px;
+        font-size: 18px;
         color: #0e6bf7;
       }
     }

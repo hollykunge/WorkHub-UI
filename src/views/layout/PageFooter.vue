@@ -23,7 +23,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .page-footer {
   text-align: center;
-  margin-top: 20px;
+  margin-top: -23px;
   span {
     color: #00000073;
     font-size: 16px;
