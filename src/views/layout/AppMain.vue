@@ -1,6 +1,6 @@
 <template>
 
-  <section class="app-main" style="min-height: 100%">
+  <section class="app-main">
     <!-- <transition name="fade" mode="out-in"> -->
     <router-view :key="key"></router-view>
     <!-- </transition> -->
@@ -17,3 +17,11 @@ export default {
   }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss">
+.app-main {
+  min-height: -webkit-fill-available;
+  min-height: fill-available;
+}
+</style>
+

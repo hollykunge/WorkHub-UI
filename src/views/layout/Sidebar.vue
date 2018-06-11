@@ -1,8 +1,10 @@
 <template>
   <div>
     <div class="logo-con">
-      <img v-show="!isCollapse" src="../../../static/images/logo.svg" key="max-logo" />
-      <img v-show="isCollapse" src="../../../static/images/logo-min.svg" key="min-logo" />
+      <router-link to="/">
+        <img v-show="!isCollapse" src="../../../static/images/logo.svg" key="max-logo" />
+        <img v-show="isCollapse" src="../../../static/images/logo-min.svg" key="min-logo" />
+      </router-link>
     </div>
     <el-menu mode="vertical" theme="dark" unique-opened :default-active="$route.path" :collapse="isCollapse">
       <sidebar-item :routes='permissionMenus'></sidebar-item>
@@ -21,7 +23,7 @@ export default {
       'sidebar',
       'permissionMenus'
     ]),
-    isCollapse () {
+    isCollapse() {
       return !this.sidebar.opened
     }
   }
