@@ -36,9 +36,13 @@
             </span>
           </el-tab-pane>
         </el-tabs>
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+        <el-row justify="center">
+          <el-col :xs="{span:24}" :sm="{span:24}" :md="{span:24,offset:0}" :lg="{span:18,offset:2}">
+            <keep-alive>
+              <router-view></router-view>
+            </keep-alive>
+          </el-col>
+        </el-row>
       </el-col>
     </el-row>
   </div>
