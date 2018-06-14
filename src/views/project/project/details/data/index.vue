@@ -220,6 +220,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style rel="stylesheet/scss" lang="scss">
+.task-list-content {
+  margin: 0 20px;
+}
 </style>

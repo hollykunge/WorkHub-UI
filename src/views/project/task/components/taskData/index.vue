@@ -77,7 +77,7 @@ import { mapGetters } from 'vuex'
 export default {
   props: ['projectId', 'taskId'],
   components: { propertySelect },
-  data () {
+  data() {
     return {
       // ***************************分支数据***************************************
       currentBranch: 'master',
@@ -94,25 +94,25 @@ export default {
   computed: {
     ...mapGetters(['avatar'])
   },
-  created () {
+  created() {
     // 进入到详情页自动获取后台数据
     // this.getTaskData()
   },
   methods: {
-    getTaskData () {
+    getTaskData() {
       getTaskData(this.taskId).then(res => {
         this.branches = res.data.branches
       })
     },
-    handleBranchChanged (newBranch) {
+    handleBranchChanged(newBranch) {
       console.log(newBranch)
     },
-    handleCreate () {
+    handleCreate() {
       // this.$router.push()
       // console.log(this.$router.props)
       this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + 'new')
     },
-    handleUpload () {
+    handleUpload() {
       // this.$emit('toggleStatus', 'upload')
       this.$router.push({ name: '文件上传' })
     }

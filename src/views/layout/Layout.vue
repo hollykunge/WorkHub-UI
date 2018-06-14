@@ -68,6 +68,7 @@ export default {
     }
     .main-content {
       padding-top: 64px;
+      overflow-x: hidden;
     }
   }
 }
