@@ -8,7 +8,15 @@
       <!-- <tabs-view></tabs-view> -->
 
       <error-log v-if="log.length>0" class="errLog-container" :logsList="log"></error-log>
+
+      <!-- 导航栏功能按钮 -->
+      <el-input class="test" size="small" icon="search" placeholder="输入内容进行搜索">
+      </el-input>
+      <!-- <icon class="searcher" name="search"></icon> -->
+      <icon class="helper" name="question-circle-o"></icon>
+      <icon class="notices" name="bell-o"></icon>
       <screenfull class='screenfull'></screenfull>
+
       <div class="username">
         <a>{{ name }}</a>
       </div>
@@ -95,11 +103,37 @@ export default {
     position: absolute;
     right: 150px;
   }
+  .test {
+    position: absolute;
+    right: 345px;
+    width: 200px;
+  }
+  .searcher {
+    position: absolute;
+    right: 340px;
+    top: 21px;
+    font-size: 20px;
+    color: #000000a6;
+  }
+  .helper {
+    position: absolute;
+    right: 300px;
+    top: 21px;
+    font-size: 22px;
+    color: #000000a6;
+  }
+  .notices {
+    position: absolute;
+    right: 260px;
+    top: 21px;
+    // color: #000000;
+    font-size: 22px;
+    color: #000000a6;
+  }
   .screenfull {
     position: absolute;
-    right: 160px;
+    right: 220px;
     top: 21px;
-    color: red;
   }
   .username {
     position: absolute;
