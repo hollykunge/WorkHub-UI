@@ -173,6 +173,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .task-member-list {
+  margin: 0 20px;
   .list-header {
     margin-bottom: 10px;
   }

@@ -4,17 +4,18 @@
     <div class="main-container">
       <navbar class="navbar-content"></navbar>
       <app-main class="main-content"></app-main>
+      <page-footer class="page-footer"></page-footer>
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from 'views/layout'
+import { Navbar, Sidebar, AppMain, PageFooter } from 'views/layout'
 
 export default {
   name: 'layout',
-  components: { Navbar, Sidebar, AppMain },
-  computed: { sidebar () { return this.$store.state.app.sidebar } }
+  components: { Navbar, Sidebar, AppMain, PageFooter },
+  computed: { sidebar() { return this.$store.state.app.sidebar } }
 }
 </script>
 
@@ -27,14 +28,14 @@ export default {
   width: 100%;
   &.hideSidebar {
     .sidebar-container {
-      width: 64px;
+      width: 80px;
       overflow: inherit;
       box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
     }
     .main-container {
-      margin-left: 64px;
+      margin-left: 80px;
       .navbar-content {
-        padding-right: 64px;
+        padding-right: 80px;
       }
     }
   }
@@ -57,6 +58,7 @@ export default {
     min-height: 100%;
     transition: margin-left 0.28s ease-out;
     margin-left: 256px;
+    background: #f0f2f5;
     .navbar-content {
       width: 100%;
       padding-right: 256px;
@@ -65,7 +67,8 @@ export default {
       z-index: 1000;
     }
     .main-content {
-      margin-top: 64px;
+      padding-top: 64px;
+      overflow-x: hidden;
     }
   }
 }
