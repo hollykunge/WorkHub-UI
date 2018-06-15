@@ -9,22 +9,21 @@
       </el-col>
       <el-col :span="8">
         <div>
-          <p style="background-color: green">1111111111111111111111111111111111111111111111111111111111111111111111</p>
+          <nav-box></nav-box>
         </div>
       </el-col>
     </el-row>
-    <!-- <component v-bind:is="currentRole"> </component> -->
   </div>
 </template>
 
 <script>
 // import { mapGetters } from 'vuex'
-import EditorDashboard from './components/index'
+import { NavBox } from 'views/dashboard/components'
 import Sticky from 'views/components/sticky'
 
 export default {
   name: 'dashboard',
-  components: { EditorDashboard, Sticky },
+  components: { NavBox, Sticky },
   data() {
     return {
       currentRole: 'EditorDashboard'
