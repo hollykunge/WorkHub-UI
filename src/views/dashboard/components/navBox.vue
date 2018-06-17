@@ -90,6 +90,7 @@ export default {
 .navigation-box {
   width: 400px;
   margin-top: 60px;
+  margin-left: 60px;
   .el-card__header {
     padding: 10px 15px;
   }
