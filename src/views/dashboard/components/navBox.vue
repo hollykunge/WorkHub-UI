@@ -1,6 +1,7 @@
 <template>
   <div class="navigation-box">
-    <sticky className="navigation-box-containter" :stickyTop="80" :zIndex="100">
+    <!-- <sticky className="navigation-box-containter" :stickyTop="80" :zIndex="100"> -->
+    <div class="navigation-box-containter">
       <el-card>
         <div slot="header">
           <span style="line-height: 0px; display: inline-flex;">
@@ -11,7 +12,7 @@
         <div style="padding: 0px 15px; margin: 5px 0px;">
           <el-input v-model="taskFilterText" placeholder="搜索任务"></el-input>
         </div>
-        <el-table :show-header="false" :data="filteredTsakList" max-height="500" empty-text="没有任务信息">
+        <el-table :show-header="false" :data="filteredTsakList" max-height="700" empty-text="没有任务信息">
           <el-table-column>
             <template scope="scope">
               <el-popover trigger="hover" placement="top">
@@ -30,7 +31,8 @@
           </el-table-column>
         </el-table>
       </el-card>
-    </sticky>
+    </div>
+    <!-- </sticky> -->
   </div>
 </template>
 
@@ -89,7 +91,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .navigation-box {
   width: 400px;
-  margin-top: 60px;
+  margin-top: 0px;
   margin-left: 60px;
   .el-card__header {
     padding: 10px 15px;
