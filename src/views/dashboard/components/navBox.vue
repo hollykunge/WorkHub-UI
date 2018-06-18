@@ -1,6 +1,7 @@
 <template>
   <div class="navigation-box">
-    <sticky className="navigation-box-containter" :stickyTop="80" :zIndex="100">
+    <!-- <sticky className="navigation-box-containter" :stickyTop="80" :zIndex="100"> -->
+    <div class="navigation-box-containter">
       <el-card>
         <div slot="header">
           <span style="line-height: 0px; display: inline-flex;">
@@ -30,7 +31,8 @@
           </el-table-column>
         </el-table>
       </el-card>
-    </sticky>
+    </div>
+    <!-- </sticky> -->
   </div>
 </template>
 
@@ -89,7 +91,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .navigation-box {
   width: 400px;
-  margin-top: 60px;
+  margin-top: 0px;
   margin-left: 60px;
   .el-card__header {
     padding: 10px 15px;

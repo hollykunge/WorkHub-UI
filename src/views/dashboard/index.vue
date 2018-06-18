@@ -50,17 +50,22 @@
         </div>
       </el-col>
     </el-row>
+    <el-row type="flex" align="center">
+      <el-col :span="23">
+        <workload-map class="calendar-heatmap"></workload-map>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 // import { mapGetters } from 'vuex'
 import Sticky from 'src/components/Sticky/index'
-import { NavBox } from 'views/dashboard/components'
+import { NavBox, WorkloadMap } from 'views/dashboard/components'
 
 export default {
   name: 'dashboard',
-  components: { Sticky, NavBox },
+  components: { Sticky, NavBox, WorkloadMap },
   data() {
     return {
       notifications: [],
@@ -108,6 +113,7 @@ export default {
   .dashboard-content {
     margin-left: 40px;
     &-header {
+      margin-bottom: 20px;
       .el-card__header {
         padding: 10px 10px 10px 28px;
       }
@@ -131,13 +137,12 @@ export default {
       }
     }
     &-body {
-      margin-top: 20px;
       .el-card__header {
         padding: 10px 10px 10px 28px;
       }
       .el-card__body {
         padding: 0 20px 10px 20px;
-        max-height: 400px;
+        max-height: 740px;
         overflow-y: auto;
         .updating-list {
           position: relative;
@@ -166,6 +171,9 @@ export default {
         }
       }
     }
+  }
+  .calendar-heatmap {
+    margin-top: 40px;
   }
 }
 </style>
