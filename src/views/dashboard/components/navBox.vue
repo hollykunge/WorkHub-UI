@@ -11,7 +11,7 @@
         <div style="padding: 0px 15px; margin: 5px 0px;">
           <el-input v-model="taskFilterText" placeholder="搜索任务"></el-input>
         </div>
-        <el-table :show-header="false" :data="filteredTsakList" max-height="500" empty-text="没有任务信息">
+        <el-table :show-header="false" :data="filteredTsakList" max-height="700" empty-text="没有任务信息">
           <el-table-column>
             <template scope="scope">
               <el-popover trigger="hover" placement="top">
