@@ -5,7 +5,16 @@
         <el-col :span="10">
           <property-select title="分支" :properties="branches" @changed="handleBranchChanged"></property-select>
         </el-col>
-        <el-col :span="4" :offset="10">
+        <el-col :span="10">
+          <el-button-group class="task-view-switch-button">
+            <el-button size="small" @click="switchView(1)" plain>
+              <icon name="table"></icon>
+              数据</el-button>
+            <el-button size="small" @click="switchView(2)" plain>
+              <icon name="folder-open-o"></icon>文件列表</el-button>
+          </el-button-group>
+        </el-col>
+        <el-col :span="4">
           <el-button-group class="task-options-button">
             <el-button size="small" @click="handleCreate" plain>
               <icon name="file-o"></icon>
@@ -67,16 +76,20 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="temp-area">
+      <data-table></data-table>
+    </div>
   </div>
 </template>
 
 <script>
 import propertySelect from 'src/views/components/propertySelect'
+import dataTable from './dataTable'
 import { getTaskData } from 'api/project/task/index'
 import { mapGetters } from 'vuex'
 export default {
   props: ['projectId', 'taskId'],
-  components: { propertySelect },
+  components: { propertySelect, dataTable },
   data() {
     return {
       // ***************************分支数据***************************************
@@ -115,6 +128,9 @@ export default {
     handleUpload() {
       // this.$emit('toggleStatus', 'upload')
       this.$router.push({ name: '文件上传' })
+    },
+    switchView(val) {
+      console.log(val)
     }
   }
 }
@@ -128,6 +144,10 @@ export default {
       &-button {
         margin-left: 20px;
       }
+    }
+    .task-view-switch-button {
+      position: absolute;
+      right: 243px;
     }
     .task-options-button {
       position: absolute;
