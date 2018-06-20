@@ -60,7 +60,7 @@ export default {
       project: {},
       tabs: [{ name: 'taskData', icon: 'list-ul', lable: '数据' },
       { name: 'pullRequest', icon: 'mail-forward', lable: '合并请求' },
-      { name: 'chartManage', icon: 'bar-chart-o', lable: '图表管理' },
+      // { name: 'chartManage', icon: 'bar-chart-o', lable: '图表管理' },
       { name: 'taskIntro', icon: 'info', lable: '任务简介' },
       { name: 'versionHistory', icon: 'gg', lable: '历史版本' },
       { name: 'memberList', icon: 'users', lable: '成员' },

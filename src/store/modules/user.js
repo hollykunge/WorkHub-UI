@@ -104,7 +104,7 @@ const user = {
           commit('SET_USERID', data.id)
           commit('SET_ROLES', 'admin')
           commit('SET_NAME', data.name)
-          commit('SET_AVATAR', '../../../static/images/logo-min.svg')
+          commit('SET_AVATAR', 'static/images/logo-min.svg')
           commit('SET_INTRODUCTION', data.description)
           const menus = {}
           for (let i = 0; i < data.menus.length; i++) {
