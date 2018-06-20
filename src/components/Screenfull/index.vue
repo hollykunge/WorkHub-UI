@@ -38,6 +38,7 @@ export default {
         return false
       }
       screenfull.toggle()
+      this.$emit('isFullscreen', screenfull.isFullscreen)
     }
   }
 }
@@ -47,6 +48,6 @@ export default {
 .screenfull {
   display: inline-block;
   cursor: pointer;
-  vertical-align: -0.15em;
+  vertical-align: -0.53em;
 }
 </style>
