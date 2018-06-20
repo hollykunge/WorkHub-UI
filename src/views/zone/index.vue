@@ -92,24 +92,14 @@ export default {
   width: 72%;
   text-align: left;
   .el-menu {
-    // border: 0.5px ridge rgb(129, 144, 148);
-    background-color: #ffffff;
-    // border-radius: 13px;
     .el-menu-item {
       border-radius: 13px;
       border: 0.5px ridge rgb(129, 144, 148);
       height: 38px;
       line-height: 40px;
+      background-color: #ffffff;
     }
     .is-active {
-      // position: absolute;
-      // top: 0;
-      // bottom: 0;
-      // left: 0;
-      // width: 2px;
-      // content: "";
-      // background-color: #e36209;
-      // margin-left: 100px;
       border-left: 4px solid #e36209;
     }
   }

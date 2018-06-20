@@ -69,12 +69,12 @@ export default {
   width: 72%;
   text-align: left;
   .el-menu {
-    background-color: #ffffff;
     .el-menu-item {
       border-radius: 13px;
       border: 0.5px ridge rgb(129, 144, 148);
       height: 38px;
       line-height: 40px;
+      background-color: #ffffff;
     }
     .is-active {
       border-left: 4px solid #20a0ff;

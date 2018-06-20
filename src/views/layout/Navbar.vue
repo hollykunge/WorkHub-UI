@@ -10,11 +10,23 @@
       <error-log v-if="log.length>0" class="errLog-container" :logsList="log"></error-log>
 
       <!-- 导航栏功能按钮 -->
-      <el-input class="test" size="small" icon="search" placeholder="输入内容进行搜索">
-      </el-input>
+      <!-- <el-input class="test" size="small" icon="search" placeholder="输入内容进行搜索">
+      </el-input> -->
+      <div class="headerSearch">
+        <div class="headerSearch-icon" @click="changeSearchState">
+          <el-tooltip class="helper-tooltip" effect="dark" content="搜索" placement="bottom">
+            <icon name="search"></icon>
+          </el-tooltip>
+        </div>
+        <el-input :class="inputClass" ref="input" @keyup.enter.native="handleSearch" @blur="changeSearchState" size="small" placeholder="输入内容进行搜索">
+        </el-input>
+      </div>
+
       <div class="helper">
-        <el-tooltip class="helper-tooltip" effect="dark" content="查看使用手册" placement="bottom">
-          <icon class="helper-icon" name="question-circle-o"></icon>
+        <el-tooltip class="helper-tooltip" effect="dark" content="使用手册" placement="bottom">
+          <router-link to="/helper">
+            <icon class="helper-icon" name="question-circle-o"></icon>
+          </router-link>
         </el-tooltip>
       </div>
 
@@ -32,7 +44,7 @@
 
       <el-dropdown class="avatar-container" trigger="hover">
         <div class="avatar-wrapper">
-          <img class="user-avatar" :src="avatar">
+          <img class="user-avatar" :src="'../../../../'+avatar">
           <a>{{ name }}</a>
           <icon name="angle-down"></icon>
         </div>
@@ -63,6 +75,7 @@ import Hamburger from 'components/Hamburger'
 import Screenfull from 'components/Screenfull'
 import ErrorLog from 'components/ErrLog'
 import errLogStore from 'store/errLog'
+
 export default {
   components: {
     Levelbar,
@@ -74,7 +87,8 @@ export default {
   data() {
     return {
       log: errLogStore.state.errLog,
-      screenfulContent: '全屏'
+      screenfulContent: '全屏',
+      inputClass: 'hide'
     }
   },
   computed: { ...mapGetters([
@@ -82,6 +96,9 @@ export default {
     'name',
     'avatar'
   ])
+  },
+  mounted() {
+    this.$refs.input.$refs.input.style.border = '0px solid #bfcbd9'
   },
   methods: {
     toggleSideBar() {
@@ -95,6 +112,21 @@ export default {
     },
     handleFullscreen(val) {
       this.screenfulContent = val ? '全屏' : '退出全屏'
+    },
+    changeSearchState() {
+      this.inputClass = this.inputClass === 'hide' ? 'show' : 'hide'
+      if (this.inputClass === 'show') {
+        this.$refs.input.$refs.input.focus() // 点开搜索后自动聚焦
+        this.$refs.input.$refs.input.style.borderBottom = '1px solid #bfcbd9'
+        this.$refs.input.$refs.input.style.borderRadius = '0px'
+      }
+      if (this.inputClass === 'hide') {
+        this.$refs.input.$refs.input.style.borderBottom = '0px solid #bfcbd9'
+      }
+    },
+    handleSearch(val) {
+      console.log(val.target.value)
+      window.open('https://www.baidu.com/baidu?wd=' + val.target.value)
     }
   }
 }
@@ -118,17 +150,31 @@ export default {
     position: absolute;
     right: 150px;
   }
-  .test {
+  .headerSearch {
+    display: inline-flex;
     position: absolute;
     right: 345px;
-    width: 200px;
-  }
-  .searcher {
-    position: absolute;
-    right: 340px;
-    top: 21px;
-    font-size: 20px;
-    color: #000000a6;
+    &-icon {
+      .fa-icon {
+        vertical-align: middle;
+        font-size: 21px;
+        color: #00000086;
+        cursor: pointer;
+      }
+      &:hover {
+        background-color: #4ba5ff28;
+      }
+    }
+    .el-input {
+      transition: width 0.3s, margin-left 0.3s;
+      width: 0px;
+      background: transparent;
+
+      &.show {
+        width: 210px;
+        margin-left: 8px;
+      }
+    }
   }
   .helper {
     position: absolute;
@@ -147,7 +193,6 @@ export default {
     position: absolute;
     right: 260px;
     &-icon {
-      // top: 21px;
       vertical-align: middle;
       font-size: 22px;
       color: #000000a6;
