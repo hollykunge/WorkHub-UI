@@ -100,7 +100,7 @@ export default {
       background-color: #ffffff;
     }
     .is-active {
-      border-left: 4px solid #e36209;
+      border-left: 4px solid #20a0ff;
     }
   }
 }
