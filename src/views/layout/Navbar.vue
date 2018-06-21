@@ -14,7 +14,7 @@
       </el-input> -->
       <div class="headerSearch">
         <div class="headerSearch-icon" @click="changeSearchState">
-          <el-tooltip class="helper-tooltip" effect="dark" content="搜索" placement="bottom">
+          <el-tooltip class="helper-tooltip" effect="dark" content="点击搜索" placement="bottom">
             <icon name="search"></icon>
           </el-tooltip>
         </div>
@@ -31,8 +31,13 @@
       </div>
 
       <div class="notices">
-        <el-tooltip class="notices-tooltip" effect="dark" content="消息中心" placement="bottom">
-          <icon class="notices-icon" name="bell-o"></icon>
+        <el-tooltip class="notices-tooltip" effect="dark" :content="newNotices?'有新消息，点击查看':'消息中心'" placement="bottom">
+          <router-link to="/notification">
+            <icon class="notices-icon" name="bell-o"></icon>
+            <el-badge v-if="newNotices" is-dot class="notices-badge">
+              <!-- <icon class="notices-icon" name="bell-o"></icon> -->
+            </el-badge>
+          </router-link>
         </el-tooltip>
       </div>
 
@@ -88,7 +93,8 @@ export default {
     return {
       log: errLogStore.state.errLog,
       screenfulContent: '全屏',
-      inputClass: 'hide'
+      inputClass: 'hide',
+      newNotices: true
     }
   },
   computed: { ...mapGetters([
@@ -197,6 +203,11 @@ export default {
       font-size: 22px;
       color: #000000a6;
       cursor: pointer;
+    }
+    &-badge {
+      position: absolute;
+      top: -2px;
+      right: 2px;
     }
     &:hover {
       background-color: #4ba5ff28;
