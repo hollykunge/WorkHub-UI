@@ -1,6 +1,5 @@
 <template>
-  <!--以纵向的tab页展示-->
-  <div class="user-notification">
+  <div class="user-notification" style="z-index:2018">
     <el-row justify="center">
       <el-col :span="6">
         <div class="setting-nav-bar">
@@ -29,7 +28,36 @@
           </div>
           <div class="message-container">
             <!-- 使用统一的数据展示的模板 -->
-            <div v-for="(message, index) in messageList" :key="index"></div>
+            <div class="message-list" v-for="(message, index) in messageList" :key="index">
+              <span class="message-list-avatar"><img :src="message.avatar"></span>
+              <router-link :to="message.path" v-if="message.type==0" class="message-list-content">
+                {{message.userName}} 新建项目
+                <span>{{message.content}}</span>
+              </router-link>
+              <router-link :to="message.path" v-if="message.type==1" class="message-list-content">
+                {{message.userName}} 更新项目
+                <span>{{message.content}}</span>
+              </router-link>
+              <router-link :to="message.path" v-if="message.type==2" class="message-list-content">
+                {{message.userName}} 评论项目
+                <span>{{message.content}}</span>
+              </router-link>
+              <span class="message-list-time">{{message.time}}</span>
+              <div class="message-list-detail">
+                <div class="message-list-detail-content" v-if="currentRow==index">
+                  <p>针对遥感空间信息可信度理论在航天重大工程实际应用中需要解决的关键难题，以遥感空间数据获取、处理和应用全过程的质量控制为主线，突破了遥感空间数据可信度量、可信处理和可信评估等核心技术难题，实现了技术创新的四个首次：1）首次设计并构建了航天重大工程的遥感空间信息可信度理论方法，建立了航天探测场景静态要素可信度量模型、航天器（传感器、平台）动态数据可信处理方法和海量空间数据产品可信评估技术；2）首次建立了多波束激光虚焦点成像模型和多法向平面控制几何检校技术，提高了嫦娥探月新型激光敏感器精避障探测的可信度；3）首次破解了颤振“探、分、补”技术难题，实现了卫星平台颤振的精密探测补偿；4）首次建立了海量空间数据产品通用二级抽样评估优化技术，实现了其可信度的科学准确评估。形成了自主知识产权的面向重大航天工程和相关行业空间数据质量控制技术新体系，实现了嫦娥探月、载人航天和测绘卫星等航天工程中遥感空间信息可信度保障的重大创新。</p>
+                </div>
+                <div>
+                  <span class="message-list-detail-button" v-if="currentRow===index && showDetail" @click="packUp(index)">收起
+                    <icon name="angle-up"></icon>
+                  </span>
+                  <span class="message-list-detail-button" v-else @click="showMore(index)">详细信息
+                    <icon name="angle-down"></icon>
+                  </span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </el-col>
@@ -42,7 +70,9 @@ export default {
   data() {
     return {
       activeItem: 'unreadMessage',
-      messageList: []
+      messageList: [],
+      showDetail: false,
+      currentRow: undefined
     }
   },
   created() {
@@ -55,7 +85,23 @@ export default {
       this.getMessageList(tab)
     },
     getMessageList(tab) { // 根据点击的tab页的不同获取不同的数据
-      this.messageList = []
+      this.messageList = [
+        { type: 0, userName: '白向洋', avatar: 'static/images/avatars/139064.jpg', content: '遥感空间信息可信度理论与关键技术', path: '/', time: '2018-06-30' },
+        { type: 1, userName: '周星星', avatar: 'static/images/avatars/139065.jpg', content: '新型仿真机器人', path: '/', time: '2018-06-28' },
+        { type: 2, userName: '朱偏右', avatar: 'static/images/avatars/139066.png', content: '工程效能', path: '/', time: '2018-06-26' },
+        { type: 0, userName: '王梦源', avatar: 'static/images/avatars/139067.png', content: '卫星通导及系统融合产业化', path: '/', time: '2018-06-26' },
+        { type: 2, userName: '胡  超', avatar: 'static/images/avatars/139068.jpg', content: '智能生产', path: '/', time: '2018-06-26' },
+        { type: 1, userName: '赵海波', avatar: 'static/images/avatars/139065.jpg', content: '工业机器人', path: '/', time: '2018-06-26' },
+        { type: 0, userName: '张童飞', avatar: 'static/images/avatars/139067.png', content: '安全防御关键技术', path: '/', time: '2018-06-26' },
+        { type: 2, userName: '米思坤', avatar: 'static/images/avatars/139068.jpg', content: '八月迭代', path: '/', time: '2018-06-26' }]
+    },
+    showMore(index) {
+      this.showDetail = true
+      this.currentRow = index
+    },
+    packUp(index) {
+      this.showDetail = false
+      this.currentRow = undefined
     }
   }
 }
@@ -70,7 +116,7 @@ export default {
   .el-menu {
     .el-menu-item {
       border-radius: 13px;
-      border: 0.5px ridge rgb(129, 144, 148);
+      border: 0.5px ridge #819094;
       height: 38px;
       line-height: 40px;
       background-color: #ffffff;
@@ -89,11 +135,53 @@ export default {
     color: #24292e;
     border-bottom: 1px solid #dbdedf;
   }
-  .unread-message-container {
-  }
-  .system-notification-container {
-  }
-  .task-reminder-container {
+  .message-container {
+    .message-list {
+      position: relative;
+      border-bottom: 1px solid #dbdedf;
+      margin-top: 20px;
+      &-avatar {
+        color: #001529;
+        img {
+          width: 32px;
+          height: 32px;
+        }
+      }
+      &-content {
+        position: absolute;
+        margin-top: 5px;
+        margin-left: 10px;
+        span {
+          color: #20a0ff;
+        }
+      }
+      &-time {
+        float: right;
+        color: grey;
+      }
+      &-detail {
+        &-content {
+          margin-left: 40px;
+          border: 1px solid #d1d5da79;
+          border-radius: 3px;
+          p {
+            padding: 0 10px;
+            word-break: break-all;
+            color: #676262;
+          }
+        }
+        &-button {
+          font-size: 14px;
+          display: block;
+          text-align: right;
+          color: grey;
+          cursor: pointer;
+          &:hover {
+            color: #20a0ff;
+          }
+        }
+      }
+    }
   }
 }
 </style>
