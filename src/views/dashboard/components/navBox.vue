@@ -12,7 +12,7 @@
         <div style="padding: 0px 15px; margin: 5px 0px;">
           <el-input v-model="taskFilterText" placeholder="搜索任务"></el-input>
         </div>
-        <el-table :show-header="false" :data="filteredTsakList" max-height="700" empty-text="没有任务信息">
+        <el-table :show-header="false" :data="filteredTsakList" empty-text="没有任务信息">
           <el-table-column>
             <template scope="scope">
               <el-popover trigger="hover" placement="top">
@@ -30,6 +30,9 @@
             </template>
           </el-table-column>
         </el-table>
+        <div class="load-more">
+          <el-button @click="loadMore" v-if="isLoadMore">加载更多</el-button>
+        </div>
       </el-card>
     </div>
     <!-- </sticky> -->
@@ -46,9 +49,11 @@ export default {
   },
   data() {
     return {
-      taskList: undefined,
-      filteredTsakList: undefined,
-      taskFilterText: ''
+      taskList: [],
+      filteredTsakList: [],
+      taskFilterText: '',
+      isLoadMore: false,
+      loadMoreCounter: 0
     }
   },
   computed: {
@@ -63,6 +68,8 @@ export default {
     getTaskList({ limit: 10000, taskExecutorId: this.userId }).then(res => {
       this.taskList = res.data.rows
       this.filteredTsakList = res.data.rows
+    }).then(() => {
+      this.loadMore()
     })
   },
   methods: {
@@ -82,6 +89,17 @@ export default {
           }
         })
       }
+    },
+    loadMore() {
+      const Counter = 10 + 8 * this.loadMoreCounter
+      if (this.taskList.length <= Counter) {
+        this.filteredTsakList = this.taskList
+        this.isLoadMore = false
+      } else {
+        this.filteredTsakList = this.taskList.slice(0, Counter)
+        this.isLoadMore = true
+      }
+      this.loadMoreCounter++
     }
   }
 
@@ -102,6 +120,18 @@ export default {
   .el-table td,
   .el-table th.is-leaf {
     border-bottom: 1px solid #dfe6ec00;
+  }
+  .load-more {
+    text-align: center;
+    // display: none; /*默认不显示，ajax调用成功后才决定显示与否*/
+    .el-button {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #dbdedf;
+      &:hover {
+        background: #f0f2f5;
+      }
+    }
   }
 }
 </style>
