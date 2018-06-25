@@ -24,10 +24,10 @@ export default {
     const option = {
       title: {
         show: true,
-        text: '2018年 日工作量统计',
+        text: '工 作 量 统 计',
         left: '3%',
         textStyle: {
-          fontSize: 20
+          fontSize: 25
         }
       },
       tooltip: {
