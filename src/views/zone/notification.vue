@@ -130,7 +130,7 @@ export default {
   }
 }
 .setting-content-container {
-  padding: 0px 10% 0 0;
+  width: 850px;
   &-header {
     color: #24292e;
     border-bottom: 1px solid #dbdedf;

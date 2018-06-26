@@ -70,7 +70,7 @@ export default {
         { type: 2, userName: '米思坤', avatar: 'static/images/avatars/139068.jpg', content: '八月迭代', path: '/', time: '2018-06-26' }]
     },
     loadMore() {
-      const Counter = 3 + 3 * this.loadMoreCounter
+      const Counter = 2 + 3 * this.loadMoreCounter
       if (this.messageList.length <= Counter) {
         this.displayedList = this.messageList
         this.isLoadMore = false
