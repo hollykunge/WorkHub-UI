@@ -5,15 +5,17 @@
 </template>
 
 <script>
+import ReadMe from '../../../README.md'
+
 export default {
   data() {
     return {
       markdownText: '',
-      html: ''
+      html: ReadMe
     }
   },
   created() {
-    this.renderMD()
+    // this.renderMD()
   },
   methods: {
     getMarkdownText() {
@@ -37,8 +39,16 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.show-markdown {
-  text-align: center;
-  margin-top: 20px;
+.user-helper {
+  margin: 0 200px;
+  background-color: white;
+  .show-markdown {
+    -webkit-box-shadow: 0px 0px 10px 1px #00152959;
+    box-shadow: 0px 0px 10px 1px #00152959;
+    padding: 0 20px;
+    code {
+      background-color: #f6f8fa;
+    }
+  }
 }
 </style>
