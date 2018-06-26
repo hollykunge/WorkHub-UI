@@ -6,9 +6,11 @@
         <img v-show="isCollapse" src="../../../static/images/logo-min.svg" key="min-logo" />
       </router-link>
     </div>
-    <el-menu mode="vertical" theme="dark" unique-opened :default-active="$route.path" :collapse="isCollapse">
-      <sidebar-item :routes='permissionMenus'></sidebar-item>
-    </el-menu>
+    <div>
+      <el-menu mode="vertical" theme="dark" unique-opened :default-active="$route.path" :collapse="isCollapse">
+        <sidebar-item :routes='permissionMenus'></sidebar-item>
+      </el-menu>
+    </div>
   </div>
 </template>
 
@@ -47,6 +49,9 @@ export default {
 }
 .el-menu--dark {
   background-color: #001529 !important;
+}
+.el-menu--collapse {
+  width: 80px;
 }
 </style>
 
