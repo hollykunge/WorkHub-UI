@@ -239,4 +239,10 @@ export default {
     }
   }
 }
+// 必须写在外面
+.user-dropdown {
+  margin: 15px 0;
+  width: 150px;
+  border-radius: 3px;
+}
 </style>
