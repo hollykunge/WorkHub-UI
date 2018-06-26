@@ -50,5 +50,8 @@ export default {
 .el-menu--dark {
   background-color: #001529 !important;
 }
+.el-menu--collapse {
+  width: 80px;
+}
 </style>
 
