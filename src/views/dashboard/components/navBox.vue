@@ -1,6 +1,6 @@
 <template>
   <div class="navigation-box">
-    <!-- <sticky className="navigation-box-containter" :stickyTop="80" :zIndex="100"> -->
+
     <div class="navigation-box-containter">
       <el-card>
         <div slot="header">
@@ -15,27 +15,23 @@
         <el-table :show-header="false" :data="filteredTsakList" empty-text="没有任务信息">
           <el-table-column>
             <template scope="scope">
-              <el-popover trigger="hover" placement="top">
+              <el-tooltip :content="scope.row.taskDes" placement="top" effect="dark">
                 <!-- 任务描述-->
-                <span style="font-size: 16px;">{{ scope.row.taskDes }}</span>
-                <div slot="reference">
-                  <router-link :to="{name:'任务详情', params: { projectId: scope.row.taskProjectId, taskId: scope.row.taskId }}">
-                    <span style="font-size: 18px; color: #20a0ff;">
-                      <icon name="angle-right"></icon>
-                      <span style="margin-left: 8px;">{{ scope.row.taskName }}</span>
-                    </span>
-                  </router-link>
-                </div>
-              </el-popover>
+                <router-link :to="{name:'任务详情', params: { projectId: scope.row.taskProjectId, taskId: scope.row.taskId }}">
+                  <span style="font-size: 18px; color: #20a0ff;">
+                    <icon name="angle-right"></icon>
+                    <span style="margin-left: 8px;">{{ scope.row.taskName }}</span>
+                  </span>
+                </router-link>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
         <div class="load-more">
-          <el-button @click="loadMore" v-if="isLoadMore">加载更多</el-button>
+          <el-button class="load-more-button" @click="loadMore" v-if="isLoadMore">加载更多</el-button>
         </div>
       </el-card>
     </div>
-    <!-- </sticky> -->
   </div>
 </template>
 
@@ -79,9 +75,12 @@ export default {
     taskFilter(val) {
       if (!val) {
         this.filteredTsakList = this.taskList
+        this.loadMoreCounter = 0
+        this.loadMore()
       } else if (this.taskList === undefined) {
         this.filteredTsakList = []
       } else {
+        this.isLoadMore = false
         this.filteredTsakList = []
         this.taskList.forEach(element => {
           if (element.taskName.indexOf(val) >= 0) {
@@ -109,8 +108,11 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .navigation-box {
   width: 400px;
-  margin-top: 0px;
+  margin-top: 40px;
   margin-left: 60px;
+  .el-card {
+    background-color: #f0f2f5;
+  }
   .el-card__header {
     padding: 10px 15px;
   }
@@ -121,16 +123,16 @@ export default {
   .el-table th.is-leaf {
     border-bottom: 1px solid #dfe6ec00;
   }
+  .el-table tr {
+    background-color: #f0f2f5;
+  }
   .load-more {
     text-align: center;
     // display: none; /*默认不显示，ajax调用成功后才决定显示与否*/
-    .el-button {
+    &-button {
       width: 100%;
-      background: #fff;
+      background: #f0f2f5;
       border: 1px solid #dbdedf;
-      &:hover {
-        background: #f0f2f5;
-      }
     }
   }
 }

@@ -89,7 +89,7 @@ export default {
   color: #24292e;
   border-bottom: 1px solid #dbdedf;
   h1 {
-    font-size: 25px;
+    font-size: 30px;
   }
 }
 .activity-list-container {
@@ -108,7 +108,7 @@ export default {
       &-content {
         position: absolute;
         margin-top: 5px;
-        margin-left: 10px;
+        margin-left: 20px;
         font-weight: bolder;
 
         // 字数过多时显示省略号
@@ -126,7 +126,7 @@ export default {
       }
       &-detail {
         &-content {
-          margin-left: 40px;
+          margin-left: 50px;
           margin-bottom: 15px;
           border: 1px solid #d1d5da79;
           border-radius: 3px;
