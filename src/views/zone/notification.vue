@@ -150,7 +150,7 @@ export default {
       &-content {
         position: absolute;
         margin-top: 5px;
-        margin-left: 10px;
+        margin-left: 20px;
         span {
           color: #20a0ff;
         }
@@ -161,7 +161,7 @@ export default {
       }
       &-detail {
         &-content {
-          margin-left: 40px;
+          margin-left: 50px;
           border: 1px solid #d1d5da79;
           border-radius: 3px;
           p {
