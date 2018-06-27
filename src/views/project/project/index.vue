@@ -53,9 +53,11 @@
           <span>{{ scope.row.projectDes }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" fixed="right">
+      <el-table-column v-if="allProjects_btn_edit || allProjects_btn_del" align="center" label="操作" fixed="right">
         <template scope="scope">
-          <el-button size="small" type="primary" @click="handleCheck(scope.row)">查看
+          <el-button size="small" v-if="allProjects_btn_edit" type="primary" @click="handleCheck(scope.row)" plain>查看
+          </el-button>
+          <el-button size="small" v-if="allProjects_btn_del" type="danger" @click="handleDelete(scope.row)" plain>删除
           </el-button>
         </template>
       </el-table-column>
@@ -211,6 +213,7 @@ export default {
     this.listQuery.projectUserId = this.userId
     this.allProjects_btn_edit = this.elements['allProjects:btn_edit']
     this.allProjects_btn_add = this.elements['allProjects:btn_add']
+    this.allProjects_btn_del = this.elements['allProjects:btn_del']
     this.getList()
   },
   computed: {
@@ -275,6 +278,8 @@ export default {
           const index = this.list.indexOf(row) // 删除列表中对应的项
           this.list.splice(index, 1)
         })
+      }, () => {
+        return
       })
     },
     remoteProUserMethod(query) {
