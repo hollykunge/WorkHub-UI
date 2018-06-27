@@ -35,8 +35,8 @@
           <el-tab-pane v-for="(tab, index) in tabs" :key="index" :name="tab.name">
             <span slot="label" @click="handleTabClick(tab.name)">
               <icon :name="tab.icon"></icon> {{tab.lable}}
-              <el-badge v-if="tab.name=='projectData'" class="mark" :value="taskNum"></el-badge>
-              <el-badge v-if="tab.name=='ProjectIssue'" class="mark" :value="1"></el-badge>
+              <!-- <el-badge v-if="tab.name=='projectData'" class="mark" :value="taskNum"></el-badge> -->
+              <!-- <el-badge v-if="tab.name=='ProjectIssue'" class="mark" :value="1"></el-badge> -->
             </span>
           </el-tab-pane>
         </el-tabs>
@@ -57,12 +57,12 @@ export default {
     return {     // 用解构赋值的方式来解project的数据
       activeName: '', // 进去详情页首先显示的标签
       project: {},
-      taskNum: '?',
+      taskNum: '',
       // tab页数据
       tabs: [
         // { name: 'projectIntro', icon: 'file-text-o', lable: '项目简介' },
         { name: 'projectData', icon: 'list-ul', lable: '任务列表' },
-        { name: 'ProjectIssue', icon: 'question-circle-o', lable: '问题研讨' },
+        // { name: 'ProjectIssue', icon: 'question-circle-o', lable: '问题研讨' },
         { name: 'projectTeam', icon: 'users', lable: '团队列表' },
         { name: 'projectSetting', icon: 'gears', lable: '项目设置' }]
     }
@@ -104,7 +104,8 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .index-project {
-  padding: 12px;
+  height: 30px;
+  margin: 15px 0 15px 25px;
   .fa-icon {
     font-size: 12px;
     color: #11181d9a;

@@ -5,10 +5,8 @@
         <el-col :span="16">
           <el-button class="filter-item" v-if="allProjects_btn_add" @click="handleCreate" type="success" icon="edit">新建项目</el-button>
         </el-col>
-        <el-col :span="6">
-          <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="项目名称" v-model="listQuery.projectName"> </el-input>
-        </el-col>
-        <el-col :span="2">
+        <el-col :span="8" style="text-align: right;">
+          <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="输入项目名称" v-model="listQuery.projectName" style="width: 300px;"> </el-input>
           <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
         </el-col>
       </el-row>
