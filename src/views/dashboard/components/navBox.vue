@@ -131,7 +131,7 @@ export default {
     // display: none; /*默认不显示，ajax调用成功后才决定显示与否*/
     &-button {
       width: 100%;
-      background: #f0f2f5;
+      background: inherit;
       border: 1px solid #dbdedf;
     }
   }

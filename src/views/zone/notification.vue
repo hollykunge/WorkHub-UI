@@ -164,6 +164,7 @@ export default {
           margin-left: 50px;
           border: 1px solid #d1d5da79;
           border-radius: 3px;
+          background-color: #ffffff50;
           p {
             padding: 0 10px;
             word-break: break-all;
