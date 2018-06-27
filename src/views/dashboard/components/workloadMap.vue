@@ -6,9 +6,16 @@
 import echarts from 'echarts'
 export default {
   name: 'workloadMap',
+  data() {
+    const myDate = new Date()
+    return {
+      currentYear: myDate.getFullYear().toString() // 获取当前年份
+    }
+  },
   mounted() {
+    console.log(this.currentYear)
     function getVirtulData(year) {
-      year = year || '2018'
+      year = year || this.currentYear
       const date = +echarts.number.parseDate(year + '-01-01')
       const end = +echarts.number.parseDate((+year + 1) + '-01-01')
       const dayTime = 3600 * 24 * 1000
@@ -24,14 +31,15 @@ export default {
     const option = {
       title: {
         show: true,
-        text: '工 作 量 统 计',
-        left: '3%',
+        text: '工 作 统 计',
+        left: '60',
         textStyle: {
-          fontSize: 25
+          fontSize: 30
         }
       },
       tooltip: {
-        position: 'top'
+        position: 'top',
+        formatter: '{c}'
       },
       visualMap: {
         min: 0,
@@ -47,7 +55,7 @@ export default {
         }
       },
       calendar: {
-        range: '2018',
+        range: this.currentYear,
         cellSize: ['auto', 26],
         right: 25,
         yearLabel: {
@@ -58,7 +66,7 @@ export default {
         type: 'heatmap',
         coordinateSystem: 'calendar',
         calendarIndex: 0,
-        data: getVirtulData(2018)
+        data: getVirtulData(this.currentYear)
       }]
     }
     const workloadMapCharts = echarts.init(document.getElementById('workload_map_con'))
