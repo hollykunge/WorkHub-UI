@@ -23,12 +23,12 @@ export function getObj(id) {
   })
 }
 
-// export function delObj(id) {
-//   return fetch({
-//     url: '/api/project/project/' + id,
-//     method: 'delete'
-//   })
-// }
+export function delObj(id) {
+  return fetch({
+    url: '/api/project/task/' + id,
+    method: 'delete'
+  })
+}
 
 // export function putObj(id, obj) {
 //   return fetch({

@@ -2,13 +2,13 @@
   <div class="task-list">
     <div class="filter-container">
       <el-row type="flex" justify="space-between" :gutter="5">
-        <el-col :span="15" :offset="1">
-          <el-button class="filter-item" @click="handleCreateTask" type="success" icon="plus" size="small">创建任务</el-button>
+        <el-col :span="16" style="text-align: left;">
+          <el-button class="filter-item" v-if="projectData_btn_add" @click="handleCreateTask" type="success" icon="plus" size="small">创建任务</el-button>
         </el-col>
-        <el-col :span="6">
-          <el-input @keyup.enter.native="handleTaskFilter" class="filter-item" placeholder="任务名称" size="small" v-model="listQuery.taskName"></el-input>
-        </el-col>
-        <el-col :span="2">
+        <el-col :span="8" style="text-align: right;">
+          <el-input @keyup.enter.native="handleTaskFilter" class="filter-item" style="width: 300px;" placeholder="输入任务名称" size="small" v-model="listQuery.taskName"></el-input>
+          <!-- </el-col>
+        <el-col :span="2"> -->
           <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleTaskFilter" size="small">搜索</el-button>
         </el-col>
       </el-row>
@@ -22,9 +22,11 @@
             <el-table-column label="负责人id" prop="taskExecutorId" align="center"></el-table-column>
             <el-table-column label="创建时间" prop="crtTime" align="center"></el-table-column>
             <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center"></el-table-column>
-            <el-table-column align="center" label="操作" fixed="right">
+            <el-table-column v-if="projectData_btn_edit || projectData_btn_del" align="center" label="操作" fixed="right">
               <template scope="scope">
-                <el-button size="small" type="primary" @click="handleCheck(scope.row)">查看
+                <el-button v-if="projectData_btn_edit" size="small" type="primary" @click="handleCheck(scope.row)" plain>查看
+                </el-button>
+                <el-button v-if="projectData_btn_del" size="small" type="danger" @click="handleDelete(scope.row)" plain>删除
                 </el-button>
               </template>
             </el-table-column>
@@ -43,7 +45,7 @@
         <el-form-item label="任务名称" prop="taskName">
           <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
         </el-form-item>
-        <el-form-item label="项目负责人" prop="taskExecutorId">
+        <el-form-item label="任务负责人" prop="taskExecutorId">
           <el-select v-model="form.taskExecutorId" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteQueryUsers" :loading="loading" style="width: 100%">
             <el-option v-for="item in userItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
           </el-select>
@@ -71,7 +73,7 @@
 </template>
 
 <script>
-import { addObj, page } from 'api/project/task/index'
+import { addObj, page, delObj as deleteTask } from 'api/project/task/index'
 import { page as userPage, all as userAll } from 'api/admin/user/index'
 import { mapGetters } from 'vuex'
 export default {
@@ -121,13 +123,24 @@ export default {
           message: '描述信息不能为空'
         }
       },
-      taskProcessOptions: [{ key: '第一阶段', value: 1 }, { key: '第二阶段', value: 2 }, { key: '第三阶段', value: 3 }, { key: '第四阶段', value: 4 }]
+      taskProcessOptions: [{ key: '第一阶段', value: 1 }, { key: '第二阶段', value: 2 }, { key: '第三阶段', value: 3 }, { key: '第四阶段', value: 4 }],
+      projectData_btn_edit: true,
+      projectData_btn_del: true,
+      projectData_btn_add: true
     }
   },
   computed: {
     ...mapGetters([
-      'userId'
+      'userId',
+      'elements'
     ])
+  },
+  created() {
+    // this.projectData_btn_edit = this.elements['projectData:btn_edit']
+    // this.projectData_btn_add = this.elements['projectData:btn_add']
+    // this.projectData_btn_del = this.elements['projectData:btn_del']
+
+    this.getTaskByProIdExeId()
   },
   methods: {
     handleCreateTask() {
@@ -164,6 +177,26 @@ export default {
     },
     handleCheck(task) {
       this.$router.push({ name: '任务详情', params: { projectId: this.projectId, taskId: task.taskId }})
+    },
+    handleDelete(row) {
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteTask(row.taskId).then(() => {
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          const index = this.list.indexOf(row) // 删除列表中对应的项
+          this.list.splice(index, 1)
+        })
+      }, () => {
+        return
+      })
     },
     getTaskByProIdExeId() { // 通过项目id和负责人id获取任务
       this.listLoading = true
@@ -213,15 +246,12 @@ export default {
         taskExecutorId: (Number)(this.userId)
       }
     }
-  },
-  created() {
-    this.getTaskByProIdExeId()
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.task-list-content {
+.task-list {
   margin: 0 20px;
 }
 </style>
