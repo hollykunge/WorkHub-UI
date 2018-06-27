@@ -174,7 +174,7 @@ export default {
     .el-input {
       transition: width 0.3s, margin-left 0.3s;
       width: 0px;
-      background: transparent;
+      background: inherit;
 
       &.show {
         width: 210px;
@@ -238,5 +238,11 @@ export default {
       }
     }
   }
+}
+// 必须写在外面
+.user-dropdown {
+  margin: 15px 0;
+  width: 150px;
+  border-radius: 3px;
 }
 </style>

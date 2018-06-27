@@ -73,12 +73,9 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .dashboard-container {
-  margin: 20px 20px;
+  margin: 0 20px 20px 20px;
   .dashboard-content {
     margin-left: 60px;
-
-    &-body {
-    }
   }
   .calendar-heatmap {
     margin-top: 40px;
