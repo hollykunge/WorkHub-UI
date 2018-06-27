@@ -130,6 +130,7 @@ export default {
           margin-bottom: 15px;
           border: 1px solid #d1d5da79;
           border-radius: 3px;
+          background-color: #ffffff50;
           p {
             padding: 0 10px;
             word-break: break-all;
@@ -145,7 +146,7 @@ export default {
     // display: none; /*默认不显示，ajax调用成功后才决定显示与否*/
     .el-button {
       width: 100%;
-      background: #f0f2f5;
+      background: inherit;
       border: 1px solid #dbdedf;
       &:hover {
         background: #fff;

@@ -174,7 +174,7 @@ export default {
     .el-input {
       transition: width 0.3s, margin-left 0.3s;
       width: 0px;
-      background: transparent;
+      background: inherit;
 
       &.show {
         width: 210px;
