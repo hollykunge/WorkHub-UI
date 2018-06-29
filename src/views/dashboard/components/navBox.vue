@@ -107,7 +107,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .navigation-box {
-  width: 400px;
+  max-width: 350px;
   margin-top: 40px;
   margin-left: 60px;
   .el-card {

@@ -13,7 +13,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.currentYear)
     function getVirtulData(year) {
       year = year || this.currentYear
       const date = +echarts.number.parseDate(year + '-01-01')

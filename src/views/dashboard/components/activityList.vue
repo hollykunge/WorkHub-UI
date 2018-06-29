@@ -10,20 +10,20 @@
           <span class="message-list-avatar"><img :src="message.avatar"></span>
           <router-link :to="message.path" v-if="message.type==0" class="message-list-content">
             {{message.userName}} 新建项目
-            <el-tooltip :content="message.content" placement="top" effect="dark">
-              <span>{{message.content}}</span>
+            <el-tooltip :content="message.content" placement="bottom-start" effect="dark">
+              <span>{{getSubstring(message.content)}}</span>
             </el-tooltip>
           </router-link>
           <router-link :to="message.path" v-if="message.type==1" class="message-list-content">
             {{message.userName}} 更新项目
-            <el-tooltip :content="message.content" placement="top" effect="dark">
-              <span>{{message.content}}</span>
+            <el-tooltip :content="message.content" placement="bottom-start" effect="dark">
+              <span>{{getSubstring(message.content)}}</span>
             </el-tooltip>
           </router-link>
           <router-link :to="message.path" v-if="message.type==2" class="message-list-content">
             {{message.userName}} 评论项目
-            <el-tooltip :content="message.content" placement="top" effect="dark">
-              <span>{{message.content}}</span>
+            <el-tooltip :content="message.content" placement="bottom-start" effect="dark">
+              <span>{{getSubstring(message.content)}}</span>
             </el-tooltip>
           </router-link>
           <span class="message-list-time">{{message.time}}</span>
@@ -79,6 +79,13 @@ export default {
         this.isLoadMore = true
       }
       this.loadMoreCounter++
+    },
+    getSubstring(originalString) {
+      const stringLength = originalString.length
+      if (stringLength > 30) {
+        return originalString.substr(0, 30) + '···'
+      }
+      return originalString
     }
   }
 }
@@ -110,12 +117,6 @@ export default {
         margin-top: 5px;
         margin-left: 20px;
         font-weight: bolder;
-
-        // 字数过多时显示省略号
-        width: 750px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
         span {
           color: #20a0ff;
         }
@@ -123,6 +124,7 @@ export default {
       &-time {
         float: right;
         color: grey;
+        margin-top: 8px;
       }
       &-detail {
         &-content {

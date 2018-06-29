@@ -1,7 +1,7 @@
 <template>
   <div class="project-team-cards">
     <el-row>
-      <el-col :xs="23" :sm="11" :md="7" v-for="(team,index) in allTeams" :key="index" :offset="1">
+      <el-col :span="7" v-for="(team,index) in allTeams" :key="index" :offset="1">
         <div>
           <el-card class="card-content">
             <div slot="header" class="card-content-header">
@@ -9,8 +9,10 @@
               <el-button v-if="!isCurrentMember(team.teamMumbers)" @click="handleJoin" style="float: right;" type="primary" size="small">加入</el-button>
               <el-button v-if="isCurrentMember(team.teamMumbers)" @click="handleLeaf" style="float: right;" type="danger" size="small">离开</el-button>
             </div>
-            <div class="card-content-body" style="">
-              <Avatar v-for="(user, index) in team.teamMumbers" :username="user.name" :size="45" :lighten="200" :key="index" style="margin-right: 5px;"></Avatar>
+            <div class="card-content-body">
+              <el-tooltip v-for="(user, index) in team.teamMumbers" :key="index" effect="dark" placement="top" :content="user.name">
+                <Avatar :username="user.name" :size="45" :lighten="200" style="margin-right: 5px;"></Avatar>
+              </el-tooltip>
             </div>
           </el-card>
           <div class="card-content-footer">
@@ -21,10 +23,9 @@
       <el-col :xs="23" :sm="11" :md="7" :offset="1">
         <el-card class="card-create-team">
           <span class="tooltips" @click="handleCreateTeam">
-            <icon name="plus"></icon>
-            <a>
-              <span>创建团队</span>
-            </a>
+            <el-tooltip effect="dark" content="创建新团队" placement="top">
+              <icon name="plus"></icon>
+            </el-tooltip>
           </span>
         </el-card>
       </el-col>
@@ -268,35 +269,15 @@ export default {
       background: #3ac3da33;
       margin: 8%;
       .tooltips {
-        position: relative; /*这个是关键*/
-        z-index: 2;
+        cursor: pointer;
         .fa-icon {
           font-size: 40px;
           margin: 10%;
           color: #20a0ffc4;
         }
         :hover {
-          z-index: 3;
           color: rgb(21, 184, 29);
         }
-      }
-      .tooltips:hover {
-        z-index: 3;
-        background: none;
-      }
-      .tooltips span {
-        display: none;
-      }
-      .tooltips:hover span {
-        display: block;
-        position: absolute;
-        top: -30px;
-        left: -15px;
-        width: 20em;
-        height: 20em;
-        font-size: 17px;
-        background-color: #d8f3f8;
-        color: rgb(21, 184, 29);
       }
     }
   }
