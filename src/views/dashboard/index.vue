@@ -75,7 +75,7 @@ export default {
 .dashboard-container {
   margin: 0 20px 20px 20px;
   .dashboard-content {
-    margin-left: 60px;
+    margin-left: 20px;
   }
   .calendar-heatmap {
     margin-top: 40px;

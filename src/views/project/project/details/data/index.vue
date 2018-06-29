@@ -74,6 +74,7 @@
 
 <script>
 import { addObj, page, delObj as deleteTask } from 'api/project/task/index'
+import { getObj as getProjectById } from 'api/project/index'
 import { page as userPage, all as userAll } from 'api/admin/user/index'
 import { mapGetters } from 'vuex'
 export default {
@@ -98,7 +99,8 @@ export default {
         taskPlanEnd: undefined,
         taskProcess: undefined,
         taskDes: undefined,
-        taskProjectId: undefined,
+        taskProjectId: undefined, // 由程序赋值
+        taskProjectName: undefined, // 由程序赋值
         taskExecutorId: undefined
       },
       rules: {
@@ -141,15 +143,22 @@ export default {
     // this.projectData_btn_del = this.elements['projectData:btn_del']
 
     this.getTaskByProIdExeId()
+    this.getProjectName()
   },
   methods: {
     handleCreateTask() {
       this.restCreateTaskForm()
+      this.form.taskProjectName = this.getProjectName()
       this.getUserItems() // 为了能正常显示默认负责人
       this.dialogFormVisible = true
     },
     handleTaskFilter() {
       this.getTaskByProIdExeId()
+    },
+    getProjectName() {
+      getProjectById(this.projectId).then(res => {
+        return res.data.projectName
+      })
     },
     create(formName) {
       const set = this.$refs
