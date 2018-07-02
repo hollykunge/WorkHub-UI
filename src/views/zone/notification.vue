@@ -57,7 +57,10 @@
                 </div>
               </div>
             </div>
-
+            <div class="message-pagination">
+              <el-pagination v-if="pagination.total>pagination.limit" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pagination.page" :page-sizes="[5, 10, 20, 50]" :page-size="pagination.limit" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total">
+              </el-pagination>
+            </div>
           </div>
         </div>
       </el-col>
@@ -70,9 +73,16 @@ export default {
   data() {
     return {
       activeItem: 'unreadMessage',
-      messageList: [],
+      messageList: [], // 从后台获取到的全部数据
+      messageToShow: [], // 展示在当前页面的数据
       showDetail: false,
-      currentRow: undefined
+      currentRow: undefined,
+      // **********分页组件***********
+      pagination: {
+        page: 1,
+        total: 6,
+        limit: 5
+      }
     }
   },
   created() {
@@ -94,6 +104,8 @@ export default {
         { type: 1, userName: '赵海波', avatar: 'static/images/avatars/139065.jpg', content: '工业机器人', path: '/', time: '2018-06-26' },
         { type: 0, userName: '张童飞', avatar: 'static/images/avatars/139067.png', content: '安全防御关键技术', path: '/', time: '2018-06-26' },
         { type: 2, userName: '米思坤', avatar: 'static/images/avatars/139068.jpg', content: '八月迭代', path: '/', time: '2018-06-26' }]
+      // 获取消息成功后，调用initPagination方法，初始化分页
+      this.initPagination(this.messageList.length)
     },
     showMore(index) {
       this.showDetail = true
@@ -102,6 +114,18 @@ export default {
     packUp(index) {
       this.showDetail = false
       this.currentRow = undefined
+    },
+    initPagination(total, limit) { // 初始化分页
+      this.pagination.total = total
+      if (limit) {
+        this.pagination.limit = limit
+      }
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
     }
   }
 }
@@ -182,6 +206,9 @@ export default {
           }
         }
       }
+    }
+    .message-pagination {
+      margin: 25px auto;
     }
   }
 }
