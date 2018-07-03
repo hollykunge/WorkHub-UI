@@ -1,43 +1,47 @@
 <template>
   <div class="task-member-list">
     <div class="list-header">
-      <el-row type="flex" justify="space-between" :gutter="5">
-        <el-col :span="4" :offset="20">
-          <el-button class="filter-item" type="success" v-waves icon="plus" size="small" @click="handleInvite">邀请新成员</el-button>
+      <el-row type="flex" justify="start">
+        <el-col>
+          <div class="add-mumber-button">
+            <el-button type="success" v-waves icon="plus" size="small" @click="handleInvite">邀请新成员</el-button>
+          </div>
         </el-col>
       </el-row>
     </div>
     <div class="list-body">
-      <el-table :data="memberList" v-loading.body="listLoading" empty-text="当前任务无成员" fit highlight-current-row style="width: 100%">
-        <el-table-column align="center" label="姓名/单位">
-          <template scope="scope">
-            <el-button type="text">
-              <icon name="user"></icon>
-              <span>{{ scope.row.name }}/{{ scope.row.orgName }}</span>
-            </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="权限">
-          <template scope="scope">
-            <el-button :type="scope.row.authrioty==200? 'success':'warning'" class="authrioty-button" size="small">
-              <icon name="key"></icon>
-              <span>{{ scope.row.authrioty }}</span>
-            </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="角色">
-          <template scope="scope">
-            <icon name="drivers-license-o"></icon>
-            <span>{{ scope.row.role }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="操作">
-          <template scope="scope">
-            <el-button type="primary" size="small" @click="handleUpdate(scope.row)" plain>修改权限</el-button>
-            <el-button type="danger" size="small" @click="handleDelete(scope.row)" plain>删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div>
+        <el-table :data="memberList" v-loading.body="listLoading" empty-text="当前任务无成员" fit highlight-current-row style="width: 100%">
+          <el-table-column align="center" label="姓名/单位">
+            <template scope="scope">
+              <el-button type="text">
+                <icon name="user"></icon>
+                <span>{{ scope.row.name }}/{{ scope.row.orgName }}</span>
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="权限">
+            <template scope="scope">
+              <el-button :type="scope.row.authrioty==200? 'success':'warning'" class="authrioty-button" size="small">
+                <icon name="key"></icon>
+                <span>{{ scope.row.authrioty }}</span>
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="角色">
+            <template scope="scope">
+              <icon name="drivers-license-o"></icon>
+              <span>{{ scope.row.role }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="操作">
+            <template scope="scope">
+              <el-button type="primary" size="small" @click="handleUpdate(scope.row)" plain>修改权限</el-button>
+              <el-button type="danger" size="small" @click="handleDelete(scope.row)" plain>删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
     <div class="list-footer">
       <el-row type="flex" justify="center">
@@ -173,20 +177,19 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .task-member-list {
-  margin: 0 20px;
   .list-header {
-    margin-bottom: 10px;
+    margin-bottom: 16px;
+    .add-mumber-button {
+      position: absolute;
+      right: 18px;
+      padding-right: 12px;
+    }
+  }
+  .list-body {
+    margin: 44px 30px 0 20px;
   }
   .authrioty-button {
     padding: 3px;
   }
-  // .el-dialog__body {
-  //   text-align: center;
-  //   .el-table {
-  //     width: 80%;
-  //     margin-left: 13%;
-  //     margin-top: 20px;
-  //   }
-  // }
 }
 </style>

@@ -147,7 +147,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .pull-request {
   &-header {
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     .new-pull-request {
       margin-left: 20px;
     }

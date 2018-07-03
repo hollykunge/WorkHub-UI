@@ -2,7 +2,7 @@
   <!--任务详情页首页-->
   <div>
     <el-row type="flex" justify="start">
-      <el-col :span="10">
+      <el-col :span="16">
         <div class="index-task">
           <icon name="folder-open"></icon>
           <el-button type="text" @click="ToProject">{{ project.projectName }}</el-button>
@@ -11,7 +11,7 @@
         </div>
       </el-col>
       <el-col :span="8">
-        <div class="task-button-group">
+        <div class="task-button-group" v-if="false">
           <el-button-group>
             <el-button type="warning" size="small" plain>
               <icon name="code-fork"></icon>
@@ -110,7 +110,8 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .index-task {
-  padding: 12px;
+  height: 30px;
+  margin: 25px 0 10px 25px;
   .fa-icon {
     font-size: 12px;
     color: #11181d9a;
@@ -127,6 +128,7 @@ export default {
 }
 .task-button-group {
   position: absolute;
+  top: 10px;
   right: 18px;
   padding: 12px;
   .el-button {
@@ -141,6 +143,9 @@ export default {
       margin-right: 1px;
     }
   }
+}
+.el-tabs.el-tabs--card {
+  margin-bottom: 8px;
 }
 .el-tabs__nav-scroll {
   margin: 0 0 0 10%;
@@ -161,6 +166,7 @@ export default {
     }
 
     .el-tabs__item.is-active {
+      border-bottom-color: #4faafe;
       .mark {
         .el-badge__content {
           background-color: #20aaff;
