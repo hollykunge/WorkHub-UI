@@ -9,7 +9,7 @@
           <el-input @keyup.enter.native="handleTaskFilter" class="filter-item" style="width: 300px;" placeholder="输入任务名称" size="small" v-model="listQuery.taskName"></el-input>
           <!-- </el-col>
         <el-col :span="2"> -->
-          <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleTaskFilter" size="small">搜索</el-button>
+          <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleTaskFilter" size="small" plain>搜索</el-button>
         </el-col>
       </el-row>
     </div>

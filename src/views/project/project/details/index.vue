@@ -105,7 +105,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .index-project {
   height: 30px;
-  margin: 15px 0 15px 25px;
+  margin: 25px 0 10px 25px;
   .fa-icon {
     font-size: 12px;
     color: #11181d9a;
@@ -122,6 +122,7 @@ export default {
 }
 .project-button-group {
   position: absolute;
+  top: 10px;
   right: 18px;
   padding: 12px;
   .el-button {
@@ -136,6 +137,9 @@ export default {
       margin-right: 1px;
     }
   }
+}
+.el-tabs.el-tabs--card {
+  margin-bottom: 8px;
 }
 .el-tabs__nav-scroll {
   margin: 0 0 0 10%;
@@ -155,6 +159,7 @@ export default {
       }
     }
     .el-tabs__item.is-active {
+      border-bottom-color: #4faafe;
       .mark {
         .el-badge__content {
           background-color: #20aaff;
