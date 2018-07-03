@@ -6,13 +6,13 @@
           <property-select title="分支" :properties="branches" @changed="handleBranchChanged"></property-select>
         </el-col>
         <el-col :span="10">
-          <el-button-group class="task-view-switch-button">
+          <!-- <el-button-group class="task-view-switch-button">
             <el-button size="small" @click="switchView(1)" plain>
               <icon name="table"></icon>
               数据</el-button>
             <el-button size="small" @click="switchView(2)" plain>
               <icon name="folder-open-o"></icon>文件列表</el-button>
-          </el-button-group>
+          </el-button-group> -->
         </el-col>
         <el-col :span="4">
           <el-button-group class="task-options-button">
@@ -76,9 +76,9 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="temp-area">
+    <!-- <div class="temp-area">
       <data-table></data-table>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -139,7 +139,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .task-data {
   &-header {
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     .branch-dropdown {
       &-button {
         margin-left: 20px;

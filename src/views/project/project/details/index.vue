@@ -159,6 +159,7 @@ export default {
       }
     }
     .el-tabs__item.is-active {
+      border-bottom-color: #4faafe;
       .mark {
         .el-badge__content {
           background-color: #20aaff;

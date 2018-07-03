@@ -65,13 +65,14 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .setting-nav-bar {
-  padding: 20% 5% 0 10%;
+  padding: 20% 5% 0 0%;
   width: 72%;
   text-align: left;
+  float: right;
   .el-menu {
     .el-menu-item {
       border-radius: 13px;
-      border: 0.5px ridge rgb(129, 144, 148);
+      border: 0.5px ridge #819094;
       height: 38px;
       line-height: 40px;
       background-color: #ffffff;
