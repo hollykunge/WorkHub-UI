@@ -28,7 +28,7 @@
           </div>
           <div class="message-container">
             <!-- 使用统一的数据展示的模板 -->
-            <div class="message-list" v-for="(message, index) in messageList" :key="index">
+            <div class="message-list" v-for="(message, index) in messageToShow" :key="index">
               <span class="message-list-avatar"><img :src="message.avatar"></span>
               <router-link :to="message.path" v-if="message.type==0" class="message-list-content">
                 {{message.userName}} 新建项目
@@ -57,7 +57,10 @@
                 </div>
               </div>
             </div>
-
+            <div class="message-pagination">
+              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pagination.page" :page-sizes="[5, 10, 20, 50]" :page-size="pagination.limit" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total">
+              </el-pagination>
+            </div>
           </div>
         </div>
       </el-col>
@@ -70,13 +73,26 @@ export default {
   data() {
     return {
       activeItem: 'unreadMessage',
-      messageList: [],
+      messageList: [], // 从后台获取到的全部数据
+      messageToShow: [], // 展示在当前页面的数据
       showDetail: false,
-      currentRow: undefined
+      currentRow: undefined,
+      // **********分页组件***********
+      pagination: {
+        page: 1,
+        total: 6,
+        limit: 5
+      }
     }
   },
   created() {
     this.getMessageList(this.activeItem)
+  },
+  watch: {
+    pagination: { handler(value) {
+      this.handlePaging(value.page, value.limit, value.total)
+    },
+      deep: true }
   },
   methods: {
     handleClick(tab, event) {
@@ -94,6 +110,8 @@ export default {
         { type: 1, userName: '赵海波', avatar: 'static/images/avatars/139065.jpg', content: '工业机器人', path: '/', time: '2018-06-26' },
         { type: 0, userName: '张童飞', avatar: 'static/images/avatars/139067.png', content: '安全防御关键技术', path: '/', time: '2018-06-26' },
         { type: 2, userName: '米思坤', avatar: 'static/images/avatars/139068.jpg', content: '八月迭代', path: '/', time: '2018-06-26' }]
+      // 获取消息成功后，调用initPagination方法，初始化分页
+      this.initPagination(this.messageList.length)
     },
     showMore(index) {
       this.showDetail = true
@@ -102,6 +120,27 @@ export default {
     packUp(index) {
       this.showDetail = false
       this.currentRow = undefined
+    },
+    initPagination(total, limit) { // 初始化分页
+      this.pagination.total = total
+      if (limit) {
+        this.pagination.limit = limit
+      }
+    },
+    handlePaging(currentPage, limit, total) { // 处理数据的分页
+      if (total <= limit) {
+        this.messageToShow = this.messageList
+      } else {
+        const indexFrom = (currentPage - 1) * limit
+        const indexTo = currentPage * limit
+        this.messageToShow = this.messageList.slice(indexFrom, indexTo)
+      }
+    },
+    handleSizeChange(val) {
+      this.pagination.limit = val
+    },
+    handleCurrentChange(val) {
+      this.pagination.page = val
     }
   }
 }
@@ -182,6 +221,9 @@ export default {
           }
         }
       }
+    }
+    .message-pagination {
+      margin: 25px auto;
     }
   }
 }
