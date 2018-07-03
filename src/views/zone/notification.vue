@@ -28,7 +28,7 @@
           </div>
           <div class="message-container">
             <!-- 使用统一的数据展示的模板 -->
-            <div class="message-list" v-for="(message, index) in messageList" :key="index">
+            <div class="message-list" v-for="(message, index) in messageToShow" :key="index">
               <span class="message-list-avatar"><img :src="message.avatar"></span>
               <router-link :to="message.path" v-if="message.type==0" class="message-list-content">
                 {{message.userName}} 新建项目
@@ -58,7 +58,7 @@
               </div>
             </div>
             <div class="message-pagination">
-              <el-pagination v-if="pagination.total>pagination.limit" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pagination.page" :page-sizes="[5, 10, 20, 50]" :page-size="pagination.limit" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total">
+              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="pagination.page" :page-sizes="[5, 10, 20, 50]" :page-size="pagination.limit" layout="total, sizes, prev, pager, next, jumper" :total="pagination.total">
               </el-pagination>
             </div>
           </div>
@@ -87,6 +87,12 @@ export default {
   },
   created() {
     this.getMessageList(this.activeItem)
+  },
+  watch: {
+    pagination: { handler(value) {
+      this.handlePaging(value.page, value.limit, value.total)
+    },
+      deep: true }
   },
   methods: {
     handleClick(tab, event) {
@@ -121,11 +127,20 @@ export default {
         this.pagination.limit = limit
       }
     },
+    handlePaging(currentPage, limit, total) { // 处理数据的分页
+      if (total <= limit) {
+        this.messageToShow = this.messageList
+      } else {
+        const indexFrom = (currentPage - 1) * limit
+        const indexTo = currentPage * limit
+        this.messageToShow = this.messageList.slice(indexFrom, indexTo)
+      }
+    },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      this.pagination.limit = val
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      this.pagination.page = val
     }
   }
 }
