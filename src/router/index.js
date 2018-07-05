@@ -21,11 +21,6 @@ export const constantRouterMap = [{
   hidden: true
 },
 {
-  path: '/authredirect',
-  component: _import('login/authredirect'),
-  hidden: true
-},
-{
   path: '/404',
   component: _import('error/404'),
   hidden: true
@@ -172,19 +167,8 @@ export const constantRouterMap = [{
   }]
 },
 {
-  path: '/introduction',
-  component: Layout,
-  redirect: '/introduction/index',
-  icon: 'form',
-  noDropdown: true,
-  children: [{
-    path: 'index',
-    component: _import('introduction/index'),
-    name: '简述'
-  }]
-},
-{
-  path: '/'
+  path: '*',
+  redirect: '/404'
 }
 ]
 
