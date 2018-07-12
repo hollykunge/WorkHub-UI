@@ -94,6 +94,11 @@ export const constantRouterMap = [{
       props: true
     }]
   }, {
+    path: 'projectSys/allProjects/task/new',
+    component: _import('project/task/new/index'),
+    name: '创建任务',
+    props: true
+  }, {
     path: 'projectSys/allProjects/:projectId/:taskId',
     component: _import('project/task/index'),
     name: '任务详情',
