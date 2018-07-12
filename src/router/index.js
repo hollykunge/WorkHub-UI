@@ -52,6 +52,11 @@ export const constantRouterMap = [{
     component: _import('zone/notification'),
     name: '消息中心'
   }, {
+    path: 'projectSys/allProjects/new',
+    component: _import('project/project/new/index'),
+    name: '创建项目',
+    props: true
+  }, {
     path: 'projectSys/allProjects/:projectId',
     component: _import('project/project/details/index'),
     name: '项目详情',
