@@ -52,6 +52,11 @@ export const constantRouterMap = [{
     component: _import('zone/notification'),
     name: '消息中心'
   }, {
+    path: 'projectSys/allProjects/new',
+    component: _import('project/project/new/index'),
+    name: '创建项目',
+    props: true
+  }, {
     path: 'projectSys/allProjects/:projectId',
     component: _import('project/project/details/index'),
     name: '项目详情',
@@ -88,6 +93,11 @@ export const constantRouterMap = [{
       name: '项目问题详情',
       props: true
     }]
+  }, {
+    path: 'projectSys/allProjects/task/new',
+    component: _import('project/task/new/index'),
+    name: '创建任务',
+    props: true
   }, {
     path: 'projectSys/allProjects/:projectId/:taskId',
     component: _import('project/task/index'),
