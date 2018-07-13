@@ -177,10 +177,10 @@ export default {
   width: 700px;
   margin: 24px auto 0;
   &-header {
-    // margin-bottom: 30px;
+    margin-bottom: 40px;
     display: flex;
-    padding-bottom: 8px;
-    margin-bottom: 16px;
+    // padding-bottom: 8px;
+    // margin-bottom: 16px;
     border-bottom: 1px #e1e4e8 solid;
     flex-flow: row wrap;
   }
