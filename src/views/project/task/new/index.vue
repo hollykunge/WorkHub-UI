@@ -141,7 +141,8 @@ export default {
       set[formName].validate(valid => {
         if (valid) {
           // this.form.taskProjectId = this.projectId
-          addObj(this.form).then(() => {
+          addObj(this.form).then(res => {
+            console.log(res)
             this.dialogFormVisible = false
             this.getTaskByProIdExeId()
             this.$notify({

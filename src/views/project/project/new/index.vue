@@ -140,7 +140,8 @@ export default {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
-          createProject(this.form).then(() => {
+          createProject(this.form).then(res => {
+            console.log(res)
             this.$notify({
               title: '成功',
               message: '创建成功',
