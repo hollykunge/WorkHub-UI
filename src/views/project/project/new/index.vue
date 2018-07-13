@@ -5,15 +5,22 @@
       <h2>创建一个新的项目</h2>
     </div>
     <div class="page-new-project-main">
-      <el-form :model="form" :rules="rules" ref="form">
-        <el-form-item label="负责人" prop="projectUserId">
-          <el-select v-model="form.projectUserId" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteProUserMethod" :loading="loading" loading-text="正在搜索···">
-            <el-option v-for="item in userItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
-          </el-select>/
-        </el-form-item>
-        <el-form-item label="项目名称" prop="projectName">
-          <el-input v-model="form.projectName" placeholder="请输入项目名称"></el-input>
-        </el-form-item>
+      <el-form :model="form" :rules="rules" ref="form" :show-message="false">
+
+        <div class="subheader">
+          <el-form-item prop="projectUserId">
+            <p class="subheader-label">负责人</p>
+            <el-select v-model="form.projectUserId" filterable remote placeholder="搜索用户" :remote-method="remoteProUserMethod" :loading="loading" loading-text="正在搜索···">
+              <el-option v-for="item in userItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+            </el-select>
+            <span class="subheader-slash">/</span>
+          </el-form-item>
+          <el-form-item prop="projectName">
+            <p class="subheader-label">项目名称</p>
+            <el-input v-model="form.projectName" style="width: 400px"></el-input>
+          </el-form-item>
+        </div>
+
         <el-form-item label="计划开始时间" prop="projectTimeStart">
           <el-date-picker editable v-model="form.projectTimeStart" type="datetime" placeholder="选择开始时间" align="center" format="yyyy年MM月dd日HH:MM">
           </el-date-picker>
@@ -31,7 +38,7 @@
           <el-input type="textarea" :autosize="{minRows: 3,maxRows:5}" placeholder="为项目添加描述信息" v-model="form.projectDes"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="success" @click="create('form')">创建项目</el-button>
+          <el-button type="success" @click="create('form')" :disabled="createdEnabled">创建项目</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -124,6 +131,7 @@ export default {
         projectUserId: ''
       },
       projectPhaseOptions: [{ key: '需求调研阶段', value: 1 }, { key: '技术论证阶段', value: 2 }, { key: '设计阶段', value: 3 }, { key: '开发阶段', value: 4 }],
+      createdEnabled: true
     }
   },
   computed: {
@@ -135,19 +143,33 @@ export default {
   },
   created() {},
   mounted() {},
+  watch: {
+    form: {
+      handler() {
+        this.$refs['form'].validate(valid => {
+          if (valid) {
+            this.createdEnabled = false
+          } else {
+            this.createdEnabled = true
+          }
+        })
+      },
+      deep: true
+    }
+  },
   methods: {
     create(formName) {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
           createProject(this.form).then(res => {
-            console.log(res)
             this.$notify({
               title: '成功',
               message: '创建成功',
               type: 'success',
               duration: 2000
             })
+            this.$router.push({name: '全部项目'})
           })
         } else {
           return false
@@ -161,7 +183,6 @@ export default {
         userPage({
           name: query
         }).then(response => {
-          console.log(response)
           this.userItems = response.data.rows
           this.loading = false
         })
@@ -178,12 +199,37 @@ export default {
   width: 700px;
   margin: 24px auto 0;
   &-header {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
     display: flex;
-    // padding-bottom: 8px;
-    // margin-bottom: 16px;
     border-bottom: 1px #e1e4e8 solid;
     flex-flow: row wrap;
+  }
+  &-main {
+    .subheader {
+      display: inline-flex;
+      padding-right: 174px;
+      margin-bottom: 16px;
+      border-bottom: 1px #e1e4e8 solid;
+      .el-form-item__content {
+        line-height: 24px;
+        font-size: 14px;
+      }
+      &-label {
+        font-weight: 600;
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      &-slash {
+        margin: 0 8px;
+        font-size: 21px;
+      }
+      .el-select .el-input__inner {
+        cursor: pointer;
+        padding-right: 0px;
+        width: 100px;
+      }
+    }
+
   }
 }
 </style>

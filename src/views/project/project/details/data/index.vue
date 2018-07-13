@@ -4,6 +4,9 @@
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="16" style="text-align: left;">
           <el-button class="filter-item" v-if="projectData_btn_add" @click="handleCreateTask" type="success" icon="plus" size="small">创建任务</el-button>
+          <el-button class="filter-item" size="small" @click="handleTest()" type="warning">
+              <icon name="file-o"></icon>
+              新建测试</el-button>
         </el-col>
         <el-col :span="8" style="text-align: right;">
           <el-input @keyup.enter.native="handleTaskFilter" class="filter-item" style="width: 300px;" placeholder="输入任务名称" size="small" v-model="listQuery.taskName"></el-input>
@@ -128,7 +131,8 @@ export default {
       taskProcessOptions: [{ key: '第一阶段', value: 1 }, { key: '第二阶段', value: 2 }, { key: '第三阶段', value: 3 }, { key: '第四阶段', value: 4 }],
       projectData_btn_edit: true,
       projectData_btn_del: true,
-      projectData_btn_add: true
+      projectData_btn_add: true,
+      tempProjectName: undefined 
     }
   },
   computed: {
@@ -148,7 +152,7 @@ export default {
   methods: {
     handleCreateTask() {
       this.restCreateTaskForm()
-      this.form.taskProjectName = this.getProjectName()
+      // this.form.taskProjectName = this.getProjectName()
       this.getUserItems() // 为了能正常显示默认负责人
       this.dialogFormVisible = true
     },
@@ -157,7 +161,8 @@ export default {
     },
     getProjectName() {
       getProjectById(this.projectId).then(res => {
-        return res.data.projectName
+        this.tempProjectName = res.data.projectName
+        // return
       })
     },
     create(formName) {
@@ -252,8 +257,12 @@ export default {
         taskProcess: undefined,
         taskDes: undefined,
         taskProjectId: this.projectId,
+        taskProjectName: this.tempProjectName,
         taskExecutorId: (Number)(this.userId)
       }
+    },
+    handleTest() {
+      this.$router.push({name: '创建任务'})
     }
   }
 }

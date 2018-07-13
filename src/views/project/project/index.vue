@@ -248,9 +248,10 @@ export default {
       this.dialogUserVisible = true
     },
     handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
+      // this.resetTemp()
+      // this.dialogStatus = 'create'
+      // this.dialogFormVisible = true
+      this.$router.push({name: '创建项目'})
     },
     handleUpdate(row) {
       getObj(row.projectId)
@@ -347,6 +348,9 @@ export default {
         projectTimeStart: undefined,
         projectDes: undefined
       }
+    },
+    handleTest() {
+      this.$router.push({name: '创建项目'})
     }
   }
 }
