@@ -9,6 +9,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './', //请根据自己路径配置更改
+
     productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -35,15 +36,15 @@ module.exports = {
         // target: 'http://192.168.8.105:8765',
         pathRewrite: {
           '^/jwt': '/jwt'
-        },
+        }
       },
       '/api': {
         target: 'http://localhost:8765',
         // target: 'http://192.168.8.105:8765',
         pathRewrite: {
           '^/api': '/api'
-        },
-      },
+        }
+      }
       // 用来做测试的mock数据
       // '/sys': {
       //   target: 'https://www.easy-mock.com/mock/5a976850371a4725188755d6/sys',

@@ -21,11 +21,6 @@ export const constantRouterMap = [{
   hidden: true
 },
 {
-  path: '/authredirect',
-  component: _import('login/authredirect'),
-  hidden: true
-},
-{
   path: '/404',
   component: _import('error/404'),
   hidden: true
@@ -56,6 +51,11 @@ export const constantRouterMap = [{
     path: 'notification',
     component: _import('zone/notification'),
     name: '消息中心'
+  }, {
+    path: 'projectSys/allProjects/new',
+    component: _import('project/project/new/index'),
+    name: '创建项目',
+    props: true
   }, {
     path: 'projectSys/allProjects/:projectId',
     component: _import('project/project/details/index'),
@@ -93,6 +93,11 @@ export const constantRouterMap = [{
       name: '项目问题详情',
       props: true
     }]
+  }, {
+    path: 'projectSys/allProjects/task/new',
+    component: _import('project/task/new/index'),
+    name: '创建任务',
+    props: true
   }, {
     path: 'projectSys/allProjects/:projectId/:taskId',
     component: _import('project/task/index'),
@@ -172,19 +177,8 @@ export const constantRouterMap = [{
   }]
 },
 {
-  path: '/introduction',
-  component: Layout,
-  redirect: '/introduction/index',
-  icon: 'form',
-  noDropdown: true,
-  children: [{
-    path: 'index',
-    component: _import('introduction/index'),
-    name: '简述'
-  }]
-},
-{
-  path: '/'
+  path: '*',
+  redirect: '/404'
 }
 ]
 

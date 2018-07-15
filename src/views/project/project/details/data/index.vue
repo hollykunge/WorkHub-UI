@@ -129,7 +129,6 @@ export default {
       projectData_btn_edit: true,
       projectData_btn_del: true,
       projectData_btn_add: true,
-      tempProjectName: undefined
     }
   },
   computed: {
@@ -144,14 +143,15 @@ export default {
     // this.projectData_btn_del = this.elements['projectData:btn_del']
 
     this.getTaskByProIdExeId()
-    this.getProjectName()
+    // this.getProjectName()
   },
   methods: {
-    handleCreateTask () {
-      this.restCreateTaskForm()
+    handleCreateTask() {
+      // this.restCreateTaskForm()
       // this.form.taskProjectName = this.getProjectName()
-      this.getUserItems() // 为了能正常显示默认负责人
-      this.dialogFormVisible = true
+      // this.getUserItems() // 为了能正常显示默认负责人
+      // this.dialogFormVisible = true
+      this.$router.push({name: '创建任务'})
     },
     handleTaskFilter () {
       this.getTaskByProIdExeId()
