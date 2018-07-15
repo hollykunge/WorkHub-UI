@@ -4,9 +4,6 @@
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="16" style="text-align: left;">
           <el-button class="filter-item" v-if="projectData_btn_add" @click="handleCreateTask" type="success" icon="plus" size="small">创建任务</el-button>
-          <el-button class="filter-item" size="small" @click="handleTest()" type="warning">
-              <icon name="file-o"></icon>
-              新建测试</el-button>
         </el-col>
         <el-col :span="8" style="text-align: right;">
           <el-input @keyup.enter.native="handleTaskFilter" class="filter-item" style="width: 300px;" placeholder="输入任务名称" size="small" v-model="listQuery.taskName"></el-input>
@@ -151,10 +148,11 @@ export default {
   },
   methods: {
     handleCreateTask() {
-      this.restCreateTaskForm()
+      // this.restCreateTaskForm()
       // this.form.taskProjectName = this.getProjectName()
-      this.getUserItems() // 为了能正常显示默认负责人
-      this.dialogFormVisible = true
+      // this.getUserItems() // 为了能正常显示默认负责人
+      // this.dialogFormVisible = true
+      this.$router.push({name: '创建任务'})
     },
     handleTaskFilter() {
       this.getTaskByProIdExeId()
@@ -260,9 +258,6 @@ export default {
         taskProjectName: this.tempProjectName,
         taskExecutorId: (Number)(this.userId)
       }
-    },
-    handleTest() {
-      this.$router.push({name: '创建任务'})
     }
   }
 }
