@@ -79,7 +79,7 @@ import { page as userPage, all as userAll } from 'api/admin/user/index'
 import { mapGetters } from 'vuex'
 export default {
   props: ['projectId'],
-  data() {
+  data () {
     return {
       listQuery: {
         page: 1,
@@ -129,7 +129,6 @@ export default {
       projectData_btn_edit: true,
       projectData_btn_del: true,
       projectData_btn_add: true,
-      tempProjectName: undefined 
     }
   },
   computed: {
@@ -138,13 +137,13 @@ export default {
       'elements'
     ])
   },
-  created() {
+  created () {
     // this.projectData_btn_edit = this.elements['projectData:btn_edit']
     // this.projectData_btn_add = this.elements['projectData:btn_add']
     // this.projectData_btn_del = this.elements['projectData:btn_del']
 
     this.getTaskByProIdExeId()
-    this.getProjectName()
+    // this.getProjectName()
   },
   methods: {
     handleCreateTask() {
@@ -154,16 +153,15 @@ export default {
       // this.dialogFormVisible = true
       this.$router.push({name: '创建任务'})
     },
-    handleTaskFilter() {
+    handleTaskFilter () {
       this.getTaskByProIdExeId()
     },
-    getProjectName() {
+    getProjectName () {
       getProjectById(this.projectId).then(res => {
         this.tempProjectName = res.data.projectName
-        // return
       })
     },
-    create(formName) {
+    create (formName) {
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
@@ -183,14 +181,14 @@ export default {
         }
       })
     },
-    cancel(formName) {
+    cancel (formName) {
       this.dialogFormVisible = false
       this.$refs[formName].resetFields()
     },
-    handleCheck(task) {
-      this.$router.push({ name: '任务详情', params: { projectId: this.projectId, taskId: task.taskId }})
+    handleCheck (task) {
+      this.$router.push({ name: '任务详情', params: { projectId: this.projectId, taskId: task.taskId } })
     },
-    handleDelete(row) {
+    handleDelete (row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -210,7 +208,7 @@ export default {
         return
       })
     },
-    getTaskByProIdExeId() { // 通过项目id和负责人id获取任务
+    getTaskByProIdExeId () { // 通过项目id和负责人id获取任务
       this.listLoading = true
       this.listQuery.taskProjectId = this.projectId
       this.listQuery.taskExecutorId = this.userId
@@ -221,15 +219,15 @@ export default {
         this.list = res.data.rows
       })
     },
-    handleSizeChange(val) {
+    handleSizeChange (val) {
       this.listQuery.limit = val
       this.getTaskByProIdExeId()
     },
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       this.listQuery.page = val
       this.getTaskByProIdExeId()
     },
-    remoteQueryUsers(query) {
+    remoteQueryUsers (query) {
       if (query !== '') {
         this.loading = true
         this.loading = false
@@ -243,12 +241,12 @@ export default {
         this.userItems = []
       }
     },
-    getUserItems() {
+    getUserItems () {
       userAll().then(res => {
         this.userItems = res
       })
     },
-    restCreateTaskForm() { // 重置表单，同时写入项目id和负责人id
+    restCreateTaskForm () { // 重置表单，同时写入项目id和负责人id
       this.form = {
         taskName: undefined,
         taskPlanEnd: undefined,
