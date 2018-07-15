@@ -5,20 +5,33 @@
       <h2>创建一个新的任务</h2>
     </div>
     <div class="page-new-task-main">
-      <el-form :model="form" ref="form" :rules="rules">
-        <el-form-item label="任务所属项目" prop="taskProjectName">
-          <el-select v-model="form.taskProjectName" placeholder="请选择项目" @change="evalTaskProjectId(form.taskProjectName)">
-            <el-option v-for="item in projectItems" :key="item.projectId" :label="item.projectName" :value="item.projectName"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="任务名称" prop="taskName">
-          <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
-        </el-form-item>
-        <el-form-item label="任务负责人" prop="taskExecutorId">
-          <el-select v-model="form.taskExecutorId" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteQueryUsers" :loading="loading" style="width: 100%">
-            <el-option v-for="item in userItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
-          </el-select>
-        </el-form-item>
+      <el-form :model="form" ref="form" :rules="rules" :show-message="false">
+
+        <div class="subheader">
+          <div class="task-executor">
+            <el-form-item prop="taskExecutorId">
+              <p class="subheader-label">任务负责人</p>
+              <el-select v-model="form.taskExecutorId" filterable remote placeholder="输入姓名进行搜索" :remote-method="remoteQueryUsers" :loading="loading" style="width: 100%">
+                <el-option v-for="item in userItems" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+          
+          <div class="task-info">
+            <el-form-item prop="taskProjectName">
+              <p class="subheader-label">任务所属项目</p>
+              <el-select v-model="form.taskProjectName" placeholder="请选择项目" @change="evalTaskProjectId(form.taskProjectName)">
+                <el-option v-for="item in projectItems" :key="item.projectId" :label="item.projectName" :value="item.projectName"></el-option>
+              </el-select>
+              <span class="subheader-slash">/</span>
+            </el-form-item>
+            <el-form-item prop="taskName">
+              <p class="subheader-label">任务名称</p>
+              <el-input v-model="form.taskName" placeholder="请输入任务名称" style="width: 375px"></el-input>
+            </el-form-item>
+          </div>
+        </div>
+
         <el-form-item label="当前所处阶段" prop="taskProcess">
           <el-select v-model="form.taskProcess" placeholder="请选择" style="width: 100%">
             <el-option v-for="item in  taskProcessOptions" :key="item.value" :label="item.key" :value="item.value"> </el-option>
@@ -33,7 +46,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="create('form')">创 建</el-button>
+        <el-button type="primary" @click="create('form')" :disabled="createdEnabled">创建任务</el-button>
       </div>
     </div>
   </div>
@@ -72,6 +85,10 @@ export default {
         taskExecutorId: undefined
       },
       rules: {
+        taskProjectName: {
+          required: true,
+          message: '请选择项目'
+        },
         taskName: {
           required: true,
           message: '任务名称不能为空'
@@ -96,7 +113,8 @@ export default {
       taskProcessOptions: [{ key: '第一阶段', value: 1 }, { key: '第二阶段', value: 2 }, { key: '第三阶段', value: 3 }, { key: '第四阶段', value: 4 }],
       projectData_btn_edit: true,
       projectData_btn_del: true,
-      projectData_btn_add: true
+      projectData_btn_add: true,
+      createdEnabled: true
     }
   },
   computed: {
@@ -105,13 +123,21 @@ export default {
       'elements'
     ])
   },
+  watch: {
+    form: {
+      handler() {
+        this.$refs['form'].validate(valid => {
+          if (valid) {
+            this.createdEnabled = false
+          } else {
+            this.createdEnabled = true
+          }
+        })
+      },
+      deep: true
+    }
+  },
   created() {
-    // this.projectData_btn_edit = this.elements['projectData:btn_edit']
-    // this.projectData_btn_add = this.elements['projectData:btn_add']
-    // this.projectData_btn_del = this.elements['projectData:btn_del']
-
-    // this.getTaskByProIdExeId()
-    // this.getProjectName()
     this.handleCreateTask()
     this.getAllProjects()
   },
@@ -136,15 +162,12 @@ export default {
       })
     },
     create(formName) {
-      console.log(this.form)
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
-          // this.form.taskProjectId = this.projectId
           addObj(this.form).then(res => {
-            console.log(res)
             this.dialogFormVisible = false
-            this.getTaskByProIdExeId()
+            this.$router.push({ path: '/projectSys/allProjects/' + this.form.taskProjectId })
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -216,12 +239,56 @@ export default {
   width: 700px;
   margin: 24px auto 0;
   &-header {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
     display: flex;
-    padding-bottom: 8px;
-    margin-bottom: 16px;
     border-bottom: 1px #e1e4e8 solid;
     flex-flow: row wrap;
+  }
+  &-main {
+    .subheader {
+      padding-right: 174px;
+      margin-bottom: 16px;
+      border-bottom: 1px #e1e4e8 solid;
+      .el-form-item {
+        margin-bottom: 0px;
+      }
+      .el-form-item__content {
+        line-height: 24px;
+        font-size: 14px;
+      }
+      .task-executor {
+        .subheader-label {
+        font-weight: 600;
+        margin-bottom: 0px;
+        margin-top: 0px;
+        }
+        .el-select .el-input__inner {
+          cursor: pointer;
+          padding-right: 0px;
+          width: 150px;
+        }
+      }
+      .task-info {
+        display: inline-flex;
+        width: 700px;
+        margin-bottom: 24px;
+        .subheader-label {
+        font-weight: 600;
+        margin-bottom: 0px;
+        margin-top: 0px;
+        }
+        .subheader-slash {
+          margin: 0 8px;
+          font-size: 21px;
+        }
+        .el-select .el-input__inner {
+          cursor: pointer;
+          padding-right: 0px;
+          width: 300px;
+        }
+      }
+    }
+
   }
 }
 </style>

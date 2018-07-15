@@ -22,16 +22,16 @@
         </div>
 
         <el-form-item label="计划开始时间" prop="projectTimeStart">
-          <el-date-picker editable v-model="form.projectTimeStart" type="datetime" placeholder="选择开始时间" align="center" format="yyyy年MM月dd日HH:MM">
+          <el-date-picker editable v-model="form.projectTimeStart" type="datetime" placeholder="选择开始时间" align="center" format="yyyy年MM月dd日HH:MM" style="width: 100%">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="预计完成时间" prop="projectPlanEnd">
-          <el-date-picker editable v-model="form.projectPlanEnd" type="datetime" placeholder="选择完成时间" align="center" :picker-options="pickerOptions" format="yyyy年MM月dd日HH:MM">
+          <el-date-picker editable v-model="form.projectPlanEnd" type="datetime" placeholder="选择完成时间" align="center" :picker-options="pickerOptions" format="yyyy年MM月dd日HH:MM" style="width: 100%">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="当前所处阶段" prop="projectPhase">
-          <el-select v-model="form.projectPhase" placeholder="请选择">
-            <el-option v-for="item in projectPhaseOptions" :key="item.value" :label="item.key" :value="item.value"> </el-option>
+          <el-select v-model="form.projectPhase" placeholder="请选择" style="width: 100%">
+            <el-option v-for="item in projectPhaseOptions" :key="item.value" :label="item.key" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="描述" prop="projectDes">
