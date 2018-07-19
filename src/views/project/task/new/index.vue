@@ -20,8 +20,8 @@
           <div class="task-info">
             <el-form-item prop="taskProjectName">
               <p class="subheader-label">任务所属项目</p>
-              <el-select v-model="form.taskProjectName" placeholder="请选择项目" @change="evalTaskProjectId(form.taskProjectName)">
-                <el-option v-for="item in projectItems" :key="item.projectId" :label="item.projectName" :value="item.projectName"></el-option>
+              <el-select v-model="form.taskProjectId" placeholder="请选择项目" @change="evalTaskProjectName(form.taskProjectId)">
+                <el-option v-for="item in projectItems" :key="item.projectId" :label="item.projectName" :value="item.projectId"></el-option>
               </el-select>
               <span class="subheader-slash">/</span>
             </el-form-item>
@@ -30,6 +30,15 @@
               <el-input v-model="form.taskName" placeholder="请输入任务名称" style="width: 375px"></el-input>
             </el-form-item>
           </div>
+        </div>
+
+        <div class="task-issue-button">
+          <el-form-item label="允许提问" prop="enableIssues" style="width: 320px">
+            <el-switch v-model="form.enableIssues" on-text="是" off-text="否"></el-switch>
+          </el-form-item>
+          <el-form-item label="公开问题" prop="allowPublicIssues" style="width: 350px">
+            <el-switch v-model="form.allowPublicIssues" on-text="是" off-text="否"></el-switch>
+          </el-form-item>
         </div>
 
         <el-form-item label="当前所处阶段" prop="taskProcess">
@@ -45,8 +54,9 @@
           <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5}" placeholder="请输入内容" v-model="form.taskDes"> </el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="task-create-footer">
         <el-button type="primary" @click="create('form')" :disabled="createdEnabled">创建任务</el-button>
+        <el-button type="primary" @click="cancel">取消</el-button>
       </div>
     </div>
   </div>
@@ -76,13 +86,17 @@ export default {
       listLoading: false,
       dialogFormVisible: false,
       form: {
-        taskName: undefined,
-        taskPlanEnd: undefined,
-        taskProcess: undefined,
-        taskDes: undefined,
-        taskProjectId: undefined, // 由程序赋值
-        taskProjectName: undefined, // 由程序赋值
-        taskExecutorId: undefined
+        taskName: undefined, // 任务名称
+        taskPlanEnd: undefined, // 计划结束时间
+        taskProcess: undefined, // 任务进度
+        taskDes: undefined, // 任务描述
+        taskProjectId: undefined, // 所属项目ID
+        taskProjectName: undefined, // 所属项目名称
+        taskExecutorId: undefined, // 任务执行人
+        taskCreatorId: undefined, // 任务创建人id
+        defaultBranch: undefined, // 默认分支
+        enableIssues: undefined, // 是否允许提问
+        allowPublicIssues: undefined // 允许公共问题
       },
       rules: {
         taskProjectName: {
@@ -108,6 +122,12 @@ export default {
         taskDes: {
           required: true,
           message: '描述信息不能为空'
+        },
+        enableIssues: {
+          required: true
+        },
+        allowPublicIssues: {
+          required: true
         }
       },
       taskProcessOptions: [{ key: '第一阶段', value: 1 }, { key: '第二阶段', value: 2 }, { key: '第三阶段', value: 3 }, { key: '第四阶段', value: 4 }],
@@ -140,6 +160,10 @@ export default {
   created() {
     this.handleCreateTask()
     this.getAllProjects()
+    this.form.taskCreatorId = this.userId
+    this.form.defaultBranch = 'master'
+    this.form.enableIssues = true
+    this.form.allowPublicIssues = true
   },
   methods: {
     getAllProjects() {
@@ -162,6 +186,7 @@ export default {
       })
     },
     create(formName) {
+      console.log(this.form)
       const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
@@ -181,8 +206,9 @@ export default {
       })
     },
     cancel(formName) {
-      this.dialogFormVisible = false
-      this.$refs[formName].resetFields()
+      // this.dialogFormVisible = false
+      // this.$refs[formName].resetFields()
+      this.$router.go(-1)
     },
     getTaskByProIdExeId() { // 通过项目id和负责人id获取任务
       this.listLoading = true
@@ -226,9 +252,9 @@ export default {
       //   taskExecutorId: (Number)(this.userId)
       // }
     },
-    evalTaskProjectId(val) {
-      const selectedProject = this.projectItems.filter(item => item.projectName === val)
-      this.form.taskProjectId = selectedProject[0].projectId
+    evalTaskProjectName(val) {
+      const selectedProject = this.projectItems.filter(item => item.projectId === val)
+      this.form.taskProjectName = selectedProject[0].projectName
     }
   }
 }
@@ -288,7 +314,17 @@ export default {
         }
       }
     }
-
+    .task-issue-button {
+      display: flex;
+      width: 700px;
+      height: 48px;
+      margin-bottom: 16px;
+      border-bottom: 1px #e1e4e8 solid;
+    }
+    .task-create-footer {
+      float: right;
+      margin-bottom: 32px;
+    }
   }
 }
 </style>
