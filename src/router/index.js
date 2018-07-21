@@ -295,6 +295,16 @@ export const asyncRouterMap = [{
     component: _import('project/project/index'),
     name: '全部任务',
     authority: 'allTasks'
+  }, {
+    path: 'myProjects',
+    component: _import('project/project/index'),
+    name: '我创建的',
+    authority: 'myProjects'
+  }, {
+    path: 'joinedProject',
+    component: _import('project/project/index'),
+    name: '我参加的',
+    authority: 'joinedProject'
   }]
 },
 {

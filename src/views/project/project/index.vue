@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="16">
-          <el-button class="filter-item" v-if="allProjects_btn_add" @click="handleCreate" type="success" icon="edit">新建项目</el-button>
+          <el-button class="filter-item" v-if="allProjects_btn_add && $route.name !='我参加的'" @click="handleCreate" type="success" icon="edit">新建项目</el-button>
         </el-col>
         <el-col :span="8" style="text-align: right;">
           <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="输入项目名称" v-model="listQuery.projectName" style="width: 300px;"> </el-input>
@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { page, addObj, getObj, delObj, putObj } from 'api/project/index'
+import { page, addObj, getObj, delObj, putObj, joinpro } from 'api/project/index'
 import { page as userPage } from 'api/admin/user/index'
 import { mapGetters } from 'vuex'
 export default {
@@ -191,7 +191,10 @@ export default {
         page: 1,
         limit: 10,
         projectName: undefined,
-        projectUserId: ''
+        // projectUserId: '', // 项目负责人id
+        // crtUser: '', // 创建人的id
+        // taskExecutorId: '', // 任务负责人的id
+        // projectId: '' // 项目id
       },
       projectPhaseOptions: [{ key: '需求调研阶段', value: 1 }, { key: '技术论证阶段', value: 2 }, { key: '设计阶段', value: 3 }, { key: '开发阶段', value: 4 }],
       dialogFormVisible: false,
@@ -208,7 +211,6 @@ export default {
     }
   },
   created() {
-    this.listQuery.projectUserId = this.userId
     this.allProjects_btn_edit = this.elements['allProjects:btn_edit']
     this.allProjects_btn_add = this.elements['allProjects:btn_add']
     this.allProjects_btn_del = this.elements['allProjects:btn_del']
@@ -223,11 +225,29 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      page(this.listQuery).then(response => {
-        this.total = response.data.total
-        this.listLoading = false
-        this.list = response.data.rows
-      })
+      const routeName = this.$route.name
+      if (routeName === '全部项目') {
+        page(this.listQuery).then(response => {
+          this.total = response.data.total
+          this.listLoading = false
+          this.list = response.data.rows
+        })
+      }
+      if (routeName === '我创建的') {
+        this.listQuery.crtUser = this.userId
+        page(this.listQuery).then(response => {
+          this.total = response.data.total
+          this.listLoading = false
+          this.list = response.data.rows
+        })
+      } 
+      if (routeName === '我参加的') {
+        joinpro(this.listQuery).then(response => {
+          this.total = response.data.total
+          this.listLoading = false
+          this.list = response.data.rows
+        })
+      }     
     },
     handleFilter() {
       this.getList()
