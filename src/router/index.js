@@ -291,20 +291,38 @@ export const asyncRouterMap = [{
     name: '全部项目',
     authority: 'allProjects'
   }, {
-    path: 'allTasks',
-    component: _import('project/project/index'),
-    name: '全部任务',
-    authority: 'allTasks'
-  }, {
     path: 'myProjects',
     component: _import('project/project/index'),
     name: '我创建的',
     authority: 'myProjects'
   }, {
-    path: 'joinedProject',
+    path: 'joinedProjects',
     component: _import('project/project/index'),
     name: '我参加的',
-    authority: 'joinedProject'
+    authority: 'joinedProjects'
+  }]
+},
+{
+  path: '/taskSys',
+  component: Layout,
+  name: '任务管理',
+  icon: 'category',
+  authority: 'taskSys',
+  children: [{
+    path: 'allTasks',
+    component: _import('project/project/index'),
+    name: '全部任务',
+    authority: 'allTasks'
+  }, {
+    path: 'myTasks',
+    component: _import('project/project/index'),
+    name: '我创建的任务',
+    authority: 'myTasks'
+  }, {
+    path: 'joinedTasks',
+    component: _import('project/project/index'),
+    name: '我参加的任务',
+    authority: 'joinedTasks'
   }]
 },
 {
@@ -314,6 +332,11 @@ export const asyncRouterMap = [{
   icon: 'group_fill',
   authority: 'teamManager',
   children: [{
+    path: 'allTeams',
+    component: _import('team/myTeams'),
+    name: '全部团队',
+    authority: 'allTeams'
+  }, {
     path: 'myTeams',
     component: _import('team/myTeams'),
     name: '创建的团队',
