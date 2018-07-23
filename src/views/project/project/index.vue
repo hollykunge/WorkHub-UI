@@ -234,7 +234,7 @@ export default {
         })
       }
       if (routeName === '我创建的') {
-        this.listQuery.crtUser = this.userId
+        this.listQuery.currentUserId = this.userId
         page(this.listQuery).then(response => {
           this.total = response.data.total
           this.listLoading = false
@@ -242,6 +242,7 @@ export default {
         })
       } 
       if (routeName === '我参加的') {
+        this.listQuery.currentUserId = this.userId
         joinpro(this.listQuery).then(response => {
           this.total = response.data.total
           this.listLoading = false

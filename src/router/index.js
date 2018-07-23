@@ -184,11 +184,11 @@ export const constantRouterMap = [{
       props: true
     }]
   }]
-},
-{
-  path: '*',
-  redirect: '/404'
 }
+// {
+//   path: '*',
+//   redirect: '/404'
+// }
 ]
 
 export default new Router({
@@ -293,12 +293,12 @@ export const asyncRouterMap = [{
   }, {
     path: 'myProjects',
     component: _import('project/project/index'),
-    name: '我创建的',
+    name: '我创建的项目',
     authority: 'myProjects'
   }, {
     path: 'joinedProjects',
     component: _import('project/project/index'),
-    name: '我参加的',
+    name: '我参加的项目',
     authority: 'joinedProjects'
   }]
 },
@@ -339,12 +339,12 @@ export const asyncRouterMap = [{
   }, {
     path: 'myTeams',
     component: _import('team/myTeams'),
-    name: '创建的团队',
+    name: '我创建的团队',
     authority: 'myTeams'
   }, {
     path: 'joinedTeams',
     component: _import('team/joinedTeams'),
-    name: '参与的团队',
+    name: '我参加的团队',
     authority: 'joinedTeams'
   }]
 }
