@@ -48,7 +48,7 @@ export function all() {
 // 获取我参与的项目列表
 export function joinpro(query) {
   return fetch({
-    url: '/api/project/project/page/joinpro',
+    url: '/api/project/project/joined',
     method: 'get',
     params: query
   })
