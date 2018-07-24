@@ -310,17 +310,17 @@ export const asyncRouterMap = [{
   authority: 'taskSys',
   children: [{
     path: 'allTasks',
-    component: _import('project/project/index'),
+    component: _import('project/task/taskList'),
     name: '全部任务',
     authority: 'allTasks'
   }, {
     path: 'myTasks',
-    component: _import('project/project/index'),
+    component: _import('project/task/taskList'),
     name: '我创建的任务',
     authority: 'myTasks'
   }, {
     path: 'joinedTasks',
-    component: _import('project/project/index'),
+    component: _import('project/task/taskList'),
     name: '我参加的任务',
     authority: 'joinedTasks'
   }]
