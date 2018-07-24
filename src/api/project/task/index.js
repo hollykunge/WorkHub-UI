@@ -46,17 +46,26 @@ export function all() {
 }
 
 // mock测试数据接口
-export function getTaskData(taskId) {
-  return fetch({
-    url: '/sys/project/task/' + taskId,
-    method: 'get'
-  })
-}
+// export function getTaskData(taskId) {
+//   return fetch({
+//     url: '/jhn/project/task/' + taskId,
+//     method: 'get'
+//   })
+// }
 
-// 获取我参加的任务列表
+// 获取我参加的任务列表(不区分项目) currentUserId
 export function joined(query) {
   return fetch({
     url: '/api/project/task/joined',
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取我参加的任务列表(区分项目) currentUserId projectId
+export function joinedTaskInProject(query) {
+  return fetch({
+    url: '/api/project/task/project/joined',
     method: 'get',
     params: query
   })

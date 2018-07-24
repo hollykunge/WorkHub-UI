@@ -9,7 +9,7 @@
     </el-button>
     <el-dropdown-menu slot="dropdown" class="property-dropdown-content" style="background: #ffffff; border-radius: 8px; width: 200px;">
       <span style="line-height: 25px; font-size: 14px; margin-left: 10px;">切换{{title}}
-        <el-input style="margin-bottom: 10px;" placeholder="搜索分支" v-model="fliterText" size="small" autofocus></el-input>
+        <el-input style="margin-bottom: 10px;" placeholder="搜索···" v-model="fliterText" size="small" autofocus></el-input>
       </span>
       <el-table @row-click="changeProperty" :data="filteredProperty" :show-header="false" empty-text="Nothing to show">
         <el-table-column>
@@ -39,7 +39,7 @@ export default {
     return {
       filteredProperty: [],
       fliterText: '',
-      currentProperty: 'master'
+      currentProperty: undefined
     }
   },
   watch: {
@@ -47,6 +47,9 @@ export default {
   },
   created () {
     this.filteredProperty = this.properties
+    if (this.currentProperty === undefined) {
+      this.currentProperty = this.properties[0].name
+    } 
   },
   methods: {
     filterProperty (val) {
@@ -66,7 +69,6 @@ export default {
     changeProperty (row) {
       this.currentProperty = row.name
       this.$emit('changed', row.name)
-      console.log(this.title + '切换成功')
     }
   }
 }
