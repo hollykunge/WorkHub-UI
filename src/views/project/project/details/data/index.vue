@@ -4,6 +4,7 @@
       <el-row type="flex" justify="space-between" :gutter="5">
         <el-col :span="16" style="text-align: left;">
           <el-button class="filter-item" v-if="projectData_btn_add" @click="handleCreateTask" type="success" icon="plus" size="small">创建任务</el-button>
+          <property-select title="筛选" :properties="properties" @changed="handleTypeChanged"></property-select>
         </el-col>
         <el-col :span="8" style="text-align: right;">
           <el-input @keyup.enter.native="handleTaskFilter" class="filter-item" style="width: 300px;" placeholder="输入任务名称" size="small" v-model="listQuery.taskName"></el-input>
@@ -41,12 +42,13 @@
 </template>
 
 <script>
-import { addObj, page, delObj as deleteTask } from 'api/project/task/index'
-import { getObj as getProjectById } from 'api/project/index'
-import { page as userPage, all as userAll } from 'api/admin/user/index'
+import { page, delObj as deleteTask, joinedTaskInProject } from 'api/project/task/index'
 import { mapGetters } from 'vuex'
+import propertySelect from 'src/views/components/propertySelect'
+
 export default {
   props: ['projectId'],
+  components: { propertySelect },
   data () {
     return {
       listQuery: {
@@ -62,6 +64,7 @@ export default {
       projectData_btn_edit: true,
       projectData_btn_del: true,
       projectData_btn_add: true,
+      properties: [ {name: '我参加的'}, {name: '我创建的'}, {name: '全部任务'} ]
     }
   },
   computed: {
@@ -75,20 +78,44 @@ export default {
     // this.projectData_btn_add = this.elements['projectData:btn_add']
     // this.projectData_btn_del = this.elements['projectData:btn_del']
 
-    this.getTaskByProIdExeId()
+    this.getTaskList('我参加的')
   },
   methods: {
-    getTaskByProIdExeId () { // 通过项目id和负责人id获取任务
+    getTaskList (val) { // 通过项目id和负责人id获取任务
       this.listLoading = true
-      // this.listQuery.taskProjectId = this.projectId
-      // this.listQuery.taskExecutorId = this.userId
-      this.listQuery.crtUser = this.userId
-      page(this.listQuery).then(res => {
-        this.$emit('taskTotalNum', res.data.total) // 获取完数据触发该事件，返回总的任务数
-        this.total = res.data.total
-        this.listLoading = false
-        this.list = res.data.rows
-      })
+      this.listQuery.projectId = this.projectId
+      switch (val) {
+        case '我参加的':
+          this.listQuery.currentUserId = this.userId
+          this.listQuery.crtUser = undefined
+          joinedTaskInProject(this.listQuery).then(res => {
+            this.total = res.data.total
+            this.listLoading = false
+            this.list = res.data.rows
+          })
+          break;
+        case '我创建的':
+          this.listQuery.crtUser = this.userId
+          this.listQuery.currentUserId = undefined
+          page(this.listQuery).then(res => {
+            this.total = res.data.total
+            this.listLoading = false
+            this.list = res.data.rows
+          })
+          break;
+        case '全部任务':
+          this.listQuery.crtUser = undefined
+          this.listQuery.currentUserId = undefined
+          page(this.listQuery).then(res => {
+            this.$emit('taskTotalNum', res.data.total) // 获取完数据触发该事件，返回总的任务数
+            this.total = res.data.total
+            this.listLoading = false
+            this.list = res.data.rows
+          })
+          break;
+        default:
+          break;
+      }
     },
     handleCreateTask() {
       this.$router.push({name: '创建任务'})
@@ -127,6 +154,9 @@ export default {
       this.listQuery.page = val
       this.getTaskByProIdExeId()
     },
+    handleTypeChanged (val) {
+      this.getTaskList(val)
+    }
   }
 }
 </script>
@@ -134,5 +164,9 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .task-list {
   margin: 0 20px;
+  .property-dropdown {
+    margin-bottom: 8px;
+    vertical-align: middle;
+  }
 }
 </style>
