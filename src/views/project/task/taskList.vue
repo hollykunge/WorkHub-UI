@@ -22,26 +22,18 @@
             <el-table-column label="负责人id" prop="taskExecutorId" align="center"></el-table-column>
             <el-table-column label="任务进度" prop="taskProcess" align="center">
               <template scope="scope">
-<<<<<<< HEAD
+
                 <el-progress :stroke-width="8" :percentage="scope.row.taskProcess*25" :status="scope.row.taskProcess==4?'success':''"></el-progress>
-=======
-                <el-progrss :text-inside="true" :stroke-width="18" :percentage="scopr.row.taskProcess*25" :status="scope.row.taskProcess==4?'success':''"></el-progrss>
->>>>>>> 3cd81e39226ed663d8bdd6e34f7527c9acdf48dc
+
               </template>
             </el-table-column>
             <el-table-column label="创建时间" prop="crtTime" align="center"></el-table-column>
             <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center"></el-table-column>
             <el-table-column align="center" label="操作" fixed="right">
               <template scope="scope">
-<<<<<<< HEAD
                 <el-button size="small" type="primary" @click="handleCheck(scope.row)" plain>查看
                 </el-button>
                 <el-button size="small" type="danger" @click="handleDelete(scope.row)" plain>删除
-=======
-                <el-button v-if="projectData_btn_edit" size="small" type="primary" @click="handleCheck(scope.row)" plain>查看
-                </el-button>
-                <el-button v-if="projectData_btn_del" size="small" type="danger" @click="handleDelete(scope.row)" plain>删除
->>>>>>> 3cd81e39226ed663d8bdd6e34f7527c9acdf48dc
                 </el-button>
               </template>
             </el-table-column>
@@ -63,11 +55,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   component: {},
-<<<<<<< HEAD
   data () {
-=======
-  data() {
->>>>>>> 3cd81e39226ed663d8bdd6e34f7527c9acdf48dc
     return {
       listQuery: {
         page: 1,
@@ -87,21 +75,12 @@ export default {
       'elements'
     ])
   },
-<<<<<<< HEAD
   created () {
     this.getTaskList()
   },
   mounted () { },
   methods: {
     getTaskList () {
-=======
-  created() {
-    this.getTaskList()
-  },
-  mounted() {},
-  methods: {
-    getTaskList() {
->>>>>>> 3cd81e39226ed663d8bdd6e34f7527c9acdf48dc
       this.listLoading = true
       const routerName = this.$route.name
       switch (routerName) {
@@ -132,13 +111,9 @@ export default {
           break;
       }
     },
-<<<<<<< HEAD
     handleCreate () { },
     handleFilter () { },
-=======
-    handleCreate() {},
-    handleFilter() {},
->>>>>>> 3cd81e39226ed663d8bdd6e34f7527c9acdf48dc
+
     handleSizeChange (val) {
       this.listQuery.limit = val
       // this.getTaskByProIdExeId()
@@ -175,7 +150,6 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-<<<<<<< HEAD
 .task-list-page {
   padding: 20px;
   &-header {
@@ -185,15 +159,4 @@ export default {
     margin-bottom: 24px;
   }
 }
-=======
-  .task-list-page {
-    padding: 20px;
-    &-header {
-      margin-bottom: 16px;
-    }
-    &-body {
-      margin-bottom: 24px;
-    }
-  }
->>>>>>> 3cd81e39226ed663d8bdd6e34f7527c9acdf48dc
 </style>
