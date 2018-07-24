@@ -111,16 +111,20 @@ export default {
           break;
       }
     },
-    handleCreate () { },
-    handleFilter () { },
+    handleCreate() {
+      this.$router.push({name: '创建任务'})
+    },
+    handleFilter() {
+      this.getTaskList()
+    },
 
     handleSizeChange (val) {
       this.listQuery.limit = val
-      // this.getTaskByProIdExeId()
+      this.getTaskList()
     },
     handleCurrentChange (val) {
       this.listQuery.page = val
-      // this.getTaskByProIdExeId()
+      this.getTaskList()
     },
     handleCheck (task) {
       this.$router.push({ name: '任务详情', params: { projectId: task.taskProjectId, taskId: task.taskId } })
