@@ -2,10 +2,10 @@
   <div class="app-container calendar-list-container">
     <div class="filter-container">
       <el-row type="flex" justify="space-between" :gutter="5">
-        <el-col :span="16">
+        <el-col :span="14">
           <el-button class="filter-item" v-if="allProjects_btn_add && $route.name !='我参加的'" @click="handleCreate" type="success" icon="edit">新建项目</el-button>
         </el-col>
-        <el-col :span="8" style="text-align: right;">
+        <el-col :span="10" style="text-align: right;">
           <el-input @keyup.enter.native="handleFilter" class="filter-item" placeholder="输入项目名称" v-model="listQuery.projectName" style="width: 300px;"> </el-input>
           <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
         </el-col>
@@ -234,7 +234,7 @@ export default {
         })
       }
       if (routeName === '我创建的') {
-        this.listQuery.currentUserId = this.userId
+        this.listQuery.crtUser = this.userId
         page(this.listQuery).then(response => {
           this.total = response.data.total
           this.listLoading = false
