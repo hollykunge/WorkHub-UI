@@ -52,3 +52,12 @@ export function getTaskData(taskId) {
     method: 'get'
   })
 }
+
+// 获取我参加的任务列表
+export function joined(query) {
+  return fetch({
+    url: '/api/project/task/joined',
+    method: 'get',
+    params: query
+  })
+}
