@@ -118,7 +118,7 @@ export default {
       }
     },
     handleCreateTask() {
-      this.$router.push({name: '创建任务'})
+      this.$router.push( {name: '创建任务', params: { projectId: this.projectId } }) 
     },
     handleTaskFilter () {
       this.getTaskByProIdExeId()
