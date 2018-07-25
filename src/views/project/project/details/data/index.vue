@@ -2,11 +2,11 @@
   <div class="task-list">
     <div class="filter-container">
       <el-row type="flex" justify="space-between" :gutter="5">
-        <el-col :span="16" style="text-align: left;">
+        <el-col :span="8" style="text-align: left;">
           <el-button class="filter-item" v-if="projectData_btn_add" @click="handleCreateTask" type="success" icon="plus" size="small">创建任务</el-button>
-          <property-select title="筛选" :properties="properties" @changed="handleTypeChanged"></property-select>
         </el-col>
-        <el-col :span="8" style="text-align: right;">
+        <el-col :span="16" style="text-align: right;">
+          <property-select title="筛选" :properties="properties" @changed="handleTypeChanged"></property-select>
           <el-input @keyup.enter.native="handleTaskFilter" class="filter-item" style="width: 300px;" placeholder="输入任务名称" size="small" v-model="listQuery.taskName"></el-input>
           <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleTaskFilter" size="small" plain>搜索</el-button>
         </el-col>
@@ -118,7 +118,7 @@ export default {
       }
     },
     handleCreateTask() {
-      this.$router.push({name: '创建任务'})
+      this.$router.push( {name: '创建任务', params: { projectId: this.projectId } }) 
     },
     handleTaskFilter () {
       this.getTaskByProIdExeId()
@@ -166,6 +166,7 @@ export default {
   margin: 0 20px;
   .property-dropdown {
     margin-bottom: 8px;
+    margin-right: 24px;
     vertical-align: middle;
   }
 }

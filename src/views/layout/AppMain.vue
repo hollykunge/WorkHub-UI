@@ -24,4 +24,3 @@ export default {
   min-height: fill-available;
 }
 </style>
-

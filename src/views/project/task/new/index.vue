@@ -20,8 +20,8 @@
           <div class="task-info">
             <el-form-item prop="taskProjectName">
               <p class="subheader-label">任务所属项目</p>
-              <el-select v-model="form.taskProjectId" placeholder="请选择项目" @change="evalTaskProjectName(form.taskProjectId)">
-                <el-option v-for="item in projectItems" :key="item.projectId" :label="item.projectName" :value="item.projectId"></el-option>
+              <el-select v-model="form.taskProjectName" placeholder="请选择项目" @change="evalTaskProjectName(form.taskProjectName)">
+                <el-option v-for="item in projectItems" :key="item.projectId" :label="item.projectName" :value="item.projectName"></el-option>
               </el-select>
               <span class="subheader-slash">/</span>
             </el-form-item>
@@ -169,6 +169,13 @@ export default {
     getAllProjects() {
       all().then(res => {
         this.projectItems = res
+      }).then(() => {
+        const projectId = this.$route.params.projectId
+        if (projectId !== undefined) {
+          const currentProject = this.projectItems.filter(item => item.projectId === parseInt(projectId))
+          this.form.taskProjectId = projectId
+          this.form.taskProjectName = currentProject[0].projectName
+        }
       })
     },
     handleCreateTask() {
@@ -253,8 +260,8 @@ export default {
       // }
     },
     evalTaskProjectName(val) {
-      const selectedProject = this.projectItems.filter(item => item.projectId === val)
-      this.form.taskProjectName = selectedProject[0].projectName
+      const selectedProject = this.projectItems.filter(item => item.projectName === val)
+      this.form.taskProjectId = selectedProject[0].projectId
     }
   }
 }

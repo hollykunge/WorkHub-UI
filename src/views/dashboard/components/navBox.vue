@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     handleCreateTask() {
-      alert('创建新任务')
+      this.$router.push({name: '创建任务'})
     },
     taskFilter(val) {
       if (!val) {
