@@ -6,7 +6,7 @@
           <span>
             Copyright
             <icon name="copyright"></icon>
-            2018 复杂产品协同设计团队
+            2017~2018 复杂产品协同设计团队
           </span>
         </div>
       </el-col>
@@ -22,8 +22,10 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .page-footer {
+  position: relative;
   text-align: center;
-  margin-top: -23px;
+  margin-top: -21px;
+  z-index: 0;
   span {
     color: #00000073;
     font-size: 16px;
