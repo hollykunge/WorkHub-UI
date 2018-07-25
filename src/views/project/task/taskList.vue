@@ -22,16 +22,18 @@
             <el-table-column label="负责人id" prop="taskExecutorId" align="center"></el-table-column>
             <el-table-column label="任务进度" prop="taskProcess" align="center">
               <template scope="scope">
-                <el-progrss :text-inside="true" :stroke-width="18" :percentage="scopr.row.taskProcess*25" :status="scope.row.taskProcess==4?'success':''"></el-progrss>
+
+                <el-progress :stroke-width="8" :percentage="scope.row.taskProcess*25" :status="scope.row.taskProcess==4?'success':''"></el-progress>
+
               </template>
             </el-table-column>
             <el-table-column label="创建时间" prop="crtTime" align="center"></el-table-column>
             <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center"></el-table-column>
             <el-table-column align="center" label="操作" fixed="right">
               <template scope="scope">
-                <el-button v-if="projectData_btn_edit" size="small" type="primary" @click="handleCheck(scope.row)" plain>查看
+                <el-button size="small" type="primary" @click="handleCheck(scope.row)" plain>查看
                 </el-button>
-                <el-button v-if="projectData_btn_del" size="small" type="danger" @click="handleDelete(scope.row)" plain>删除
+                <el-button size="small" type="danger" @click="handleDelete(scope.row)" plain>删除
                 </el-button>
               </template>
             </el-table-column>
@@ -53,7 +55,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   component: {},
-  data() {
+  data () {
     return {
       listQuery: {
         page: 1,
@@ -73,12 +75,12 @@ export default {
       'elements'
     ])
   },
-  created() {
+  created () {
     this.getTaskList()
   },
-  mounted() {},
+  mounted () { },
   methods: {
-    getTaskList() {
+    getTaskList () {
       this.listLoading = true
       const routerName = this.$route.name
       switch (routerName) {
@@ -115,6 +117,7 @@ export default {
     handleFilter() {
       this.getTaskList()
     },
+
     handleSizeChange (val) {
       this.listQuery.limit = val
       this.getTaskList()
@@ -151,13 +154,13 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .task-list-page {
-    padding: 20px;
-    &-header {
-      margin-bottom: 16px;
-    }
-    &-body {
-      margin-bottom: 24px;
-    }
+.task-list-page {
+  padding: 20px;
+  &-header {
+    margin-bottom: 16px;
   }
+  &-body {
+    margin-bottom: 24px;
+  }
+}
 </style>
