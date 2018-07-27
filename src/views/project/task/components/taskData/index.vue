@@ -85,7 +85,6 @@
 <script>
 import propertySelect from 'src/views/components/propertySelect'
 import dataTable from './dataTable'
-import { getTaskData } from 'api/project/task/index'
 import { mapGetters } from 'vuex'
 export default {
   props: ['projectId', 'taskId'],
@@ -113,9 +112,9 @@ export default {
   },
   methods: {
     getTaskData() {
-      getTaskData(this.taskId).then(res => {
-        this.branches = res.data.branches
-      })
+      // getTaskData(this.taskId).then(res => {
+      //   this.branches = res.data.branches
+      // })
     },
     handleBranchChanged(newBranch) {
       console.log(newBranch)
