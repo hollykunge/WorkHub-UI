@@ -31,7 +31,7 @@
       <el-table :data="fileHeader" :show-header="false" class="file-table-header" empty-text="无更新记录">
         <el-table-column align="left">
           <template scope="scope">
-            <a><img :src="'../../' + avatar" height="20px" style="vertical-align: middle;"></a>
+            <a><img :src="'../../../../' + avatar" height="20px" style="vertical-align: middle;"></a>
             <a style="font-size: 13px; color: #0e6bf7;">{{scope.row.name}}</a>
             <a style="font-size: 13px; color: #7b7373;">{{scope.row.comment}}</a>
           </template>
@@ -85,8 +85,8 @@
 <script>
 import propertySelect from 'src/views/components/propertySelect'
 import dataTable from './dataTable'
-import { getTaskData } from 'api/project/task/index'
 import { mapGetters } from 'vuex'
+import { getFileList } from 'api/project/task/index'
 export default {
   props: ['projectId', 'taskId'],
   components: { propertySelect, dataTable },
@@ -110,12 +110,15 @@ export default {
   created() {
     // 进入到详情页自动获取后台数据
     // this.getTaskData()
+    getFileList({limit: 10, page: 1, crtUser: 1, taskId: 15}).then(res => {
+      console.log(res)
+    })
   },
   methods: {
     getTaskData() {
-      getTaskData(this.taskId).then(res => {
-        this.branches = res.data.branches
-      })
+      // getTaskData(this.taskId).then(res => {
+      //   this.branches = res.data.branches
+      // })
     },
     handleBranchChanged(newBranch) {
       console.log(newBranch)
