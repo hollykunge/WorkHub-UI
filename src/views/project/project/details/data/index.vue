@@ -86,8 +86,7 @@ export default {
       this.listQuery.projectId = this.projectId
       switch (val) {
         case '我参加的':
-          this.listQuery.currentUserId = this.userId
-          this.listQuery.crtUser = undefined
+          this.listQuery.crtUser = this.userId
           joinedTaskInProject(this.listQuery).then(res => {
             this.total = res.data.total
             this.listLoading = false
@@ -96,7 +95,6 @@ export default {
           break;
         case '我创建的':
           this.listQuery.crtUser = this.userId
-          this.listQuery.currentUserId = undefined
           page(this.listQuery).then(res => {
             this.total = res.data.total
             this.listLoading = false
@@ -105,7 +103,6 @@ export default {
           break;
         case '全部任务':
           this.listQuery.crtUser = undefined
-          this.listQuery.currentUserId = undefined
           page(this.listQuery).then(res => {
             this.$emit('taskTotalNum', res.data.total) // 获取完数据触发该事件，返回总的任务数
             this.total = res.data.total
