@@ -53,7 +53,7 @@ export function all() {
 //   })
 // }
 
-// 获取我参加的任务列表(不区分项目) currentUserId
+// 获取我参加的任务列表(不区分项目) crtUser
 export function joined(query) {
   return fetch({
     url: '/api/project/task/joined',
@@ -62,10 +62,19 @@ export function joined(query) {
   })
 }
 
-// 获取我参加的任务列表(区分项目) currentUserId projectId
+// 获取我参加的任务列表(区分项目) crtUser projectId
 export function joinedTaskInProject(query) {
   return fetch({
     url: '/api/project/task/project/joined',
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取某个任务中的文件列表
+export function getFileList(query) {
+  return fetch({
+    url: '/api/project/task/repository',
     method: 'get',
     params: query
   })

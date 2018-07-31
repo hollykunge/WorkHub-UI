@@ -100,7 +100,7 @@ export default {
           })
           break;
         case '我参加的':
-          this.listQuery.currentUserId = this.userId
+          this.listQuery.crtUser = this.userId
           joined(this.listQuery).then(res => {
             this.total = res.data.total
             this.listLoading = false

@@ -242,7 +242,7 @@ export default {
         })
       } 
       if (routeName === '我参加的') {
-        this.listQuery.currentUserId = this.userId
+        this.listQuery.crtUser = this.userId
         joinpro(this.listQuery).then(response => {
           this.total = response.data.total
           this.listLoading = false
