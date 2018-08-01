@@ -5,17 +5,16 @@
       <div class="main-container-background"></div>
       <navbar class="navbar-content"></navbar>
       <app-main class="main-content"></app-main>
-      <page-footer class="page-footer"></page-footer>
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain, PageFooter } from 'views/layout'
+import { Navbar, Sidebar, AppMain } from 'views/layout'
 
 export default {
   name: 'layout',
-  components: { Navbar, Sidebar, AppMain, PageFooter },
+  components: { Navbar, Sidebar, AppMain },
   computed: { sidebar() { return this.$store.state.app.sidebar } }
 }
 </script>
