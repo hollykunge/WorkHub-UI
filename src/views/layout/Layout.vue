@@ -2,19 +2,19 @@
   <div class="app-wrapper" :class="{hideSidebar:!sidebar.opened}">
     <sidebar class="sidebar-container"></sidebar>
     <div class="main-container">
+      <div class="main-container-background"></div>
       <navbar class="navbar-content"></navbar>
       <app-main class="main-content"></app-main>
-      <page-footer class="page-footer"></page-footer>
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain, PageFooter } from 'views/layout'
+import { Navbar, Sidebar, AppMain } from 'views/layout'
 
 export default {
   name: 'layout',
-  components: { Navbar, Sidebar, AppMain, PageFooter },
+  components: { Navbar, Sidebar, AppMain },
   computed: { sidebar() { return this.$store.state.app.sidebar } }
 }
 </script>
@@ -25,6 +25,13 @@ export default {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+.main-container-background {
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: #f0f2f5;
 }
 .app-wrapper {
   @include clearfix;
@@ -55,6 +62,7 @@ export default {
     left: 0;
     box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
     z-index: 1001;
+    overflow-x: hidden;
     overflow-y: auto;
     &::-webkit-scrollbar {
       display: none;
