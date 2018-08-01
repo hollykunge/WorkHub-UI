@@ -12,12 +12,15 @@
       </el-menu>
     </div>
     <div class="copyright-con" :class="{hideSidebar:isCollapse}">
-      <address>WorkHub Team</address>
-      <span>
+      <address>
+        <span>WorkHub</span>
+        <span>Team</span>
+      </address>
+      <a>
         Copyright
         <icon name="copyright"></icon>
         2017~2018
-        </span>
+        </a>
     </div>
   </div>
 </template>
@@ -64,17 +67,19 @@ export default {
 .copyright-con {
   margin-left: 40px;
   text-align: center;
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   font-size: 16px;
   color: aliceblue;
   transition: margin-left 0.28s linear;
   &.hideSidebar {
-    transition: margin-left 0.28s linear;
-    margin-left: 0px;
+    margin-left: 10px;
     font-size: 14px;
-    span {
+    a {
       display: none;
+    }
+    span {
+      display: block;
     }
   }
 }
