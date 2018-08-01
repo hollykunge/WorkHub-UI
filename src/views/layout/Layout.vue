@@ -2,6 +2,7 @@
   <div class="app-wrapper" :class="{hideSidebar:!sidebar.opened}">
     <sidebar class="sidebar-container"></sidebar>
     <div class="main-container">
+      <div class="main-container-background"></div>
       <navbar class="navbar-content"></navbar>
       <app-main class="main-content"></app-main>
       <page-footer class="page-footer"></page-footer>
@@ -25,6 +26,13 @@ export default {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+.main-container-background {
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: #f0f2f5;
 }
 .app-wrapper {
   @include clearfix;
