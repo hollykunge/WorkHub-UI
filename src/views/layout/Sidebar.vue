@@ -11,6 +11,14 @@
         <sidebar-item :routes='permissionMenus'></sidebar-item>
       </el-menu>
     </div>
+    <div class="copyright-con" :class="{hideSidebar:isCollapse}">
+      <address>WorkHub Team</address>
+      <span>
+        Copyright
+        <icon name="copyright"></icon>
+        2017~2018
+        </span>
+    </div>
   </div>
 </template>
 
@@ -52,6 +60,23 @@ export default {
 }
 .el-menu--collapse {
   width: 80px;
+}
+.copyright-con {
+  margin-left: 40px;
+  text-align: center;
+  position: absolute;
+  bottom: 20px;
+  font-size: 16px;
+  color: aliceblue;
+  transition: margin-left 0.28s linear;
+  &.hideSidebar {
+    transition: margin-left 0.28s linear;
+    margin-left: 0px;
+    font-size: 14px;
+    span {
+      display: none;
+    }
+  }
 }
 </style>
 
