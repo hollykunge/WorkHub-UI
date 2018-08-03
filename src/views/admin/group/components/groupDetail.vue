@@ -5,9 +5,9 @@
         <el-button type="primary" v-if="groupManager_btn_add" icon="plus" @click="handlerAdd">添加</el-button>
         <el-button type="primary" v-if="groupManager_btn_edit" icon="edit" @click="handlerEdit">编辑</el-button>
         <el-button type="primary" v-if="groupManager_btn_del" icon="delete" @click="handleDelete">删除</el-button>
-        <el-button type="primary" v-if="groupManager_btn_resourceManager" @click="handlerAuthority">
+        <el-button type="primary" v-if="groupManager_btn_resourceManager" :disabled="currentId===-1" @click="handlerAuthority">
           <icon-svg icon-class="quanxian1"></icon-svg>权限分配</el-button>
-        <el-button type="primary" v-if="groupManager_btn_userManager" @click="handlerUser">
+        <el-button type="primary" v-if="groupManager_btn_userManager" :disabled="currentId===-1" @click="handlerUser">
           <icon-svg icon-class="27"></icon-svg>关联用户</el-button>
       </el-button-group>
     </el-col>
