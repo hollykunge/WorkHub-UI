@@ -16,7 +16,7 @@
       <el-row type="flex" justify="center">
         <el-col>
           <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row empty-text="暂无任务数据" style="width: 100%">
-            <el-table-column label="序号" prop="taskId" align="center" width="65"></el-table-column>
+            <el-table-column label="序号" prop="taskId" type="index" align="center" width="65"></el-table-column>
             <el-table-column label="任务名称" prop="taskName" align="center"></el-table-column>
             <el-table-column label="负责人id" prop="taskExecutorId" align="center"></el-table-column>
             <el-table-column label="创建时间" prop="crtTime" align="center"></el-table-column>
