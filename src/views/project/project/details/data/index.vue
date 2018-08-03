@@ -66,7 +66,8 @@ export default {
       projectData_btn_edit: true,
       projectData_btn_del: true,
       projectData_btn_add: true,
-      properties: [ {name: '我参加的'}, {name: '我创建的'}, {name: '全部任务'} ]
+      properties: [ {name: '我参加的'}, {name: '我创建的'}, {name: '全部任务'} ],
+      currentPropertie: undefined
     }
   },
   computed: {
@@ -79,13 +80,14 @@ export default {
     // this.projectData_btn_edit = this.elements['projectData:btn_edit']
     // this.projectData_btn_add = this.elements['projectData:btn_add']
     // this.projectData_btn_del = this.elements['projectData:btn_del']
-
-    this.getTaskList(this.properties[0].name)
+    this.currentPropertie = this.properties[0].name
+    this.getTaskList(this.currentPropertie)
   },
   methods: {
-    getTaskList (val) { // 通过项目id和负责人id获取任务
+    getTaskList (val) { // val:     properties的类型 *为必选值 为currentProperties
       this.listLoading = true
       this.listQuery.projectId = this.projectId
+
       switch (val) {
         case '我参加的':
           this.listQuery.crtUser = this.userId
@@ -120,7 +122,7 @@ export default {
       this.$router.push( {name: '创建任务', params: { projectId: this.projectId } }) 
     },
     handleTaskFilter () {
-      this.getTaskByProIdExeId()
+      this.getTaskList(this.currentPropertie)
     },
     handleCheck (task) {
       this.$router.push({ name: '任务详情', params: { projectId: this.projectId, taskId: task.taskId } })
@@ -147,14 +149,15 @@ export default {
     },
     handleSizeChange (val) {
       this.listQuery.limit = val
-      this.getTaskByProIdExeId()
+      this.getTaskList(this.currentPropertie)
     },
     handleCurrentChange (val) {
       this.listQuery.page = val
-      this.getTaskByProIdExeId()
+      this.getTaskList(this.currentPropertie)
     },
     handleTypeChanged (val) {
       this.getTaskList(val)
+      this.currentPropertie = val
     }
   }
 }
