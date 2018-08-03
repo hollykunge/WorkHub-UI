@@ -23,7 +23,9 @@
             <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center"></el-table-column>
             <el-table-column v-if="projectData_btn_edit || projectData_btn_del" align="center" label="操作" fixed="right">
               <template scope="scope">
-                <el-button v-if="projectData_btn_edit" size="small" type="primary" @click="handleCheck(scope.row)" plain>查看
+                <el-button v-if="scope.row.status" size="small" type="success" @click="handleCheck(scope.row)" plain>处理
+                </el-button>
+                <el-button v-if="projectData_btn_edit&&(!scope.row.status)" size="small" type="primary" @click="handleCheck(scope.row)" plain>查看
                 </el-button>
                 <el-button v-if="projectData_btn_del" size="small" type="danger" @click="handleDelete(scope.row)" plain>删除
                 </el-button>
@@ -78,7 +80,7 @@ export default {
     // this.projectData_btn_add = this.elements['projectData:btn_add']
     // this.projectData_btn_del = this.elements['projectData:btn_del']
 
-    this.getTaskList('我参加的')
+    this.getTaskList(this.properties[0].name)
   },
   methods: {
     getTaskList (val) { // 通过项目id和负责人id获取任务
