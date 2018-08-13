@@ -17,17 +17,35 @@
         <el-col>
           <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row empty-text="暂无任务数据" style="width: 100%">
             <el-table-column label="序号" prop="taskId" type="index" align="center" width="65"></el-table-column>
-            <el-table-column label="任务名称" prop="taskName" align="center"></el-table-column>
-            <el-table-column label="负责人id" prop="taskExecutorId" align="center"></el-table-column>
-            <el-table-column label="创建时间" prop="crtTime" align="center"></el-table-column>
-            <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center"></el-table-column>
-            <el-table-column v-if="projectData_btn_edit || projectData_btn_del" align="center" label="操作" fixed="right">
+            <el-table-column label="任务名称" prop="taskName" align="center" width="250" show-overflow-tooltip>
+              <template scope="scope">
+                <span>{{scope.row.taskName.match(/\/(\S*)(?=.git)/)[1]}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="负责人" prop="taskExecutorId" align="center"></el-table-column>
+            <!-- <el-table-column label="优先级" prop="taskPriority" align="center"> -->
+            <el-table-column label="优先级" prop="taskId" align="center" width="80">
+              <template scope="scope">
+                <el-tag v-if="scope.row.taskId" type="danger">高</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center">
+              <template scope="scope">
+                <span>{{timestamp2Time(scope.row.taskPlanEnd, "{y}-{m}-{d}")}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="进度" prop="taskProcess" align="center">
+              <template scope="scope">
+                <el-progress :percentage="scope.row.taskProcess * 25"></el-progress>
+              </template>
+            </el-table-column>
+            <el-table-column v-if="projectData_btn_edit || projectData_btn_del" align="left" label="操作" fixed="right" width="150px">
               <template scope="scope">
                 <el-button v-if="scope.row.status" size="small" type="success" @click="handleCheck(scope.row)" plain>处理
                 </el-button>
                 <el-button v-if="projectData_btn_edit&&(!scope.row.status)" size="small" type="primary" @click="handleCheck(scope.row)" plain>查看
                 </el-button>
-                <el-button v-if="projectData_btn_del" size="small" type="danger" @click="handleDelete(scope.row)" plain>删除
+                <el-button v-if="projectData_btn_del&&scope.row.status" size="small" type="danger" @click="handleDelete(scope.row)" plain>删除
                 </el-button>
               </template>
             </el-table-column>
@@ -45,6 +63,7 @@
 
 <script>
 import { page, delObj as deleteTask, joinedTaskInProject } from 'api/project/task/index'
+import { parseTime } from 'utils/index'
 import { mapGetters } from 'vuex'
 import propertySelect from 'src/views/components/propertySelect'
 
@@ -158,7 +177,11 @@ export default {
     handleTypeChanged (val) {
       this.getTaskList(val)
       this.currentPropertie = val
-    }
+    },
+    timestamp2Time (timestamp, cFormat) {
+      return parseTime(timestamp, cFormat)
+		}
+
   }
 }
 </script>

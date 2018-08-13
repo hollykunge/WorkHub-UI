@@ -7,7 +7,7 @@
           <icon name="folder-open"></icon>
           <el-button type="text" @click="ToProject">{{ project.projectName }}</el-button>
           <icon name="chevron-right"></icon>
-          <el-button type="text">{{ task.taskName }}</el-button>
+          <el-button type="text">{{ task.taskName.match(/\/(\S*)(?=.git)/)[1] }}</el-button>
         </div>
       </el-col>
       <el-col :span="8">
