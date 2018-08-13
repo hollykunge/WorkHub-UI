@@ -31,7 +31,7 @@ export default {
       title: {
         show: true,
         text: '工 作 统 计',
-        left: '60',
+        left: '20',
         textStyle: {
           fontSize: 30
         }
