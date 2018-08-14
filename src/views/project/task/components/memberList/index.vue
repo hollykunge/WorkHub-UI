@@ -11,33 +11,39 @@
     </div>
     <div class="list-body">
       <div>
-        <el-table :data="memberList" v-loading.body="listLoading" empty-text="当前任务无成员" fit highlight-current-row style="width: 100%">
-          <el-table-column align="center" label="姓名/单位">
+        <el-table :data="memberList" v-loading.body="listLoading" empty-text="无参与成员" fit highlight-current-row style="width: 100%">
+          <el-table-column align="center" label="序号" type="index" width="150"></el-table-column>
+          <el-table-column align="center" label="用户">
             <template scope="scope">
               <el-button type="text">
-                <icon name="user"></icon>
-                <span>{{ scope.row.name }}/{{ scope.row.orgName }}</span>
+                <icon name="user"></icon>&nbsp;
+                <span>{{ scope.row.userName }}</span>
               </el-button>
             </template>
           </el-table-column>
           <el-table-column align="center" label="权限">
             <template scope="scope">
-              <el-button :type="scope.row.authrioty==200? 'success':'warning'" class="authrioty-button" size="small">
-                <icon name="key"></icon>
-                <span>{{ scope.row.authrioty }}</span>
-              </el-button>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" label="角色">
-            <template scope="scope">
-              <icon name="drivers-license-o"></icon>
-              <span>{{ scope.row.role }}</span>
+              <el-popover ref="permission" placement="right" width="160" v-model="popoverVisible">
+                <!-- **************************** -->
+                <!-- <p>这是一段内容这是一段内容确定删除吗？</p>
+
+                <div style="text-align: right; margin: 0">
+                  <el-button size="mini" type="text" @click="popoverVisible = false">取消</el-button>
+                  <el-button type="primary" size="mini" @click="popoverVisible = false">确定</el-button>
+                </div> -->
+                <!-- **************************** -->
+              </el-popover>
+              <el-tooltip content="单击修改权限" placement="top" effect="dark">
+                <el-button :type="scope.row.authrioty==200? 'success':'warning'" v-popover:permission class="authrioty-button" size="small">
+                  <icon name="key"></icon>&nbsp;
+                  <span>{{ scope.row.permission }}</span>
+                </el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作">
             <template scope="scope">
-              <el-button type="primary" size="small" @click="handleUpdate(scope.row)" plain>修改权限</el-button>
-              <el-button type="danger" size="small" @click="handleDelete(scope.row)" plain>删除</el-button>
+              <el-button type="danger" size="small" @click="handleDelete(scope.row)" plain>移除成员</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -78,18 +84,22 @@
 </template>
 
 <script>
-import linkUser from '../../../../team/components/linkUser'
+import linkUser from 'views/team/components/linkUser'
+import { getTaskMember, associateUser, modifyMemberPermission, deleteMember } from 'api/project/task/taskMember'
+
 export default {
+  props: ['projectId', 'taskId'],
   components: { linkUser },
   data() {
     return {
-      memberList: [{ name: '姬海南', orgName: '十一室', authrioty: '读写', role: '设计师' }],
+      memberList: [],
       dialogVisible: false,
+      popoverVisible: false,
       selectedOrg: [],
       userlist: [{ name: '姬海南' }],
       listLoading: false,
       listQuery: {
-        page: undefined,
+        page: 1,
         limit: 10
       },
       total: 0,
@@ -106,8 +116,20 @@ export default {
   computed: {
   },
   created() {
+    this.listQuery.taskId = this.taskId
+    this.getMumberList()
+    // associateUser({taskId: '20',userId: '1', userName: 'hollykunge', taskName: '测试项目0813/测试任务0813.git', permission: '0'}).then(res => {
+    //   console.log(res)
+    // })
   },
   methods: {
+    getMumberList() {
+      getTaskMember(this.listQuery).then(res => {
+        this.memberList = res.data.rows
+        this.total = res.data.total
+        console.log(res)
+      })
+    },
     handleTabClick() {
       console.log('-----')
       this.$emit('toggleStatus')
@@ -122,11 +144,11 @@ export default {
     // 还要有一个判断当前用户是否已经在该小组的方法
     handleSizeChange(val) {
       this.listQuery.limit = val
-      // this.getList()
+      this.getMumberList()
     },
     handleCurrentChange(val) {
       this.listQuery.page = val
-      // this.getList()
+      this.getMumberList()
     },
     handleDelete(row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
@@ -134,16 +156,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // delObj(row.id).then(() => {
-        //   this.$notify({
-        //     title: '成功',
-        //     message: '删除成功',
-        //     type: 'success',
-        //     duration: 2000
-        //   })
-        //   const index = this.list.indexOf(row) // 删除列表中对应的项
-        //   this.list.splice(index, 1)
-        // })
+        deleteMember(row.id).then(() => {
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          const index = this.memberList.indexOf(row) // 删除列表中对应的项
+          this.memberList.splice(index, 1)
+        })
       })
     },
     handleUpdate(row) {
@@ -189,7 +211,7 @@ export default {
     margin: 44px 30px 0 20px;
   }
   .authrioty-button {
-    padding: 3px;
+    padding: 5px 8px;
   }
 }
 </style>
