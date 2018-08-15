@@ -24,17 +24,15 @@
           <el-table-column align="center" label="权限">
             <template scope="scope">
               <el-popover ref="permission" placement="right" width="160" v-model="popoverVisible">
-                <!-- **************************** -->
-                <!-- <p>这是一段内容这是一段内容确定删除吗？</p>
+                <el-rate v-model="scope.row.permission" show-text :texts="['只读', '执行', '管理']" :max="3"></el-rate>
 
-                <div style="text-align: right; margin: 0">
-                  <el-button size="mini" type="text" @click="popoverVisible = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="popoverVisible = false">确定</el-button>
-                </div> -->
-                <!-- **************************** -->
+                <span>
+                  <el-button @click="popoverVisible = false" size="small">关闭</el-button>
+                  <el-button @click="update(scope.row)" size="small" type="primary">确定修改</el-button>
+                </span>
               </el-popover>
               <el-tooltip content="单击修改权限" placement="top" effect="dark">
-                <el-button :type="scope.row.authrioty==200? 'success':'warning'" v-popover:permission class="authrioty-button" size="small">
+                <el-button :type="scope.row.permission==200? 'success':'warning'" v-popover:permission class="authrioty-button" size="small">
                   <icon name="key"></icon>&nbsp;
                   <span>{{ scope.row.permission }}</span>
                 </el-button>
@@ -172,25 +170,18 @@ export default {
       this.modifyVisible = true
       this.form = row
     },
-    update(formName) {
-      // const set = this.$refs
-      // set[formName].validate(valid => {
-      //   if (valid) {
-      this.modifyVisible = false
-      // putObj(this.form.id, this.form).then(() => {
-      //   this.dialogFormVisible = false
-      //   this.getList()
-      this.$notify({
-        title: '成功',
-        message: '修改成功',
-        type: 'success',
-        duration: 2000
+    update(row) {
+      this.popoverVisible = false
+      modifyMemberPermission(row.id, row).then(() => {
+        this.popoverVisible = false
+        this.$notify({
+          title: '成功',
+          message: '修改成功',
+          type: 'success',
+          duration: 2000
+        })
       })
-      //   })
-      // } else {
-      //   return false
-      //   }
-      // })
+
     }
   }
 
