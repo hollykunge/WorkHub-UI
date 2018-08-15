@@ -1,8 +1,8 @@
 <template>
   <el-dialog :visible.sync="visible" @close="handleClose" @open="handleOpen" :show="show" :close-on-click-modal="false" :show-close="false">
     <div slot="title" class="link-user-header">
-      <icon name="link"></icon>
-      <b>编辑团队成员</b>
+      <icon name="user-plus"></icon>
+      <b>编辑成员</b>
     </div>
     <div class="link-user-body">
       <el-row :gutter="20">
@@ -48,7 +48,8 @@
     </div>
 
     <div slot="footer" class="link-user-footer">
-      <el-button type="primary" size="small" @click="handleLink">关联已选用户</el-button>
+      <!-- <el-button type="primary" size="small" @click="handleLink">关联已选用户</el-button> -->
+      <el-button type="primary" size="small" @click="handleConfirm">添加已选用户</el-button>
       <el-button size="small" @click="visible=false">关闭</el-button>
     </div>
   </el-dialog>
@@ -107,10 +108,10 @@ export default {
       })
       // 通过teamId获取当前的成员，存到userSelected中
       // const vals = {}
-      modifyTeamUsers(this.teamId, [7]).then(res => {
-        console.log('---------')
-        console.log(res)
-      })
+      // modifyTeamUsers(this.teamId, [7]).then(res => {
+      //   console.log('---------')
+      //   console.log(res)
+      // })
     },
     filterOrgNode(value, data) { // 筛选组织树节点
       if (!value) return true
@@ -146,8 +147,10 @@ export default {
         }
       }
     },
+    handleConfirm() {
+      this.$emit('confirmed', this.getSelectedUserId(this.userSelected)) // 返回已选择的用户的ids
+    },
     handleLink() {
-      // console.log(this.userSelected)
       modifyTeamUsers(this.teamId, this.userSelected).then(res => {
         console.log('---------')
         console.log(res)
@@ -168,6 +171,13 @@ export default {
           })
         }
       } else { this.$refs.usersTable.clearSelection() }
+    },
+    getSelectedUserId(userSelected) {
+      const userIds =[]
+      userSelected.forEach(item => {
+        userIds.push(item.id)
+      })
+      return userIds
     }
   }
 
