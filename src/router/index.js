@@ -137,7 +137,8 @@ export const constantRouterMap = [{
     }, {
       path: 'memberList',
       component: _import('project/task/components/memberList/index'),
-      name: '成员'
+      name: '成员',
+      props: true
     }, {
       path: 'taskSetting',
       component: _import('project/task/components/taskSetting/index'),

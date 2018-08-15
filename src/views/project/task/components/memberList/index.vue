@@ -11,33 +11,36 @@
     </div>
     <div class="list-body">
       <div>
-        <el-table :data="memberList" v-loading.body="listLoading" empty-text="当前任务无成员" fit highlight-current-row style="width: 100%">
-          <el-table-column align="center" label="姓名/单位">
+        <el-table :data="memberList" v-loading.body="listLoading" empty-text="无参与成员" fit highlight-current-row style="width: 100%">
+          <el-table-column align="center" label="序号" type="index"  header-align="center" width="250"></el-table-column>
+          <el-table-column align="left"  header-align="center" label="用户" width="150">
             <template scope="scope">
               <el-button type="text">
-                <icon name="user"></icon>
-                <span>{{ scope.row.name }}/{{ scope.row.orgName }}</span>
+                <icon name="user"></icon>&nbsp;
+                <span>{{ scope.row.userName }}</span>
               </el-button>
             </template>
           </el-table-column>
           <el-table-column align="center" label="权限">
             <template scope="scope">
-              <el-button :type="scope.row.authrioty==200? 'success':'warning'" class="authrioty-button" size="small">
-                <icon name="key"></icon>
-                <span>{{ scope.row.authrioty }}</span>
-              </el-button>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" label="角色">
-            <template scope="scope">
-              <icon name="drivers-license-o"></icon>
-              <span>{{ scope.row.role }}</span>
+              <el-popover ref="permission" placement="right" width="160" v-model="popoverVisible">
+                <el-rate v-model="listQuery.page" show-text :texts="['只读', '执行', '管理']" :max="3"></el-rate>
+                <span>
+                  <el-button @click="popoverVisible = false" size="small">关闭</el-button>
+                  <el-button @click="handleUpdate(scope.row)" size="small" type="primary">确定修改</el-button>
+                </span>
+              </el-popover>
+              <!-- <el-tooltip content="单击修改权限" placement="top" effect="dark"> -->
+                <el-button :type="scope.row.permission==200? 'success':'warning'" v-popover:permission class="authrioty-button" size="small">
+                  <icon name="key"></icon>&nbsp;
+                  <span>{{ scope.row.permission }}</span>
+                </el-button>
+              <!-- </el-tooltip> -->
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作">
             <template scope="scope">
-              <el-button type="primary" size="small" @click="handleUpdate(scope.row)" plain>修改权限</el-button>
-              <el-button type="danger" size="small" @click="handleDelete(scope.row)" plain>删除</el-button>
+              <el-button type="danger" size="small" @click="handleDelete(scope.row)" plain>移除成员</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -50,83 +53,59 @@
         </div>
       </el-row>
     </div>
+    <!-- 邀请新成员对话框 -->
     <div class="list-dialog-box">
-      <link-user :show.sync="dialogVisible"></link-user>
-      <el-dialog title="修改权限权限" :visible.sync="modifyVisible" top="20%" :close-on-click-modal="false">
-        <el-form :model="form" label-position="right" label-width="100px">
-          <el-form-item label="用户名">
-            <el-input v-model="form.name" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="权限">
-            <el-select v-model="form.authrioty" style="width: 100%">
-              <el-option v-for="item in authriotyOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="角色">
-            <el-select v-model="form.role" style="width: 100%">
-              <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <span slot="footer">
-          <el-button @click="modifyVisible = false" size="small">关闭</el-button>
-          <el-button @click="update('form')" size="small" type="primary">确定修改</el-button>
-        </span>
-      </el-dialog>
+      <link-user @confirmed="handleAddUser" :show.sync="dialogVisible"></link-user>
     </div>
   </div>
 </template>
 
 <script>
-import linkUser from '../../../../team/components/linkUser'
+import linkUser from 'views/team/components/linkUser'
+import { getTaskMember, associateUser, modifyMemberPermission, deleteMember } from 'api/project/task/taskMember'
+
 export default {
+  props: ['projectId', 'taskId'],
   components: { linkUser },
   data() {
     return {
-      memberList: [{ name: '姬海南', orgName: '十一室', authrioty: '读写', role: '设计师' }],
+      memberList: [],
       dialogVisible: false,
-      selectedOrg: [],
-      userlist: [{ name: '姬海南' }],
+      popoverVisible: true,
       listLoading: false,
       listQuery: {
-        page: undefined,
+        page: 1,
         limit: 10
       },
       total: 0,
-      modifyVisible: false,
-      form: {
-        name: undefined,
-        authrioty: 100,
-        role: 100
-      },
-      authriotyOptions: [{ label: '只读', value: 100 }, { label: '读/写', value: 200 }],
-      roleOptions: [{ label: '设计师', value: 100 }, { label: '调度', value: 101 }, { label: '总师', value: 102 }]
     }
   },
   computed: {
   },
   created() {
+    this.listQuery.taskId = this.taskId
+    this.getMumberList()
   },
   methods: {
-    handleTabClick() {
-      console.log('-----')
-      this.$emit('toggleStatus')
+    getMumberList() {
+      getTaskMember(this.listQuery).then(res => {
+        this.memberList = res.data.rows
+        this.total = res.data.total
+        console.log(res)
+      })
     },
     // 处理邀请成员点击事件的方法
     handleInvite() {
       this.dialogVisible = true
     },
-    handleCascaderChange(value) {
-      console.log(value)
-    },
     // 还要有一个判断当前用户是否已经在该小组的方法
     handleSizeChange(val) {
       this.listQuery.limit = val
-      // this.getList()
+      this.getMumberList()
     },
     handleCurrentChange(val) {
       this.listQuery.page = val
-      // this.getList()
+      this.getMumberList()
     },
     handleDelete(row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
@@ -134,41 +113,41 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // delObj(row.id).then(() => {
-        //   this.$notify({
-        //     title: '成功',
-        //     message: '删除成功',
-        //     type: 'success',
-        //     duration: 2000
-        //   })
-        //   const index = this.list.indexOf(row) // 删除列表中对应的项
-        //   this.list.splice(index, 1)
-        // })
+        deleteMember(row.id).then(() => {
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          const index = this.memberList.indexOf(row) // 删除列表中对应的项
+          this.memberList.splice(index, 1)
+        })
       })
     },
     handleUpdate(row) {
-      this.modifyVisible = true
-      this.form = row
-    },
-    update(formName) {
-      // const set = this.$refs
-      // set[formName].validate(valid => {
-      //   if (valid) {
-      this.modifyVisible = false
-      // putObj(this.form.id, this.form).then(() => {
-      //   this.dialogFormVisible = false
-      //   this.getList()
-      this.$notify({
-        title: '成功',
-        message: '修改成功',
-        type: 'success',
-        duration: 2000
+      this.popoverVisible = false
+      modifyMemberPermission(row.id, row).then(() => {
+        this.popoverVisible = false
+        this.$notify({
+          title: '成功',
+          message: '修改成功',
+          type: 'success',
+          duration: 2000
+        })
       })
-      //   })
-      // } else {
-      //   return false
-      //   }
-      // })
+    },
+    handleAddUser(val) {
+      associateUser(this.taskId, { userIds: val.join() }).then(res => {
+        this.dialogVisible = false
+        this.$notify({
+          title: '成功',
+          message: '修改成功',
+          type: 'success',
+          duration: 2000
+        })
+        console.log(res)
+      })
     }
   }
 
@@ -189,7 +168,7 @@ export default {
     margin: 44px 30px 0 20px;
   }
   .authrioty-button {
-    padding: 3px;
+    padding: 5px 8px;
   }
 }
 </style>

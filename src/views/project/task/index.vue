@@ -83,6 +83,7 @@ export default {
     getTaskBasicInfo(taskId, projectId) {
       getTaskObj(taskId).then(res => {
         const data = res.data;
+        data.taskName = data.taskName.match(/\/(\S*)(?=.git)/)[1];
         (this.task = data) // 解构赋值
       })
       getProjectObj(projectId).then(res => {
