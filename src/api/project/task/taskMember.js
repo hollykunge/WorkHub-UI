@@ -10,11 +10,11 @@ export function getTaskMember(query) {
 }
 
 // 关联已选择用户
-export function associateUser(data) {
+export function associateUser(id, data) {
   return fetch({
-    url: '/api/project/map',
+    url: '/api/project/map/' + id,
     method: 'post',
-    data: data
+    params: data
   })
 }
 

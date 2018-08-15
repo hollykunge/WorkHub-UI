@@ -12,8 +12,8 @@
     <div class="list-body">
       <div>
         <el-table :data="memberList" v-loading.body="listLoading" empty-text="无参与成员" fit highlight-current-row style="width: 100%">
-          <el-table-column align="center" label="序号" type="index" width="150"></el-table-column>
-          <el-table-column align="center" label="用户">
+          <el-table-column align="center" label="序号" type="index"  header-align="center" width="250"></el-table-column>
+          <el-table-column align="left"  header-align="center" label="用户" width="150">
             <template scope="scope">
               <el-button type="text">
                 <icon name="user"></icon>&nbsp;
@@ -24,19 +24,18 @@
           <el-table-column align="center" label="权限">
             <template scope="scope">
               <el-popover ref="permission" placement="right" width="160" v-model="popoverVisible">
-                <el-rate v-model="scope.row.permission" show-text :texts="['只读', '执行', '管理']" :max="3"></el-rate>
-
+                <el-rate v-model="listQuery.page" show-text :texts="['只读', '执行', '管理']" :max="3"></el-rate>
                 <span>
                   <el-button @click="popoverVisible = false" size="small">关闭</el-button>
-                  <el-button @click="update(scope.row)" size="small" type="primary">确定修改</el-button>
+                  <el-button @click="handleUpdate(scope.row)" size="small" type="primary">确定修改</el-button>
                 </span>
               </el-popover>
-              <el-tooltip content="单击修改权限" placement="top" effect="dark">
+              <!-- <el-tooltip content="单击修改权限" placement="top" effect="dark"> -->
                 <el-button :type="scope.row.permission==200? 'success':'warning'" v-popover:permission class="authrioty-button" size="small">
                   <icon name="key"></icon>&nbsp;
                   <span>{{ scope.row.permission }}</span>
                 </el-button>
-              </el-tooltip>
+              <!-- </el-tooltip> -->
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作">
@@ -54,29 +53,9 @@
         </div>
       </el-row>
     </div>
+    <!-- 邀请新成员对话框 -->
     <div class="list-dialog-box">
-      <link-user :show.sync="dialogVisible"></link-user>
-      <el-dialog title="修改权限权限" :visible.sync="modifyVisible" top="20%" :close-on-click-modal="false">
-        <el-form :model="form" label-position="right" label-width="100px">
-          <el-form-item label="用户名">
-            <el-input v-model="form.name" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="权限">
-            <el-select v-model="form.authrioty" style="width: 100%">
-              <el-option v-for="item in authriotyOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="角色">
-            <el-select v-model="form.role" style="width: 100%">
-              <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <span slot="footer">
-          <el-button @click="modifyVisible = false" size="small">关闭</el-button>
-          <el-button @click="update('form')" size="small" type="primary">确定修改</el-button>
-        </span>
-      </el-dialog>
+      <link-user @confirmed="handleAddUser" :show.sync="dialogVisible"></link-user>
     </div>
   </div>
 </template>
@@ -92,23 +71,13 @@ export default {
     return {
       memberList: [],
       dialogVisible: false,
-      popoverVisible: false,
-      selectedOrg: [],
-      userlist: [{ name: '姬海南' }],
+      popoverVisible: true,
       listLoading: false,
       listQuery: {
         page: 1,
         limit: 10
       },
       total: 0,
-      modifyVisible: false,
-      form: {
-        name: undefined,
-        authrioty: 100,
-        role: 100
-      },
-      authriotyOptions: [{ label: '只读', value: 100 }, { label: '读/写', value: 200 }],
-      roleOptions: [{ label: '设计师', value: 100 }, { label: '调度', value: 101 }, { label: '总师', value: 102 }]
     }
   },
   computed: {
@@ -116,9 +85,6 @@ export default {
   created() {
     this.listQuery.taskId = this.taskId
     this.getMumberList()
-    // associateUser({taskId: '20',userId: '1', userName: 'hollykunge', taskName: '测试项目0813/测试任务0813.git', permission: '0'}).then(res => {
-    //   console.log(res)
-    // })
   },
   methods: {
     getMumberList() {
@@ -128,16 +94,9 @@ export default {
         console.log(res)
       })
     },
-    handleTabClick() {
-      console.log('-----')
-      this.$emit('toggleStatus')
-    },
     // 处理邀请成员点击事件的方法
     handleInvite() {
       this.dialogVisible = true
-    },
-    handleCascaderChange(value) {
-      console.log(value)
     },
     // 还要有一个判断当前用户是否已经在该小组的方法
     handleSizeChange(val) {
@@ -167,10 +126,6 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.modifyVisible = true
-      this.form = row
-    },
-    update(row) {
       this.popoverVisible = false
       modifyMemberPermission(row.id, row).then(() => {
         this.popoverVisible = false
@@ -181,7 +136,18 @@ export default {
           duration: 2000
         })
       })
-
+    },
+    handleAddUser(val) {
+      associateUser(this.taskId, { userIds: val.join() }).then(res => {
+        this.dialogVisible = false
+        this.$notify({
+          title: '成功',
+          message: '修改成功',
+          type: 'success',
+          duration: 2000
+        })
+        console.log(res)
+      })
     }
   }
 
