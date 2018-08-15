@@ -12,8 +12,8 @@
     <div class="list-body">
       <div>
         <el-table :data="memberList" v-loading.body="listLoading" empty-text="无参与成员" fit highlight-current-row style="width: 100%">
-          <el-table-column align="center" label="序号" type="index"  header-align="center" width="250"></el-table-column>
-          <el-table-column align="left"  header-align="center" label="用户" width="150">
+          <el-table-column align="center" label="序号" type="index" header-align="center" width="250"></el-table-column>
+          <el-table-column align="left" header-align="center" label="用户" width="150">
             <template scope="scope">
               <el-button type="text">
                 <icon name="user"></icon>&nbsp;
@@ -23,19 +23,21 @@
           </el-table-column>
           <el-table-column align="center" label="权限">
             <template scope="scope">
-              <el-popover ref="permission" placement="right" width="160" v-model="popoverVisible">
+              <el-popover ref="permission" placement="top" width="160">
                 <el-rate v-model="listQuery.page" show-text :texts="['只读', '执行', '管理']" :max="3"></el-rate>
                 <span>
                   <el-button @click="popoverVisible = false" size="small">关闭</el-button>
                   <el-button @click="handleUpdate(scope.row)" size="small" type="primary">确定修改</el-button>
                 </span>
+                <div slot="reference">
+                <el-tooltip content="单击修改权限" placement="top" effect="dark">
+                  <el-button :type="scope.row.permission==200? 'success':'warning'" class="authrioty-button" size="small">
+                    <icon name="key"></icon>&nbsp;
+                    <span>{{ scope.row.permission }}</span>
+                  </el-button>
+                </el-tooltip>
+                </div>
               </el-popover>
-              <!-- <el-tooltip content="单击修改权限" placement="top" effect="dark"> -->
-                <el-button :type="scope.row.permission==200? 'success':'warning'" v-popover:permission class="authrioty-button" size="small">
-                  <icon name="key"></icon>&nbsp;
-                  <span>{{ scope.row.permission }}</span>
-                </el-button>
-              <!-- </el-tooltip> -->
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作">
@@ -71,7 +73,7 @@ export default {
     return {
       memberList: [],
       dialogVisible: false,
-      popoverVisible: true,
+      popoverVisible: false,
       listLoading: false,
       listQuery: {
         page: 1,
