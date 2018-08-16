@@ -135,7 +135,7 @@ export default {
     handleUpdate(row) {
       this.popoverVisible = false
       row.permission = row.permission - 1
-      modifyMemberPermission(row.id, row).then(() => {
+      modifyMemberPermission(row).then(() => {
         this.popoverVisible = false
         this.$notify({
           title: '成功',
