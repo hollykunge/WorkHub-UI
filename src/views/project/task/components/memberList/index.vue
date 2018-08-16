@@ -12,8 +12,8 @@
     <div class="list-body">
       <div>
         <el-table :data="memberList" v-loading.body="listLoading" empty-text="无参与成员" fit highlight-current-row style="width: 100%">
-          <el-table-column align="center" label="序号" type="index" header-align="center" width="250"></el-table-column>
-          <el-table-column align="left" header-align="center" label="用户" width="150">
+          <el-table-column align="center" label="序号" type="index" header-align="center" width="300"></el-table-column>
+          <el-table-column align="left" label="用户">
             <template scope="scope">
               <el-button type="text">
                 <icon name="user"></icon>&nbsp;
@@ -24,16 +24,16 @@
           <el-table-column align="center" label="权限">
             <template scope="scope">
               <el-popover ref="permission" placement="top" width="160">
-                <el-rate v-model="listQuery.page" show-text :texts="['只读', '执行', '管理']" :max="3"></el-rate>
+                <el-rate v-model="scope.row.permission" show-text :texts="['无', '只读', '执行', '管理']" :colors="['#99A9BF', '#F7BA2A', '#20d220']" :max="4" :low-threshold="1" :high-threshold="4"></el-rate>
                 <span>
                   <el-button @click="popoverVisible = false" size="small">关闭</el-button>
                   <el-button @click="handleUpdate(scope.row)" size="small" type="primary">确定修改</el-button>
                 </span>
                 <div slot="reference">
                 <el-tooltip content="单击修改权限" placement="top" effect="dark">
-                  <el-button :type="scope.row.permission==200? 'success':'warning'" class="authrioty-button" size="small">
+                  <el-button :type="scope.row.permission == 4 ? 'success':'warning'" class="authrioty-button" size="small">
                     <icon name="key"></icon>&nbsp;
-                    <span>{{ scope.row.permission }}</span>
+                    <span>{{ getPermissionText(scope.row.permission) }}</span>
                   </el-button>
                 </el-tooltip>
                 </div>
@@ -91,7 +91,12 @@ export default {
   methods: {
     getMumberList() {
       getTaskMember(this.listQuery).then(res => {
-        this.memberList = res.data.rows
+        const tempList = res.data.rows
+        tempList.forEach(element => {
+          const permission = parseInt(element.permission) + 1
+          element.permission = permission
+        })
+        this.memberList = tempList
         this.total = res.data.total
         console.log(res)
       })
@@ -129,6 +134,7 @@ export default {
     },
     handleUpdate(row) {
       this.popoverVisible = false
+      row.permission = row.permission - 1
       modifyMemberPermission(row.id, row).then(() => {
         this.popoverVisible = false
         this.$notify({
@@ -150,6 +156,22 @@ export default {
         })
         console.log(res)
       })
+    },
+    getPermissionText(val) {
+      switch(val) {
+        case 1:
+          return '无'
+          break
+        case 2:
+          return '只读'
+          break
+        case 3:
+          return '执行'
+          break
+        case 4:
+          return '管理'
+          break
+      }
     }
   }
 
