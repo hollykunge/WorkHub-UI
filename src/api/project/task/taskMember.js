@@ -19,9 +19,9 @@ export function associateUser(id, data) {
 }
 
 // 修改成员权限
-export function modifyMemberPermission(id, obj) {
+export function modifyMemberPermission(obj) {
   return fetch({
-    url: '/api/project/map/' + id,
+    url: '/api/project/map',
     method: 'put',
     data: obj
   })
