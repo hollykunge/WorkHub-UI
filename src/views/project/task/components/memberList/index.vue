@@ -24,18 +24,14 @@
           <el-table-column align="center" label="权限">
             <template scope="scope">
               <el-popover ref="permission" placement="top" width="160">
-                <el-rate v-model="scope.row.permission" show-text :texts="['无', '只读', '执行', '管理']" :colors="['#99A9BF', '#F7BA2A', '#20d220']" :max="4" :low-threshold="1" :high-threshold="4"></el-rate>
-                <span>
-                  <el-button @click="popoverVisible = false" size="small">关闭</el-button>
-                  <el-button @click="handleUpdate(scope.row)" size="small" type="primary">确定修改</el-button>
-                </span>
+                <el-rate v-model="scope.row.permission" @change="handleUpdate(scope.row)" show-text :texts="['查看', '只读', '读写', '管理']" :colors="['#99A9BF', '#F7BA2A', '#20d220']" :max="4" :low-threshold="1" :high-threshold="4"></el-rate>
                 <div slot="reference">
-                <el-tooltip content="单击修改权限" placement="top" effect="dark">
-                  <el-button :type="scope.row.permission == 4 ? 'success':'warning'" class="authrioty-button" size="small">
-                    <icon name="key"></icon>&nbsp;
-                    <span>{{ getPermissionText(scope.row.permission) }}</span>
-                  </el-button>
-                </el-tooltip>
+                  <el-tooltip content="单击修改权限" placement="right" effect="dark">
+                    <el-button :type="scope.row.permission == 4 ? 'success':'warning'" class="authrioty-button" size="small">
+                      <icon name="key"></icon>&nbsp;
+                      <span>{{ getPermissionText(scope.row.permission) }}</span>
+                    </el-button>
+                  </el-tooltip>
                 </div>
               </el-popover>
             </template>
@@ -73,7 +69,6 @@ export default {
     return {
       memberList: [],
       dialogVisible: false,
-      popoverVisible: false,
       listLoading: false,
       listQuery: {
         page: 1,
@@ -93,7 +88,7 @@ export default {
       getTaskMember(this.listQuery).then(res => {
         const tempList = res.data.rows
         tempList.forEach(element => {
-          const permission = parseInt(element.permission) + 1
+          const permission = parseInt(element.permission)
           element.permission = permission
         })
         this.memberList = tempList
@@ -133,10 +128,7 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.popoverVisible = false
-      row.permission = row.permission - 1
       modifyMemberPermission(row).then(() => {
-        this.popoverVisible = false
         this.$notify({
           title: '成功',
           message: '修改成功',
@@ -160,13 +152,13 @@ export default {
     getPermissionText(val) {
       switch(val) {
         case 1:
-          return '无'
+          return '查看'
           break
         case 2:
           return '只读'
           break
         case 3:
-          return '执行'
+          return '读写'
           break
         case 4:
           return '管理'
