@@ -2,13 +2,13 @@
   <el-dialog :visible.sync="visible" @close="handleClose" @open="handleOpen" :show="show" :close-on-click-modal="false" :show-close="false">
     <div slot="title" class="link-user-header">
       <icon name="user-plus"></icon>
-      <b>编辑成员</b>
+      <b> 编辑成员 </b>
     </div>
     <div class="link-user-body">
       <el-row :gutter="20">
         <el-col :span="10">
           <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
-          <el-tree :data="orgTree" :props="defaultProps" @node-click="handleNodeClick" :filter-node-method="filterOrgNode" ref="orgTree" highlight-current></el-tree>
+          <el-tree :data="orgTree" :props="defaultProps" @node-click="handleNodeClick" :filter-node-method="filterOrgNode" ref="orgTree" default-expand-all highlight-current></el-tree>
         </el-col>
         <el-col :span="14">
           <el-row>
@@ -49,7 +49,7 @@
 
     <div slot="footer" class="link-user-footer">
       <!-- <el-button type="primary" size="small" @click="handleLink">关联已选用户</el-button> -->
-      <el-button type="primary" size="small" @click="handleConfirm">添加已选用户</el-button>
+      <el-button type="primary" size="small" @click="handleConfirm" :disabled="isSelectedChanged">确认修改</el-button>
       <el-button size="small" @click="visible=false">关闭</el-button>
     </div>
   </el-dialog>
@@ -68,6 +68,12 @@ export default {
     },
     teamId: {
       type: Number
+    },
+    userSelected: {
+      type: Array,
+      default: function () {
+        return []
+      }
     }
   },
   data() {
@@ -86,11 +92,16 @@ export default {
         label: 'orgname'
       },
       orgUsers: [],
-      userSelected: [],
-      listQuery: { name: undefined }
+      listQuery: { name: undefined },
+      originUser: [] 
     }
   },
-  computed: {},
+  computed: {
+    isSelectedChanged() {
+      const selectedUserIds = this.getSelectedUserId(this.userSelected)
+      return JSON.stringify(selectedUserIds.sort()) === JSON.stringify(this.originUser.sort())
+    }
+  },
   created() { },
   mounted() { },
   watch: {
@@ -106,6 +117,9 @@ export default {
       getAllOrg().then(res => {
         this.orgTree[0].children[0].children = res
       })
+
+      this.originUser = this.getSelectedUserId(this.userSelected)
+
       // 通过teamId获取当前的成员，存到userSelected中
       // const vals = {}
       // modifyTeamUsers(this.teamId, [7]).then(res => {
@@ -161,19 +175,21 @@ export default {
       queryUser(this.listQuery).then(res => { this.orgUsers = res.data.rows }).then(() => { this.filterSelection() })
     },
     filterSelection() {
-      if (this.userSelected.length !== 0) {
-        this.$refs.usersTable.clearSelection()
-        for (const i in this.userSelected) {
-          this.orgUsers.forEach(element => {
-            if (element.id === this.userSelected[i].id) {
-              this.$refs.usersTable.toggleRowSelection(element, true)
-            }
-          })
-        }
-      } else { this.$refs.usersTable.clearSelection() }
+      if (this.$refs.usersTable) {
+        if (this.userSelected.length !== 0) {
+          this.$refs.usersTable.clearSelection()
+          for (const i in this.userSelected) {
+            this.orgUsers.forEach(element => {
+              if (element.id === this.userSelected[i].id) {
+                this.$refs.usersTable.toggleRowSelection(element, true)
+              }
+            })
+          }
+        } else { this.$refs.usersTable.clearSelection() }
+      }
     },
     getSelectedUserId(userSelected) {
-      const userIds =[]
+      const userIds = []
       userSelected.forEach(item => {
         userIds.push(item.id)
       })
