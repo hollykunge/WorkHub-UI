@@ -26,11 +26,3 @@ export function modifyMemberPermission(obj) {
     data: obj
   })
 }
-
-// 删除成员
-export function deleteMember(userId) {
-  return fetch({
-    url: '/api/project/map/' + userId,
-    method: 'delete'
-  })
-}

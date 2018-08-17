@@ -28,53 +28,59 @@
       </el-row>
     </div>
     <div class="task-data-body">
-      <el-table :data="fileHeader" :show-header="false" class="file-table-header" empty-text="无更新记录">
-        <el-table-column align="left">
-          <template scope="scope">
-            <a><img :src="'../../../../' + avatar" height="20px" style="vertical-align: middle;"></a>
-            <a style="font-size: 13px; color: #0e6bf7;">{{scope.row.name}}</a>
-            <a style="font-size: 13px; color: #7b7373;">{{scope.row.comment}}</a>
-          </template>
-        </el-table-column>
-        <el-table-column align="right">
-          <template scope="scope">
-            <span style="color: #7b7373; font-size: 13px;">最新提交
-              <a style="background-color: #dadde2;border-radius: 5px;font-size: 12px;padding: 6px 10px 4px 10px;">{{scope.row.hashCode}}</a>{{scope.row.time}}
-            </span>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-table :data="fileList" :show-header="false">
-        <el-table-column align="left">
-          <template scope="scope">
-            <span>
-              <a>
-                <icon v-if="scope.row.isFolder" name="folder-open-o"></icon>
-                <icon v-if="!scope.row.isFolder" name="file-text-o"></icon>
-                {{scope.row.fileName}}
-              </a>
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center">
-          <template scope="scope">
-            <span style="color: #7b7373; font-size: 13px;">
-              <a>
-                {{scope.row.comment}}
-              </a>
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column align="right">
-          <template scope="scope">
-            <span style="color: #7b7373; font-size: 13px;">
-              <a>
-                {{scope.row.time}}
-              </a>
-            </span>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div class="task-data-body-empty" v-if="fileList.length == 0">
+        <h4>暂无数据文件</h4>
+      </div>
+      <div class="task-data-body-list" v-else>
+        <el-table :data="fileHeader" v-loading.body="listLoading" :show-header="false" class="file-table-header" empty-text="无更新记录">
+          <el-table-column align="left">
+            <template scope="scope">
+              <a><img :src="'../../../../' + avatar" height="20px" style="vertical-align: middle;"></a>
+              <a style="font-size: 13px; color: #586069;">{{scope.row.name}}</a>
+              <a style="font-size: 13px; color: #586069;">{{scope.row.comment}}</a>
+            </template>
+          </el-table-column>
+          <el-table-column align="right">
+            <template scope="scope">
+              <span style="color: #586069; font-size: 13px;">最新提交
+                <a style="background-color: #dadde2;border-radius: 5px;font-size: 12px;padding: 6px 10px 4px 10px;">{{scope.row.hashCode}}</a>{{scope.row.time}}
+              </span>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <el-table :data="fileList" :show-header="false">
+          <el-table-column align="left">
+            <template scope="scope">
+              <span>
+                <a>
+                  <icon v-if="scope.row.isFolder" name="folder-open-o"></icon>
+                  <icon v-if="!scope.row.isFolder" name="file-text-o"></icon>
+                  {{scope.row.fileName}}
+                </a>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center">
+            <template scope="scope">
+              <span style="color: #7b7373; font-size: 13px;">
+                <a>
+                  {{scope.row.comment}}
+                </a>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column align="right">
+            <template scope="scope">
+              <span style="color: #7b7373; font-size: 13px;">
+                <a>
+                  {{scope.row.time}}
+                </a>
+              </span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
     <!-- <div class="temp-area">
       <data-table></data-table>
@@ -86,7 +92,7 @@
 import propertySelect from 'src/views/components/propertySelect'
 import dataTable from './dataTable'
 import { mapGetters } from 'vuex'
-import { getFileList } from 'api/project/task/index'
+import { getFileList, getObj } from 'api/project/task/index'
 export default {
   props: ['projectId', 'taskId'],
   components: { propertySelect, dataTable },
@@ -99,26 +105,35 @@ export default {
       branches: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
       // ***************************文件列表数据************************************
       fileHeader: [{ name: 'jihainan', hashCode: 'b2a5e260d4', comment: '修改表头样式', time: '一个小时之前' }],
-      fileList: [{ fileName: '文件夹1', comment: '提交测试', time: '一分钟前', isFolder: true }, { fileName: '文件1.doc', comment: '文件测试', time: '刚刚', isFolder: false }]
+      // fileList: [{ fileName: '文件夹1', comment: '提交测试', time: '一分钟前', isFolder: true }, { fileName: '文件1.doc', comment: '文件测试', time: '刚刚', isFolder: false }]
+      fileList: [],
+      listLoading: false,
+      listQuery: {
+        limit: 10,
+        page: 1,
+      }
     }
   },
   watch: {
   },
   computed: {
-    ...mapGetters(['avatar'])
+    ...mapGetters(['avatar', 'userId'])
   },
   created() {
-    // 进入到详情页自动获取后台数据
-    // this.getTaskData()
-    getFileList({limit: 10, page: 1, crtUser: 1, taskId: 15}).then(res => {
-      console.log(res)
+    this.listQuery.taskId = this.taskId
+    getObj(this.taskId).then(taskInfo => {
+      this.listQuery.taskName = taskInfo.data.taskName
+      this.getTaskData()
     })
   },
   methods: {
     getTaskData() {
-      // getTaskData(this.taskId).then(res => {
-      //   this.branches = res.data.branches
-      // })
+      this.listLoading = true
+      getFileList(this.listQuery).then(res => {
+        console.log(res)
+        this.fileList = res
+        this.listLoading = false
+      })
     },
     handleBranchChanged(newBranch) {
       console.log(newBranch)
@@ -169,10 +184,23 @@ export default {
   }
   &-body {
     margin: 0 30px 0 20px;
-    .file-table-header {
-      border-radius: 3px 3px 0 0;
-      .el-table__row {
-        background-color: #ffffff;
+    &-empty {
+      text-align: center;
+      background-color: #ffff;
+      h4 {
+        padding: 20px;
+      }
+    }
+    &-list {
+      .file-table-header {
+        border-radius: 3px 3px 0 0;
+
+        &.el-table--enable-row-hover .el-table__body tr:hover > td {
+          background-color: #f1f8ff;
+        }
+        .el-table__row {
+          background-color: #f1f8ff;
+        }
       }
     }
   }
