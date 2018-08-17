@@ -27,7 +27,7 @@
                 <el-rate v-model="scope.row.permission" @change="handleUpdate(scope.row)" show-text :texts="['查看', '只读', '读写', '管理']" :colors="['#99A9BF', '#F7BA2A', '#20d220']" :max="4" :low-threshold="1" :high-threshold="4"></el-rate>
                 <div slot="reference">
                   <el-tooltip content="单击修改权限" placement="right" effect="dark">
-                    <el-button :type="scope.row.permission == 4 ? 'success':'warning'" class="authrioty-button" size="small">
+                    <el-button :type="getButtonType(scope.row.permission)" class="authrioty-button" size="small">
                       <icon name="key"></icon>&nbsp;
                       <span>{{ getPermissionText(scope.row.permission) }}</span>
                     </el-button>
@@ -53,7 +53,7 @@
     </div>
     <!-- 邀请新成员对话框 -->
     <div class="list-dialog-box">
-      <link-user @confirmed="handleAddUser" :show.sync="dialogVisible"></link-user>
+      <link-user @confirmed="handleAddUser" :userSelected="userSelected" :show.sync="dialogVisible"></link-user>
     </div>
   </div>
 </template>
@@ -75,6 +75,7 @@ export default {
         limit: 10
       },
       total: 0,
+      userSelected: []
     }
   },
   computed: {
@@ -93,11 +94,31 @@ export default {
         })
         this.memberList = tempList
         this.total = res.data.total
-        console.log(res)
       })
     },
     // 处理邀请成员点击事件的方法
     handleInvite() {
+      this.userSelected = []
+      let tempList = []
+      if (this.total > this.listQuery.limit) {
+        const query = {}
+        query.taskId = this.taskId
+        query.limit = this.total
+        query.page = 1
+        getTaskMember(query).then(res => {
+          tempList = res.data.rows
+        })
+      } else {
+        tempList = this.memberList
+      }
+
+      tempList.forEach(item => {
+        const userItem ={}
+        userItem.id = item.userId
+        userItem.name = item.userName
+        this.userSelected.push(userItem)
+      })
+      
       this.dialogVisible = true
     },
     // 还要有一个判断当前用户是否已经在该小组的方法
@@ -146,7 +167,6 @@ export default {
           type: 'success',
           duration: 2000
         })
-        console.log(res)
       })
     },
     getPermissionText(val) {
@@ -162,6 +182,22 @@ export default {
           break
         case 4:
           return '管理'
+          break
+      }
+    },
+    getButtonType(val) {
+      switch(val) {
+        case 1:
+          return 'danger'
+          break
+        case 2:
+          return 'warning'
+          break
+        case 3:
+          return 'info'
+          break
+        case 4:
+          return 'success'
           break
       }
     }
