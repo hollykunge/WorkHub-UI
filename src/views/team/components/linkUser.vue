@@ -42,7 +42,7 @@
                 <el-tag v-for="tag in userSelected" :key="tag.id" @close="handleTagClose(tag)" :close-transition="false" :closable="true" type="primary">
                   <el-tooltip content="点击修改权限" placement="top" effect="dark">
                     <el-popover placement="top" width="160">
-                      <el-rate v-model="tag.permission" show-text :texts="['查看', '只读', '读写', '管理']" :colors="['#99A9BF', '#F7BA2A', '#20d220']" :max="4" :low-threshold="1" :high-threshold="4"></el-rate>
+                      <el-rate v-model="tag.permission" @change="permissionChanged = false" show-text :texts="['查看', '只读', '读写', '管理']" :colors="['#99A9BF', '#F7BA2A', '#20d220']" :max="4" :low-threshold="1" :high-threshold="4"></el-rate>
                       <div slot="reference">
                         {{ tag.name }}
                         <span style="color: green;"> / </span>
@@ -60,7 +60,7 @@
 
     <div slot="footer" class="link-user-footer">
       <!-- <el-button type="primary" size="small" @click="handleLink">关联已选用户</el-button> -->
-      <el-button type="primary" size="small" @click="handleConfirm" :disabled="isSelectedChanged">确认修改</el-button>
+      <el-button type="primary" size="small" @click="handleConfirm" :disabled="isSelectedChanged && permissionChanged">确认修改</el-button>
       <el-button size="small" @click="visible=false">关闭</el-button>
     </div>
   </el-dialog>
@@ -104,7 +104,8 @@ export default {
       },
       orgUsers: [],
       listQuery: { name: undefined },
-      originUser: []
+      originUser: [],
+      permissionChanged: true
     }
   },
   computed: {
