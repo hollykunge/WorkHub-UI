@@ -56,6 +56,7 @@
 <script>
 import linkUser from 'views/team/components/linkUser'
 import { getTaskMember, associateUser, modifyMemberPermission, deleteMember } from 'api/project/task/taskMember'
+import { getObj } from 'api/project/task/index'
 
 export default {
   props: ['projectId', 'taskId'],
@@ -70,7 +71,9 @@ export default {
         limit: 10
       },
       total: 0,
-      userSelected: []
+      originSelected: [], // 未更改前的成员列表
+      userSelected: [],
+      taskName: undefined
     }
   },
   computed: {
@@ -78,6 +81,9 @@ export default {
   created() {
     this.listQuery.taskId = this.taskId
     this.getMumberList()
+    getObj(this.taskId).then(res => {
+      this.taskName = res.data.taskName
+    })
   },
   methods: {
     getMumberList() {
@@ -102,15 +108,18 @@ export default {
         query.page = 1
         getTaskMember(query).then(res => {
           tempList = res.data.rows
+          this.originSelected = res.data.rows
         })
       } else {
         tempList = this.memberList
+        this.originSelected = this.memberList
       }
 
       tempList.forEach(item => {
         const userItem ={}
         userItem.id = item.userId
         userItem.name = item.userName
+        userItem.permission = item.permission
         this.userSelected.push(userItem)
       })
       
@@ -136,7 +145,27 @@ export default {
       })
     },
     handleAddUser(val) {
-      associateUser(this.taskId, { userIds: val.join() }).then(res => {
+      // 生成后台的数据格式
+      let data = [] // 向后台传的数据
+      for (let i = 0; i < val.length; i++) {
+        const item = val[i]
+        let detectionResult = this.originSelected.filter(element => element.userId === item.id) 
+        if (detectionResult.length) { // 原本已经存在的成员
+          detectionResult[0].permission = item.permission
+          data.push(detectionResult[0])
+        } else {
+          const obj = {}
+          obj.userId = item.id
+          obj.userName = item.name
+          obj.permission = item.permission
+          obj.taskId = this.taskId
+          obj.taskName = this.taskName
+          data.push(obj)
+        }
+        
+      }
+
+      associateUser(this.taskId, data).then(res => {
         this.getMumberList()
         this.dialogVisible = false
         this.$notify({
