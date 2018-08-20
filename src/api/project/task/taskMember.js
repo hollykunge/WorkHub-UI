@@ -14,7 +14,7 @@ export function associateUser(id, data) {
   return fetch({
     url: '/api/project/map/' + id,
     method: 'post',
-    params: data
+    data: data
   })
 }
 
@@ -24,13 +24,5 @@ export function modifyMemberPermission(obj) {
     url: '/api/project/map',
     method: 'put',
     data: obj
-  })
-}
-
-// 删除成员
-export function deleteMember(userId) {
-  return fetch({
-    url: '/api/project/map/' + userId,
-    method: 'delete'
   })
 }

@@ -39,7 +39,18 @@
             <el-col>
               <div class="selected-users">
                 <span class="lable">已选用户:</span>
-                <el-tag v-for="tag in userSelected" :key="tag.id" @close="handleTagClose(tag)" :close-transition="false" :closable="true" type="primary">{{tag.name}}</el-tag>
+                <el-tag v-for="tag in userSelected" :key="tag.id" @close="handleTagClose(tag)" :close-transition="false" :closable="true" type="primary">
+                  <el-tooltip content="点击修改权限" placement="top" effect="dark">
+                    <el-popover placement="top" width="160">
+                      <el-rate v-model="tag.permission" show-text :texts="['查看', '只读', '读写', '管理']" :colors="['#99A9BF', '#F7BA2A', '#20d220']" :max="4" :low-threshold="1" :high-threshold="4"></el-rate>
+                      <div slot="reference">
+                        {{ tag.name }}
+                        <span style="color: green;"> / </span>
+                        <span>{{ getPermissionText(tag.permission) }}</span>
+                      </div>
+                    </el-popover>
+                  </el-tooltip>
+                </el-tag>
               </div>
             </el-col>
           </el-row>
@@ -93,7 +104,7 @@ export default {
       },
       orgUsers: [],
       listQuery: { name: undefined },
-      originUser: [] 
+      originUser: []
     }
   },
   computed: {
@@ -107,7 +118,8 @@ export default {
   watch: {
     show() { this.visible = this.show },
     filterText(val) { this.$refs.orgTree.filter(val) },
-    userSelected() { this.filterSelection() }
+    userSelected() {      this.filterSelection()
+      console.log(this.userSelected)    }
   },
   methods: {
     handleClose() {
@@ -152,7 +164,11 @@ export default {
         }
       }
       if (flag === 1) {
-        this.userSelected.push(row)
+        const obj = {}
+        obj.id = row.id
+        obj.permission = 3
+        obj.name = row.name
+        this.userSelected.push(obj)
       } else {
         for (const i in this.userSelected) {
           if (this.userSelected[i].id === row.id) {
@@ -162,7 +178,7 @@ export default {
       }
     },
     handleConfirm() {
-      this.$emit('confirmed', this.getSelectedUserId(this.userSelected)) // 返回已选择的用户的ids
+      this.$emit('confirmed', this.userSelected) // 返回已选择的用户的ids
     },
     handleLink() {
       modifyTeamUsers(this.teamId, this.userSelected).then(res => {
@@ -188,12 +204,28 @@ export default {
         } else { this.$refs.usersTable.clearSelection() }
       }
     },
-    getSelectedUserId(userSelected) {
+    getSelectedUserId(userSelected) { // 获取已选用户的id数组
       const userIds = []
       userSelected.forEach(item => {
         userIds.push(item.id)
       })
       return userIds
+    },
+    getPermissionText(val) {
+      switch (val) {
+        case 1:
+          return '查看'
+          break
+        case 2:
+          return '只读'
+          break
+        case 3:
+          return '读写'
+          break
+        case 4:
+          return '管理'
+          break
+      }
     }
   }
 
@@ -217,8 +249,12 @@ export default {
       position: absolute;
       margin: -10px -15px;
     }
-    span {
+    .el-tag {
       margin: 10px;
+      display: inline-flex;
+      .el-icon-close {
+        top: 2px;
+      }
     }
   }
 }

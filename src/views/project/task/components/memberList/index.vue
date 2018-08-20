@@ -4,7 +4,7 @@
       <el-row type="flex" justify="start">
         <el-col>
           <div class="add-mumber-button">
-            <el-button type="success" v-waves icon="plus" size="small" @click="handleInvite">邀请新成员</el-button>
+            <el-button type="success" v-waves icon="edit" size="small" @click="handleInvite">修改成员</el-button>
           </div>
         </el-col>
       </el-row>
@@ -12,8 +12,8 @@
     <div class="list-body">
       <div>
         <el-table :data="memberList" v-loading.body="listLoading" empty-text="无参与成员" fit highlight-current-row style="width: 100%">
-          <el-table-column align="center" label="序号" type="index" header-align="center" width="300"></el-table-column>
-          <el-table-column align="left" label="用户">
+          <el-table-column align="center" label="序号" type="index" header-align="center" width="500"></el-table-column>
+          <el-table-column align="left" label="用户" width="100">
             <template scope="scope">
               <el-button type="text">
                 <icon name="user"></icon>&nbsp;
@@ -27,18 +27,13 @@
                 <el-rate v-model="scope.row.permission" @change="handleUpdate(scope.row)" show-text :texts="['查看', '只读', '读写', '管理']" :colors="['#99A9BF', '#F7BA2A', '#20d220']" :max="4" :low-threshold="1" :high-threshold="4"></el-rate>
                 <div slot="reference">
                   <el-tooltip content="单击修改权限" placement="right" effect="dark">
-                    <el-button :type="getButtonType(scope.row.permission)" class="authrioty-button" size="small">
+                    <el-button :type="getButtonType(scope.row.permission)" class="authrioty-button" size="small" plain>
                       <icon name="key"></icon>&nbsp;
                       <span>{{ getPermissionText(scope.row.permission) }}</span>
                     </el-button>
                   </el-tooltip>
                 </div>
               </el-popover>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" label="操作">
-            <template scope="scope">
-              <el-button type="danger" size="small" @click="handleDelete(scope.row)" plain>移除成员</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -61,6 +56,7 @@
 <script>
 import linkUser from 'views/team/components/linkUser'
 import { getTaskMember, associateUser, modifyMemberPermission, deleteMember } from 'api/project/task/taskMember'
+import { getObj } from 'api/project/task/index'
 
 export default {
   props: ['projectId', 'taskId'],
@@ -75,7 +71,9 @@ export default {
         limit: 10
       },
       total: 0,
-      userSelected: []
+      originSelected: [], // 未更改前的成员列表
+      userSelected: [],
+      taskName: undefined
     }
   },
   computed: {
@@ -83,6 +81,9 @@ export default {
   created() {
     this.listQuery.taskId = this.taskId
     this.getMumberList()
+    getObj(this.taskId).then(res => {
+      this.taskName = res.data.taskName
+    })
   },
   methods: {
     getMumberList() {
@@ -107,15 +108,18 @@ export default {
         query.page = 1
         getTaskMember(query).then(res => {
           tempList = res.data.rows
+          this.originSelected = res.data.rows
         })
       } else {
         tempList = this.memberList
+        this.originSelected = this.memberList
       }
 
       tempList.forEach(item => {
         const userItem ={}
         userItem.id = item.userId
         userItem.name = item.userName
+        userItem.permission = item.permission
         this.userSelected.push(userItem)
       })
       
@@ -130,24 +134,6 @@ export default {
       this.listQuery.page = val
       this.getMumberList()
     },
-    handleDelete(row) {
-      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteMember(row.id).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
-          const index = this.memberList.indexOf(row) // 删除列表中对应的项
-          this.memberList.splice(index, 1)
-        })
-      })
-    },
     handleUpdate(row) {
       modifyMemberPermission(row).then(() => {
         this.$notify({
@@ -159,7 +145,28 @@ export default {
       })
     },
     handleAddUser(val) {
-      associateUser(this.taskId, { userIds: val.join() }).then(res => {
+      // 生成后台的数据格式
+      let data = [] // 向后台传的数据
+      for (let i = 0; i < val.length; i++) {
+        const item = val[i]
+        let detectionResult = this.originSelected.filter(element => element.userId === item.id) 
+        if (detectionResult.length) { // 原本已经存在的成员
+          detectionResult[0].permission = item.permission
+          data.push(detectionResult[0])
+        } else {
+          const obj = {}
+          obj.userId = item.id
+          obj.userName = item.name
+          obj.permission = item.permission
+          obj.taskId = this.taskId
+          obj.taskName = this.taskName
+          data.push(obj)
+        }
+        
+      }
+
+      associateUser(this.taskId, data).then(res => {
+        this.getMumberList()
         this.dialogVisible = false
         this.$notify({
           title: '成功',
