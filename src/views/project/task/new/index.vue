@@ -16,7 +16,7 @@
               </el-select>
             </el-form-item>
           </div>
-          
+
           <div class="task-info">
             <el-form-item prop="taskProjectName">
               <p class="subheader-label">任务所属项目</p>
@@ -38,6 +38,17 @@
           </el-form-item>
           <el-form-item label="公开问题" prop="allowPublicIssues" style="width: 350px">
             <el-switch v-model="form.allowPublicIssues" on-text="是" off-text="否"></el-switch>
+          </el-form-item>
+        </div>
+
+        <div class="task-access-control">
+          <el-form-item label="访问权限" prop="accessRestriction" style="width: 700px">
+            <el-radio-group v-model="form.accessRestriction">
+              <!-- NONE -->
+              <el-radio :label="0">私有</el-radio>
+              <!-- CLONE -->
+              <el-radio :label="2">公开</el-radio>
+            </el-radio-group>
           </el-form-item>
         </div>
 
@@ -96,7 +107,8 @@ export default {
         taskCreatorId: undefined, // 任务创建人id
         defaultBranch: undefined, // 默认分支
         enableIssues: undefined, // 是否允许提问
-        allowPublicIssues: undefined // 允许公共问题
+        allowPublicIssues: undefined, // 允许公共问题
+        accessRestriction: 2 // 访问权限 0-NONE 1-VIEW 2-CLONE 3-PUSH
       },
       rules: {
         taskProjectName: {
@@ -127,6 +139,9 @@ export default {
           required: true
         },
         allowPublicIssues: {
+          required: true
+        },
+        accessRestriction: {
           required: true
         }
       },
@@ -291,9 +306,9 @@ export default {
       }
       .task-executor {
         .subheader-label {
-        font-weight: 600;
-        margin-bottom: 0px;
-        margin-top: 0px;
+          font-weight: 600;
+          margin-bottom: 0px;
+          margin-top: 0px;
         }
         .el-select .el-input__inner {
           cursor: pointer;
@@ -306,9 +321,9 @@ export default {
         width: 700px;
         margin-bottom: 24px;
         .subheader-label {
-        font-weight: 600;
-        margin-bottom: 0px;
-        margin-top: 0px;
+          font-weight: 600;
+          margin-bottom: 0px;
+          margin-top: 0px;
         }
         .subheader-slash {
           margin: 0 8px;
@@ -327,6 +342,16 @@ export default {
       height: 48px;
       margin-bottom: 16px;
       border-bottom: 1px #e1e4e8 solid;
+    }
+    .task-access-control {
+      display: flex;
+      width: 700px;
+      height: 48px;
+      margin-bottom: 16px;
+      border-bottom: 1px #e1e4e8 solid;
+      .el-radio:nth-child(2) {
+        margin-left: 200px;
+      }
     }
     .task-create-footer {
       float: right;

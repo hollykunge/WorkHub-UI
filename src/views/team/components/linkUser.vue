@@ -119,8 +119,7 @@ export default {
   watch: {
     show() { this.visible = this.show },
     filterText(val) { this.$refs.orgTree.filter(val) },
-    userSelected() {      this.filterSelection()
-      console.log(this.userSelected)    }
+    userSelected() { this.filterSelection() }
   },
   methods: {
     handleClose() {
@@ -132,13 +131,6 @@ export default {
       })
 
       this.originUser = this.getSelectedUserId(this.userSelected)
-
-      // 通过teamId获取当前的成员，存到userSelected中
-      // const vals = {}
-      // modifyTeamUsers(this.teamId, [7]).then(res => {
-      //   console.log('---------')
-      //   console.log(res)
-      // })
     },
     filterOrgNode(value, data) { // 筛选组织树节点
       if (!value) return true
@@ -183,7 +175,6 @@ export default {
     },
     handleLink() {
       modifyTeamUsers(this.teamId, this.userSelected).then(res => {
-        console.log('---------')
         console.log(res)
       })
     },

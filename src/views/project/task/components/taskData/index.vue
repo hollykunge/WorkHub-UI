@@ -121,6 +121,7 @@ export default {
   },
   created() {
     this.listQuery.taskId = this.taskId
+    this.listQuery.crtUser = this.userId
     getObj(this.taskId).then(taskInfo => {
       this.listQuery.taskName = taskInfo.data.taskName
       this.getTaskData()
