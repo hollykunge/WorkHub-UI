@@ -14,7 +14,7 @@ export function associateUser(id, data) {
   return fetch({
     url: '/api/project/map/' + id,
     method: 'post',
-    params: data
+    data: data
   })
 }
 
