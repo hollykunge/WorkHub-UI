@@ -49,14 +49,14 @@
           </el-table-column>
         </el-table>
 
-        <el-table :data="fileList" :show-header="false">
+        <el-table :data="fileList" v-loading.body="listLoading" :show-header="false">
           <el-table-column align="left">
             <template scope="scope">
               <span>
                 <a>
                   <icon v-if="scope.row.isFolder" name="folder-open-o"></icon>
                   <icon v-if="!scope.row.isFolder" name="file-text-o"></icon>
-                  {{scope.row.fileName}}
+                  {{scope.row.name}}
                 </a>
               </span>
             </template>
@@ -65,7 +65,7 @@
             <template scope="scope">
               <span style="color: #7b7373; font-size: 13px;">
                 <a>
-                  {{scope.row.comment}}
+                  {{scope.row.path}}
                 </a>
               </span>
             </template>
@@ -74,12 +74,19 @@
             <template scope="scope">
               <span style="color: #7b7373; font-size: 13px;">
                 <a>
-                  {{scope.row.time}}
+                  {{scope.row.size}}kb
                 </a>
               </span>
             </template>
           </el-table-column>
         </el-table>
+      </div>
+      <div class="task-data-footer">
+        <el-row type="flex" justify="center">
+          <div v-show="!listLoading" class="pagination-container">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total"> </el-pagination>
+          </div>
+        </el-row>
       </div>
     </div>
     <!-- <div class="temp-area">
@@ -105,13 +112,14 @@ export default {
       branches: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
       // ***************************文件列表数据************************************
       fileHeader: [{ name: 'jihainan', hashCode: 'b2a5e260d4', comment: '修改表头样式', time: '一个小时之前' }],
-      // fileList: [{ fileName: '文件夹1', comment: '提交测试', time: '一分钟前', isFolder: true }, { fileName: '文件1.doc', comment: '文件测试', time: '刚刚', isFolder: false }]
+      // test: [{ name: '文件', path: '文件路径', size: 12, filestoreItem: '', mode: 1, objectId: '342', commitId: '567', isParentPath: true }],
       fileList: [],
       listLoading: false,
       listQuery: {
         limit: 10,
         page: 1,
-      }
+      },
+      total: 0
     }
   },
   watch: {
@@ -132,7 +140,8 @@ export default {
       this.listLoading = true
       getFileList(this.listQuery).then(res => {
         console.log(res)
-        this.fileList = res
+        this.fileList = res.data.rows
+        this.total = res.data.total
         this.listLoading = false
       })
     },
@@ -140,13 +149,18 @@ export default {
       console.log(newBranch)
     },
     handleCreate() {
-      // this.$router.push()
-      // console.log(this.$router.props)
       this.$router.push('/projectSys/allProjects/' + this.projectId + '/' + this.taskId + '/' + 'new')
     },
     handleUpload() {
-      // this.$emit('toggleStatus', 'upload')
       this.$router.push({ name: '文件上传' })
+    },
+    handleSizeChange(val) {
+      this.listQuery.limit = val
+      this.getTaskData()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.page = val
+      this.getTaskData()
     },
     switchView(val) {
       console.log(val)
