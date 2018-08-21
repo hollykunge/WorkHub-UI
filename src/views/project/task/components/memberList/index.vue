@@ -13,7 +13,7 @@
       <div>
         <el-table :data="memberList" v-loading.body="listLoading" empty-text="无参与成员" fit highlight-current-row style="width: 100%">
           <el-table-column align="center" label="序号" type="index" header-align="center" width="500"></el-table-column>
-          <el-table-column align="left" label="用户" width="100">
+          <el-table-column align="left" label="用户" width="200">
             <template scope="scope">
               <el-button type="text">
                 <icon name="user"></icon>&nbsp;
@@ -26,7 +26,7 @@
               <el-popover ref="permission" placement="top" width="160">
                 <el-rate v-model="scope.row.permission" @change="handleUpdate(scope.row)" show-text :texts="['查看', '只读', '读写', '管理']" :colors="['#99A9BF', '#F7BA2A', '#20d220']" :max="4" :low-threshold="1" :high-threshold="4"></el-rate>
                 <div slot="reference">
-                  <el-tooltip content="单击修改权限" placement="right" effect="dark">
+                  <el-tooltip content="点击修改权限" placement="right" effect="dark">
                     <el-button :type="getButtonType(scope.row.permission)" class="authrioty-button" size="small" plain>
                       <icon name="key"></icon>&nbsp;
                       <span>{{ getPermissionText(scope.row.permission) }}</span>
@@ -87,10 +87,11 @@ export default {
   },
   methods: {
     getMumberList() {
+      this.memberList = []
       getTaskMember(this.listQuery).then(res => {
         const tempList = res.data.rows
         tempList.forEach(element => {
-          const permission = parseInt(element.permission)
+          const permission = parseInt(element.permission) + 1
           element.permission = permission
         })
         this.memberList = tempList
@@ -100,29 +101,20 @@ export default {
     // 处理邀请成员点击事件的方法
     handleInvite() {
       this.userSelected = []
-      let tempList = []
       if (this.total > this.listQuery.limit) {
         const query = {}
         query.taskId = this.taskId
         query.limit = this.total
         query.page = 1
         getTaskMember(query).then(res => {
-          tempList = res.data.rows
           this.originSelected = res.data.rows
+          this.getUserSelected(res.data.rows)
         })
       } else {
-        tempList = this.memberList
         this.originSelected = this.memberList
+        this.getUserSelected(this.memberList)
       }
 
-      tempList.forEach(item => {
-        const userItem ={}
-        userItem.id = item.userId
-        userItem.name = item.userName
-        userItem.permission = item.permission
-        this.userSelected.push(userItem)
-      })
-      
       this.dialogVisible = true
     },
     // 还要有一个判断当前用户是否已经在该小组的方法
@@ -135,7 +127,15 @@ export default {
       this.getMumberList()
     },
     handleUpdate(row) {
-      modifyMemberPermission(row).then(() => {
+      const _row = {}
+      _row.id = row.id
+      _row.permission = row.permission - 1
+      _row.taskId = row.taskId
+      _row.taskName = row.taskName
+      _row.userId = row.userId
+      _row.userName = row.userName
+
+      modifyMemberPermission(_row).then(() => {
         this.$notify({
           title: '成功',
           message: '修改成功',
@@ -149,20 +149,26 @@ export default {
       let data = [] // 向后台传的数据
       for (let i = 0; i < val.length; i++) {
         const item = val[i]
-        let detectionResult = this.originSelected.filter(element => element.userId === item.id) 
+        let detectionResult = this.originSelected.filter(element => element.userId === item.id)
         if (detectionResult.length) { // 原本已经存在的成员
-          detectionResult[0].permission = item.permission
-          data.push(detectionResult[0])
+          const result = {}
+          result.id = detectionResult[0].id
+          result.permission = item.permission - 1
+          result.taskId = detectionResult[0].taskId
+          result.taskName = detectionResult[0].taskName
+          result.userId = detectionResult[0].userId
+          result.userName = detectionResult[0].userName
+
+          data.push(result)
         } else {
           const obj = {}
           obj.userId = item.id
           obj.userName = item.name
-          obj.permission = item.permission
+          obj.permission = item.permission - 1
           obj.taskId = this.taskId
           obj.taskName = this.taskName
           data.push(obj)
         }
-        
       }
 
       associateUser(this.taskId, data).then(res => {
@@ -177,7 +183,7 @@ export default {
       })
     },
     getPermissionText(val) {
-      switch(val) {
+      switch (val) {
         case 1:
           return '查看'
           break
@@ -193,7 +199,7 @@ export default {
       }
     },
     getButtonType(val) {
-      switch(val) {
+      switch (val) {
         case 1:
           return 'danger'
           break
@@ -207,6 +213,20 @@ export default {
           return 'success'
           break
       }
+    },
+    getUserSelected(val) {
+      val.forEach(item => {
+        const userItem = {}
+        userItem.id = item.userId
+        userItem.name = item.userName
+        if (this.total > this.listQuery.limit) {
+          userItem.permission = parseInt(item.permission) + 1
+        } else {
+          userItem.permission = item.permission
+        }
+
+        this.userSelected.push(userItem)
+      })
     }
   }
 
