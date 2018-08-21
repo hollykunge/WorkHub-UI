@@ -40,8 +40,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{
@@ -85,14 +85,7 @@ export default {
     },
     generateBackground() {
       const loginContainer = document.getElementById('login')
-      const i = Math.random()
-      if (i < 0.1) {
-        loginContainer.style.backgroundImage = 'url(../../../static/images/login_bg_dark.jpg)'
-      } else if (i > 0.3) {
-        loginContainer.style.backgroundImage = 'url(../../../static/images/login_bg_fireworks.jpg)'
-      } else {
-        loginContainer.style.backgroundImage = 'url(../../../static/images/login_bg_green.jpg)'
-      }
+      loginContainer.style.backgroundImage = 'url(../../../static/images/login_bg.jpg)'
     }
   },
   created() {
@@ -118,7 +111,6 @@ export default {
   @include relative;
   height: 100vh;
   background-size: 100% 100%;
-  background-image: url(../../../static/images/login_bg_green.jpg);
   input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 1000px #293444 inset !important;
     -webkit-text-fill-color: #fff !important;
@@ -129,10 +121,9 @@ export default {
     -webkit-appearance: none;
     border-radius: 0;
     padding: 12px 40px 12px 0px;
-    color: #eeeeee;
+    color: #000000;
     height: 43px;
     text-align: center;
-    // margin-left: 45%;
   }
   .el-input {
     display: inline-block;
@@ -140,10 +131,27 @@ export default {
     width: 83%;
     font-size: 18px;
     text-align: center;
+    &__inner {
+      &::placeholder {
+        color: #000;
+      }
+      &::-webkit-input-placeholder { /*Webkit browsers*/
+        color: #000;
+      }
+      &:-moz-placeholder { /*Mozilla Firefox 4 to 8*/
+        color: #000;
+      }
+      &::moz-placeholder { /*Mozilla Firefox 19+*/
+        color: #000;
+      }
+      &:-ms-input-placeholder { /*Internet Explorer 10+*/
+        color: #000;
+      }
+    }
   }
   .svg-container {
     padding: 6px 5px 6px 26px;
-    color: #889aa4;
+    color: #000c;
     .username-icon {
       margin: 0px 11px -5px -5px;
       font-size: 20px;
@@ -152,26 +160,30 @@ export default {
   .title {
     font-size: 26px;
     font-weight: 400;
-    color: #eeeeee;
+    color: #000000;
     margin: 0 auto 40px;
     text-align: center;
     font-weight: bold;
   }
   .login-form {
     position: absolute;
-    // top: 15%;
     left: 0;
     right: 0;
     width: 400px;
     padding: 35px 35px 15px;
-    margin: 120px auto;
-    background: rgba(0, 0, 0, 0.4);
+    margin: 270px auto;
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+    border-radius: 3px;
   }
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.85);
     border-radius: 5px;
     color: #454545;
+    &__error {
+      font-size: inherit;
+      left: 40%;
+    }
   }
   .forget-pwd {
     color: #fff;
