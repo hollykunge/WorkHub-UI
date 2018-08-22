@@ -42,17 +42,32 @@
 </template>
 
 <script>
+import { getActivity } from 'api/project/activity/index'
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
       messageList: [],
       displayedList: [],
       isLoadMore: false,
-      loadMoreCounter: 0
+      loadMoreCounter: 0,
+      listQuery: {
+        limit: 10,
+        page: 1,
+        dayBack: 7
+      }
     }
   },
+  computed: {
+    ...mapGetters(['userId'])
+  },
   created() {
+    this.listQuery.crtUser = this.userId
     this.getMessageList(this.activeItem)
+    getActivity(this.listQuery).then(res => {
+      console.log(res)
+    })
   },
   mounted() {
     this.loadMore()
