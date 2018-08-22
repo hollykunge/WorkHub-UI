@@ -22,7 +22,7 @@
       </el-row>
     </div>
     <div class="issues-list">
-      <el-table :data="issueHeader" :show-header="false" class="file-table-header" empty-text="无更新记录">
+      <el-table :data="issueHeader" v-loading.body="listLoading" :show-header="false" class="file-table-header" empty-text="无更新记录">
         <el-table-column align="left">
           <template scope="scope">
             <span v-show="scope" style="font-size: 13px;">
@@ -46,7 +46,7 @@
         </el-table-column>
       </el-table>
 
-      <el-table :data="issueList" :show-header="false">
+      <el-table :data="issueList" v-loading.body="listLoading" :show-header="false">
         <el-table-column align="left">
           <template scope="scope">
             <div class="pull-request-description">
@@ -72,8 +72,14 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="task-issue-footer">
+      <el-row type="flex" justify="center">
+        <div v-show="!listLoading" class="pagination-container">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total"> </el-pagination>
+        </div>
+      </el-row>
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -91,7 +97,14 @@ export default {
       requestType: { closed: false, currentUser: '' },
 
       issueHeader: [{ name: 'jihainan', hashCode: 'b2a5e260d4', comment: '修改表头样式', time: '一个小时之前' }],
-      issueList: [{ id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一天前提出', isFolder: true }, { id: 2, title: '添加window10支持', tips: '#450 test在十分钟前提出', commentNum: '0', isFolder: false }] }
+      issueList: [{ id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一天前提出', isFolder: true }, { id: 2, title: '添加window10支持', tips: '#450 test在十分钟前提出', commentNum: '0', isFolder: false }],
+      listLoading: false,
+      listQuery: {
+        limit: 10,
+        page: 1,
+      },
+      total: 0
+    }
   },
   watch: {
     // 监听requestType，当变化时根据requestType的值重新获取request列表
@@ -153,8 +166,16 @@ export default {
     // },
     handleCheckIssue(row) {
       console.log(row)
-      this.$router.push({ name: '任务问题详情', params: { issueId: row.id }})
-    }
+      this.$router.push({ name: '任务问题详情', params: { issueId: row.id } })
+    },
+    handleSizeChange(val) {
+      this.listQuery.limit = val
+      // this.getTaskData()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.page = val
+      // this.getTaskData()
+    },
   }
 }
 </script>

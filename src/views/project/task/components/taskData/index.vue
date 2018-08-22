@@ -54,8 +54,8 @@
             <template scope="scope">
               <span>
                 <a>
-                  <icon v-if="scope.row.isFolder" name="folder-open-o"></icon>
-                  <icon v-if="!scope.row.isFolder" name="file-text-o"></icon>
+                  <icon v-if="!scope.row.file" name="folder-open-o"></icon>
+                  <icon v-if="scope.row.file" name="file-text-o"></icon>
                   {{scope.row.name}}
                 </a>
               </span>
