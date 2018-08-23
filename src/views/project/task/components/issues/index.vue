@@ -84,6 +84,8 @@
 
 <script>
 import propertySelect from 'src/views/components/propertySelect'
+import { getIssue, addIssue, putIssue, delIssue} from 'api/project/issue/index'
+
 export default {
   components: { propertySelect },
   data() {
