@@ -97,11 +97,11 @@ export default {
       newNotices: true
     }
   },
-  computed: { ...mapGetters([
-    'sidebar',
-    'name',
-    'avatar'
-  ])
+  computed: {    ...mapGetters([
+      'sidebar',
+      'name',
+      'avatar'
+    ])
   },
   mounted() {
     this.$refs.input.$refs.input.style.border = '0px solid #bfcbd9'
@@ -248,5 +248,8 @@ export default {
   font-size: 14px;
   margin: 15px 0;
   border-radius: 3px;
+  .el-dropdown-menu__item {
+    line-height: 30px;
+  }
 }
 </style>
