@@ -16,22 +16,33 @@
       <el-row type="flex" justify="center">
         <el-col>
           <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row empty-text="无任务数据" style="width: 100%">
-            <el-table-column label="序号" type="index" align="center" width="65"></el-table-column>
-            <el-table-column label="任务名称" prop="taskName" align="center"></el-table-column>
-            <el-table-column label="所属项目" prop="taskProjectName" align="center"></el-table-column>
-            <el-table-column label="负责人id" prop="taskExecutorId" align="center"></el-table-column>
-            <el-table-column label="任务进度" prop="taskProcess" align="center">
+            <el-table-column label="序号" prop="taskId" type="index" align="center" width="65"></el-table-column>
+            <el-table-column label="任务名称" prop="taskName" align="center">
               <template scope="scope">
-
-                <el-progress :stroke-width="8" :percentage="scope.row.taskProcess*25" :status="scope.row.taskProcess==4?'success':''"></el-progress>
-
+                <span>{{scope.row.taskName.match(/\/(\S*)(?=.git)/)[1]}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="crtTime" align="center"></el-table-column>
-            <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center"></el-table-column>
-            <el-table-column align="center" label="操作" fixed="right">
+            <el-table-column label="所属项目" prop="taskProjectName" align="center"></el-table-column>
+            <el-table-column label="负责人" prop="taskExecutorId" align="center"></el-table-column>
+            <el-table-column label="优先级" prop="taskId" align="center" width="80">
               <template scope="scope">
-                <el-button size="small" type="primary" @click="handleCheck(scope.row)" plain>查看
+                <el-tag v-if="scope.row.taskId" type="danger">高</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center">
+              <template scope="scope">
+                <span>{{timestamp2Time(scope.row.taskPlanEnd, "{y}-{m}-{d}")}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="进度" prop="taskProcess" align="center">
+              <template scope="scope">
+                <el-progress :percentage="scope.row.taskProcess*25" :status="scope.row.taskProcess==4?'success':''"></el-progress>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="操作" fixed="right" width="150px">
+              <template scope="scope">
+                <el-button v-if="scope.row.status" size="small" type="success" @click="handleCheck(scope.row)" plain>处理</el-button>
+                <el-button v-if="!scope.row.status" size="small" type="primary" @click="handleCheck(scope.row)" plain>查看
                 </el-button>
                 <el-button size="small" type="danger" @click="handleDelete(scope.row)" plain>删除
                 </el-button>
@@ -51,11 +62,12 @@
 
 <script>
 import { page, delObj, joined } from 'api/project/task/index'
+import { parseTime } from 'utils/index'
 import { mapGetters } from 'vuex'
 
 export default {
   component: {},
-  data () {
+  data() {
     return {
       listQuery: {
         page: 1,
@@ -75,12 +87,12 @@ export default {
       'elements'
     ])
   },
-  created () {
+  created() {
     this.getTaskList()
   },
-  mounted () { },
+  mounted() { },
   methods: {
-    getTaskList () {
+    getTaskList() {
       this.listLoading = true
       const routerName = this.$route.name
       switch (routerName) {
@@ -112,24 +124,24 @@ export default {
       }
     },
     handleCreate() {
-      this.$router.push({name: '创建任务'})
+      this.$router.push({ name: '创建任务' })
     },
     handleFilter() {
       this.getTaskList()
     },
 
-    handleSizeChange (val) {
+    handleSizeChange(val) {
       this.listQuery.limit = val
       this.getTaskList()
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.listQuery.page = val
       this.getTaskList()
     },
-    handleCheck (task) {
+    handleCheck(task) {
       this.$router.push({ name: '任务详情', params: { projectId: task.taskProjectId, taskId: task.taskId } })
     },
-    handleDelete (row) {
+    handleDelete(row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -148,6 +160,9 @@ export default {
       }, () => {
         return
       })
+    },
+    timestamp2Time(timestamp, cFormat) {
+      return parseTime(timestamp, cFormat)
     }
   }
 }
