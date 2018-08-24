@@ -108,7 +108,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .navigation-box {
   max-width: 350px;
-  margin-top: 40px;
+  margin-top: 78px;
   margin-left: 60px;
   .el-card {
     background-color: #f0f2f5;
