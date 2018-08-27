@@ -53,19 +53,19 @@
               <icon name="question-circle-o" style="color: #13ce66; margin-top: 2px; font-size: 17px;"></icon>
               <div class="pull-request-description-title">
                 <h3 @click="handleCheckIssue(scope.row)">
-                  <a>{{scope.row.title}}</a>
+                  <a>{{scope.row.name}}</a>
                 </h3>
-                <span>{{scope.row.tips}}</span>
+                <span>#{{scope.row.issueIndex}} {{scope.row.crtName}}在{{timestamp2Text(scope.row.crtTime)}}提出</span>
               </div>
             </div>
           </template>
         </el-table-column>
         <el-table-column align="right">
           <template scope="scope">
-            <span v-if="scope.row.commentNum!=0" style="color: #7b7373;">
+            <span v-if="scope.row.numComments!=0" style="color: #7b7373;">
               <a>
                 <icon name="comment-o"></icon>
-                {{scope.row.commentNum}}
+                {{scope.row.numComments}}
               </a>
             </span>
           </template>
@@ -84,7 +84,8 @@
 
 <script>
 import propertySelect from 'src/views/components/propertySelect'
-import { getIssue, addIssue, putIssue, delIssue} from 'api/project/issue/index'
+import { getIssue, addIssue, putIssue, delIssue, allIssue, pageIssue} from 'api/project/issue/index'
+import { formatTime } from 'utils/index'
 
 export default {
   components: { propertySelect },
@@ -99,7 +100,8 @@ export default {
       requestType: { closed: false, currentUser: '' },
 
       issueHeader: [{ name: 'jihainan', hashCode: 'b2a5e260d4', comment: '修改表头样式', time: '一个小时之前' }],
-      issueList: [{ id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一天前提出', isFolder: true }, { id: 2, title: '添加window10支持', tips: '#450 test在十分钟前提出', commentNum: '0', isFolder: false }],
+      // { id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一天前提出', isFolder: true }
+      issueList: [],
       listLoading: false,
       listQuery: {
         limit: 10,
@@ -125,9 +127,20 @@ export default {
       return this.requestType.closed ? { color: '#96989b' } : { color: '#24292e' }
     }
   },
+  created() {
+    this.getIssueList()
+  },
   methods: {
+    getIssueList() {
+      this.listLoading = true
+      allIssue().then(res => {
+        this.listLoading = false
+        this.issueList = res
+        console.log(res)
+      })
+    },
     handleCreateIssues() {
-      console.log('新建问题')
+      this.$router.push({ name: '新建问题' })
     },
     handleIssuesFilter() {
       console.log('筛选问题')
@@ -178,6 +191,9 @@ export default {
       this.listQuery.page = val
       // this.getTaskData()
     },
+    timestamp2Text(timestamp) {
+      return formatTime(timestamp)
+    }
   }
 }
 </script>

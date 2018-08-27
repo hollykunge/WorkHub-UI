@@ -183,6 +183,11 @@ export const constantRouterMap = [{
       component: _import('project/task/components/pulls/newPull'),
       name: '新建合并请求',
       props: true
+    }, {
+      path: 'newIssue',
+      component: _import('project/task/components/issues/newIssue'),
+      name: '新建问题',
+      props: true
     }]
   }]
 }

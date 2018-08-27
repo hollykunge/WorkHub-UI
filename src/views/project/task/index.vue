@@ -102,6 +102,8 @@ export default {
         this.activeName = 'taskData'
       } else if (tab === 'conversation' || tab === 'commit' || tab === 'checks' || tab === 'filesChanged' || tab === 'newPull') {
         this.activeName = 'pullRequest'
+      } else if (tab === 'taskIssue' || tab === 'newIssue') {
+        this.activeName = 'taskIssue'
       } else {
         this.activeName = tab
       }
