@@ -7,7 +7,7 @@
           <span style="line-height: 0px; display: inline-flex;">
             <h3>任务列表</h3>
           </span>
-          <el-button style="float: right; padding:8px;" type="success" @click="handleCreateTask">新 建 任 务</el-button>
+          <el-button style="float: right; padding:8px;" type="success" @click="handleCreateTask">新建任务</el-button>
         </div>
         <div style="padding: 0px 15px; margin: 5px 0px;">
           <el-input v-model="taskFilterText" placeholder="搜索任务"></el-input>
@@ -108,7 +108,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .navigation-box {
   max-width: 350px;
-  margin-top: 40px;
+  margin-top: 78px;
   margin-left: 60px;
   .el-card {
     background-color: #f0f2f5;

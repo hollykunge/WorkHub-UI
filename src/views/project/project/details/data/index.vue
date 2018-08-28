@@ -36,7 +36,7 @@
             </el-table-column>
             <el-table-column label="进度" prop="taskProcess" align="center">
               <template scope="scope">
-                <el-progress :percentage="scope.row.taskProcess * 25"></el-progress>
+                <el-progress :percentage="scope.row.taskProcess * 25" :status="scope.row.taskProcess==4?'success':''"></el-progress>
               </template>
             </el-table-column>
             <el-table-column v-if="projectData_btn_edit || projectData_btn_del" align="left" label="操作" fixed="right" width="150px">

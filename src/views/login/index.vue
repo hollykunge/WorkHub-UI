@@ -171,7 +171,7 @@ export default {
     right: 0;
     width: 400px;
     padding: 35px 35px 15px;
-    margin: 270px auto;
+    margin: 270px auto auto auto;
     background: rgba(255, 255, 255, 0.65);
     box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
     border-radius: 3px;

@@ -4,7 +4,20 @@
       <el-col :span="16">
         <div class="dashboard-content">
           <div class="dashboard-content-body">
-            <activity-list></activity-list>
+            <el-tabs v-model="activeName">
+              <el-tab-pane v-for="(tab, index) in tabs" :key="index" :name="tab.name">
+                <span slot="label" @click="handleTabClick(tab.name)">
+                  <!-- <icon :name="tab.icon"></icon> -->
+                  {{tab.lable}}
+                  <!-- <el-badge v-if="tab.name=='projectData'" class="mark" :value="taskNum"></el-badge> -->
+                  <!-- <el-badge v-if="tab.name=='ProjectIssue'" class="mark" :value="1"></el-badge> -->
+                </span>
+              </el-tab-pane>
+            </el-tabs>
+            <keep-alive>
+              <router-view></router-view>
+            </keep-alive>
+
           </div>
         </div>
       </el-col>
@@ -14,40 +27,33 @@
         </div>
       </el-col>
     </el-row>
-    <el-row type="flex" align="center">
-      <el-col :span="23">
-        <workload-map class="calendar-heatmap"></workload-map>
-      </el-col>
-    </el-row>
   </div>
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
 import Sticky from 'src/components/Sticky/index'
-import { NavBox, WorkloadMap, ActivityList } from 'views/dashboard/components'
+import { NavBox } from 'views/dashboard/components'
 
 export default {
   name: 'dashboard',
-  components: { Sticky, NavBox, WorkloadMap, ActivityList },
+  components: { Sticky, NavBox },
   data() {
     return {
       notifications: [],
       updatings: [],
-      showNotice: false
+      showNotice: false,
+      activeName: '',
+      tabs: [
+        { name: 'activity', icon: 'list-ul', lable: '最新动态' },
+        { name: 'statistic', icon: 'users', lable: '数据统计' }]
     }
   },
-  // computed: {
-  //   ...mapGetters([
-  //     'name',
-  //     'avatar',
-  //     'email',
-  //     'introduction'
-  //   ])
-  // },
   created() {
     this.getNotice()
     this.getUpdating()
+    this.tabNavigation()
+  },
+  watch: {
   },
   methods: {
     getNotice() {
@@ -66,6 +72,15 @@ export default {
     },
     closeNotice() {
       this.showNotice = false
+    },
+    handleTabClick(val) {
+      this.$router.push('/dashboard/' + val)
+    },
+    tabNavigation() { // 根据路由地址导航到对应的tab页
+      const str = this.$route.fullPath
+      const index = str.lastIndexOf('\/')
+      const tab = str.substring(index + 1, str.length)
+      this.activeName = tab
     }
   }
 }
@@ -76,6 +91,27 @@ export default {
   margin: 0 20px 20px 20px;
   .dashboard-content {
     margin-left: 20px;
+    &-body {
+      .el-tabs__nav-scroll {
+        margin: 0;
+        .el-tabs__nav {
+          .el-tabs__item {
+            margin: 0;
+            padding: 0;
+            height: 80px;
+            line-height: 88px;
+            font-size: 20px;
+            color: #1f2d3d;
+            &.is-active {
+              color: #20a0ff;
+            }
+            span {
+              padding: 32px 16px;
+            }
+          }
+        }
+      }
+    }
   }
   .calendar-heatmap {
     margin-top: 40px;

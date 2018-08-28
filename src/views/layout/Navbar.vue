@@ -97,11 +97,11 @@ export default {
       newNotices: true
     }
   },
-  computed: { ...mapGetters([
-    'sidebar',
-    'name',
-    'avatar'
-  ])
+  computed: {    ...mapGetters([
+      'sidebar',
+      'name',
+      'avatar'
+    ])
   },
   mounted() {
     this.$refs.input.$refs.input.style.border = '0px solid #bfcbd9'
@@ -163,7 +163,7 @@ export default {
     &-icon {
       .fa-icon {
         vertical-align: middle;
-        font-size: 21px;
+        font-size: 20px;
         color: #00000086;
         cursor: pointer;
       }
@@ -187,7 +187,7 @@ export default {
     right: 300px;
     &-icon {
       vertical-align: middle;
-      font-size: 22px;
+      font-size: 21px;
       color: #000000a6;
       cursor: pointer;
     }
@@ -200,7 +200,7 @@ export default {
     right: 260px;
     &-icon {
       vertical-align: middle;
-      font-size: 22px;
+      font-size: 20px;
       color: #000000a6;
       cursor: pointer;
     }
@@ -219,17 +219,21 @@ export default {
     &:hover {
       background-color: #4ba5ff28;
     }
+    .screenfull {
+      width: 19px;
+    }
   }
   .avatar-container {
     height: 50px;
     position: absolute;
     right: 10px;
-    font-size: 18px;
+    font-size: 14px;
     color: #000000;
     .avatar-wrapper {
       cursor: pointer;
       .user-avatar {
-        width: 40px;
+        margin-right: 3px;
+        width: 32px;
         height: auto;
         vertical-align: middle;
       }
@@ -241,8 +245,11 @@ export default {
 }
 // 必须写在外面
 .user-dropdown {
+  font-size: 14px;
   margin: 15px 0;
-  width: 150px;
   border-radius: 3px;
+  .el-dropdown-menu__item {
+    line-height: 30px;
+  }
 }
 </style>

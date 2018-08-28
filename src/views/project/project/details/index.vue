@@ -86,7 +86,7 @@ export default {
       this.taskNum = taskNum
     },
     tabNavigation() { // 根据路由地址导航到对应的tab页
-      const str = window.location.href
+      const str = this.$route.fullPath
       const index = str.lastIndexOf('\/')
       const tab = str.substring(index + 1, str.length)
       if (tab === 'new' || tab === 'upload') {
