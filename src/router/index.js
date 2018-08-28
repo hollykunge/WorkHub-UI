@@ -33,12 +33,22 @@ export const constantRouterMap = [{
 {
   path: '/',
   component: Layout,
-  redirect: '/dashboard',
+  redirect: '/dashboard/activity',
   name: '首页',
   hidden: true,
   children: [{
     path: 'dashboard',
-    component: _import('dashboard/index')
+    component: _import('dashboard/index'),
+    redirect: '/dashboard/activity',
+    children: [{
+      path: 'activity',
+      component: _import('dashboard/components/activityList'),
+      name: '最新动态'
+    }, {
+      path: 'statistic',
+      component: _import('dashboard/components/workloadMap'),
+      name: '数据统计'
+    }]
   }, {
     path: 'userHome',
     component: _import('zone/index'),

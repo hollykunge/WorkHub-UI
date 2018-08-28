@@ -30,10 +30,10 @@ export default {
     const option = {
       title: {
         show: true,
-        text: '工 作 统 计',
+        text: '叫啥好呢',
         left: '20',
         textStyle: {
-          fontSize: 30
+          fontSize: 20
         }
       },
       tooltip: {
@@ -57,6 +57,7 @@ export default {
         range: this.currentYear,
         cellSize: ['auto', 26],
         right: 25,
+        left: 40,
         yearLabel: {
           show: false
         }

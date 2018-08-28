@@ -1,8 +1,8 @@
 <template>
   <div class="activity-list">
-    <div class="activity-list-header">
+    <!-- <div class="activity-list-header">
       <h1>最 新 动 态</h1>
-    </div>
+    </div> -->
     <div class="activity-list-container">
       <div class="message-container">
         <!-- 使用统一的数据展示的模板 -->
@@ -65,9 +65,9 @@ export default {
   created() {
     this.listQuery.crtUser = this.userId
     this.getMessageList(this.activeItem)
-    getActivity(this.listQuery).then(res => {
-      console.log(res)
-    })
+    // getActivity(this.listQuery).then(res => {
+    //   console.log(res)
+    // })
   },
   mounted() {
     this.loadMore()
@@ -75,14 +75,14 @@ export default {
   methods: {
     getMessageList(tab) { // 根据点击的tab页的不同获取不同的数据
       this.messageList = [
-        { type: 0, userName: '白向洋', avatar: 'static/images/avatars/139064.jpg', content: '遥感空间信息可信现场v现场v现在才v秩序只需啊倒萨顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶度理论与关键技术', path: '/', time: '2018-06-30' },
-        { type: 1, userName: '周星星', avatar: 'static/images/avatars/139065.jpg', content: '新型仿真机器人', path: '/', time: '2018-06-28' },
-        { type: 2, userName: '朱偏右', avatar: 'static/images/avatars/139066.png', content: '工程效能', path: '/', time: '2018-06-26' },
-        { type: 0, userName: '王梦源', avatar: 'static/images/avatars/139067.png', content: '卫星通导及系统融合产业化', path: '/', time: '2018-06-26' },
-        { type: 2, userName: '胡  超', avatar: 'static/images/avatars/139068.jpg', content: '智能生产', path: '/', time: '2018-06-26' },
-        { type: 1, userName: '赵海波', avatar: 'static/images/avatars/139065.jpg', content: '工业机器人', path: '/', time: '2018-06-26' },
-        { type: 0, userName: '张童飞', avatar: 'static/images/avatars/139067.png', content: '安全防御关键技术', path: '/', time: '2018-06-26' },
-        { type: 2, userName: '米思坤', avatar: 'static/images/avatars/139068.jpg', content: '八月迭代', path: '/', time: '2018-06-26' }]
+        { type: 0, userName: '白向洋', avatar: '/static/images/avatars/139064.jpg', content: '遥感空间信息可信现场v现场v现在才v秩序只需啊倒萨顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶度理论与关键技术', path: '/', time: '2018-06-30' },
+        { type: 1, userName: '周星星', avatar: '/static/images/avatars/139065.jpg', content: '新型仿真机器人', path: '/', time: '2018-06-28' },
+        { type: 2, userName: '朱偏右', avatar: '/static/images/avatars/139066.png', content: '工程效能', path: '/', time: '2018-06-26' },
+        { type: 0, userName: '王梦源', avatar: '/static/images/avatars/139067.png', content: '卫星通导及系统融合产业化', path: '/', time: '2018-06-26' },
+        { type: 2, userName: '胡  超', avatar: '/static/images/avatars/139068.jpg', content: '智能生产', path: '/', time: '2018-06-26' },
+        { type: 1, userName: '赵海波', avatar: '/static/images/avatars/139065.jpg', content: '工业机器人', path: '/', time: '2018-06-26' },
+        { type: 0, userName: '张童飞', avatar: '/static/images/avatars/139067.png', content: '安全防御关键技术', path: '/', time: '2018-06-26' },
+        { type: 2, userName: '米思坤', avatar: '/static/images/avatars/139068.jpg', content: '八月迭代', path: '/', time: '2018-06-26' }]
     },
     loadMore() {
       const Counter = 2 + 3 * this.loadMoreCounter
