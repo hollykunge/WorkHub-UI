@@ -1,37 +1,60 @@
 <template>
   <div class="activity-list">
-    <!-- <div class="activity-list-header">
-      <h1>最 新 动 态</h1>
-    </div> -->
     <div class="activity-list-container">
       <div class="message-container">
         <!-- 使用统一的数据展示的模板 -->
-        <div class="message-list" v-for="(message, index) in displayedList" :key="index">
-          <span class="message-list-avatar"><img :src="message.avatar"></span>
-          <router-link :to="message.path" v-if="message.type==0" class="message-list-content">
-            {{message.userName}} 新建项目
-            <el-tooltip :content="message.content" placement="bottom-start" effect="dark">
-              <span>{{getSubstring(message.content)}}</span>
+        <div class="message-list" v-for="(message, index) in displayedList" :key="index" v-if="!message.isPrivate || message.userId == userId">
+          <span class="message-list-avatar">
+            <Avatar :username="message.actUserName" :size="35" :lighten="200" style=""></Avatar>
+          </span>
+          <router-link to="/" v-if="message.optType==1" class="message-list-content">
+            {{message.actUserName}} 新建任务
+            <el-tooltip :content="message.repoName" placement="top-start" effect="dark">
+              <span>{{getSubstring(message.repoName)}}</span>
             </el-tooltip>
           </router-link>
-          <router-link :to="message.path" v-if="message.type==1" class="message-list-content">
-            {{message.userName}} 更新项目
-            <el-tooltip :content="message.content" placement="bottom-start" effect="dark">
-              <span>{{getSubstring(message.content)}}</span>
+          <router-link to="/" v-if="message.optType==2" class="message-list-content">
+            {{message.actUserName}} 删除任务
+            <el-tooltip :content="message.repoName" placement="top-start" effect="dark">
+              <span>{{getSubstring(message.repoName)}}</span>
             </el-tooltip>
           </router-link>
-          <router-link :to="message.path" v-if="message.type==2" class="message-list-content">
-            {{message.userName}} 评论项目
-            <el-tooltip :content="message.content" placement="bottom-start" effect="dark">
-              <span>{{getSubstring(message.content)}}</span>
+          <router-link to="/" v-if="message.optType==3" class="message-list-content">
+            {{message.actUserName}} 修改任务
+            <el-tooltip :content="message.repoName" placement="top-start" effect="dark">
+              <span>{{getSubstring(message.repoName)}}</span>
             </el-tooltip>
           </router-link>
-          <span class="message-list-time">{{message.time}}</span>
+          <router-link to="/" v-if="message.optType==4" class="message-list-content">
+            {{message.actUserName}} 提交数据到
+            <el-tooltip :content="message.repoName" placement="top-start" effect="dark">
+              <span>{{getSubstring(message.repoName)}}</span>
+            </el-tooltip>
+          </router-link>
+          <router-link to="/" v-if="message.optType==5" class="message-list-content">
+            {{message.actUserName}} 对任务
+            <el-tooltip :content="message.repoName" placement="top-start" effect="dark">
+              <span>{{getSubstring(message.repoName)}}</span>
+            </el-tooltip>的人员进行了变更
+          </router-link>
+          <router-link to="/" v-if="message.optType==6" class="message-list-content">
+            {{message.actUserName}} 合并了
+            <span>{{message.refName}}</span> 等文件到任务
+            <el-tooltip :content="message.repoName" placement="top-start" effect="dark">
+              <span>{{getSubstring(message.repoName)}}</span>
+            </el-tooltip>
+          </router-link>
+
+          <span class="message-list-time">{{timestamp2Text(message.crtTime)}}</span>
           <div class="message-list-detail">
             <div class="message-list-detail-content">
-              <p>针对遥感空间信息可信度理论在航天重大工程实际应用中需要解决的关键难题，以遥感空间数据获取、处理和应用全过程的质量控制为主线，突破了遥感空间数据可信度量、可信处理和可信评估等核心技术难题，实现了技术创新的四个首次：1）首次设计并构建了航天重大工程的遥感空间信息可信度理论方法，建立了航天探测场景静态要素可信度量模型、航天器（传感器、平台）动态数据可信处理方法和海量空间数据产品可信评估技术；2）首次建立了多波束激光虚焦点成像模型和多法向平面控制几何检校技术，提高了嫦娥探月新型激光敏感器精避障探测的可信度；3）首次破解了颤振“探、分、补”技术难题，实现了卫星平台颤振的精密探测补偿；4）首次建立了海量空间数据产品通用二级抽样评估优化技术，实现了其可信度的科学准确评估。形成了自主知识产权的面向重大航天工程和相关行业空间数据质量控制技术新体系，实现了嫦娥探月、载人航天和测绘卫星等航天工程中遥感空间信息可信度保障的重大创新。</p>
+              <p>userId: {{message.userId}} optType: {{message.optType}}, actUserId: {{message.actUserId}}, actUserName: {{message.actUserName}}, repoId: {{message.repoId}}, repoUserName: {{message.repoUserName}}, repoName: {{message.repoName}}, refName: {{message.refName}}, isPrivate: {{message.isPrivate}}, createdUnix: {{message.createdUnix}}, content: {{message.content}}, crtTime: {{message.crtTime}}</p>
             </div>
           </div>
+        </div>
+        <div v-if="displayedList.length == 0">
+          <!-- 暂无动态 -->
+          <h4>暂无动态</h4>
         </div>
       </div>
       <div class="load-more">
@@ -44,6 +67,7 @@
 <script>
 import { getActivity } from 'api/project/activity/index'
 import { mapGetters } from 'vuex'
+import { formatTime } from 'utils/index'
 
 export default {
   data() {
@@ -53,7 +77,7 @@ export default {
       isLoadMore: false,
       loadMoreCounter: 0,
       listQuery: {
-        limit: 10,
+        limit: 20,
         page: 1,
         dayBack: 7
       }
@@ -64,28 +88,37 @@ export default {
   },
   created() {
     this.listQuery.crtUser = this.userId
-    this.getMessageList(this.activeItem)
-    // getActivity(this.listQuery).then(res => {
-    //   console.log(res)
-    // })
+    this.getMessageList()
   },
   mounted() {
-    this.loadMore()
   },
   methods: {
-    getMessageList(tab) { // 根据点击的tab页的不同获取不同的数据
-      this.messageList = [
-        { type: 0, userName: '白向洋', avatar: '/static/images/avatars/139064.jpg', content: '遥感空间信息可信现场v现场v现在才v秩序只需啊倒萨顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶度理论与关键技术', path: '/', time: '2018-06-30' },
-        { type: 1, userName: '周星星', avatar: '/static/images/avatars/139065.jpg', content: '新型仿真机器人', path: '/', time: '2018-06-28' },
-        { type: 2, userName: '朱偏右', avatar: '/static/images/avatars/139066.png', content: '工程效能', path: '/', time: '2018-06-26' },
-        { type: 0, userName: '王梦源', avatar: '/static/images/avatars/139067.png', content: '卫星通导及系统融合产业化', path: '/', time: '2018-06-26' },
-        { type: 2, userName: '胡  超', avatar: '/static/images/avatars/139068.jpg', content: '智能生产', path: '/', time: '2018-06-26' },
-        { type: 1, userName: '赵海波', avatar: '/static/images/avatars/139065.jpg', content: '工业机器人', path: '/', time: '2018-06-26' },
-        { type: 0, userName: '张童飞', avatar: '/static/images/avatars/139067.png', content: '安全防御关键技术', path: '/', time: '2018-06-26' },
-        { type: 2, userName: '米思坤', avatar: '/static/images/avatars/139068.jpg', content: '八月迭代', path: '/', time: '2018-06-26' }]
+    getMessageList() {
+      getActivity(this.listQuery).then(res => {
+        console.log(res.data)
+        if (res.data.total === 0) {
+          this.messageList = [
+            // {userId, optType, actUserId, actUserName, repoId, repoUserName, repoName, refName, isPrivate, createdUnix, content}
+            // 1创建任务 2删除任务 3修改任务 4提交数据给任务 5任务人员变更 6数据合并
+            { userId: 1, optType: 1, actUserId: 1, actUserName: '赵向洋', repoId: 1, repoUserName: '赵向洋', repoName: '新型仿真机器人', refName: '数据名称', isPrivate: false, createdUnix: 'none', content: '遥感空间信息可信现场v现场v现在才v秩序只需啊倒萨顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶度理论与关键技术', crtTime: '1535099458000' },
+            { userId: 2, optType: 2, actUserId: 1, actUserName: '孙星星', repoId: 1, repoUserName: '孙星星', repoName: '工程效能', refName: '数据名称', isPrivate: false, createdUnix: 'none', content: '新型仿真机器人', crtTime: '1535099458000' },
+            { userId: 3, optType: 3, actUserId: 1, actUserName: '朱偏右', repoId: 1, repoUserName: '朱偏右', repoName: '卫星通导及系统融合产业化', refName: '数据名称', isPrivate: false, createdUnix: 'none', content: '卫星通导及系统融合产业化', crtTime: '1535099458000' },
+            { userId: 4, optType: 4, actUserId: 1, actUserName: '王梦源', repoId: 1, repoUserName: '王梦源', repoName: '智能生产', refName: '数据名称', isPrivate: false, createdUnix: 'none', content: '智能生产', crtTime: '1535099458000' },
+            { userId: 5, optType: 5, actUserId: 1, actUserName: '胡  超', repoId: 1, repoUserName: '胡  超', repoName: '新型仿真机器人', refName: '数据名称', isPrivate: false, createdUnix: 'none', content: '工业机器人', crtTime: '1535099458000' },
+            { userId: 6, optType: 6, actUserId: 1, actUserName: '钱海波', repoId: 1, repoUserName: '钱海波', repoName: '工业机器人', refName: '数据名称', isPrivate: false, createdUnix: 'none', content: '安全防御关键技术', crtTime: '1535099458000' },
+            { userId: 3, optType: 4, actUserId: 1, actUserName: '张童飞', repoId: 1, repoUserName: '张童飞', repoName: '八月迭代', refName: '数据名称', isPrivate: true, createdUnix: 'none', content: '八月迭代', crtTime: '1535099458000' },
+            { userId: 1, optType: 5, actUserId: 1, actUserName: '米思伟', repoId: 1, repoUserName: '米思坤', repoName: '安全防御关键技术', refName: '数据名称', isPrivate: true, createdUnix: 'none', content: '工程信息化', crtTime: '1535099458000' }]
+            this.loadMore()
+        } else {
+          this.messageList = res.data.rows
+          this.loadMore()
+        }
+      }, rej => {
+        console.log('获取最新动态列表失败')
+      })
     },
     loadMore() {
-      const Counter = 2 + 3 * this.loadMoreCounter
+      const Counter = 3 + 3 * this.loadMoreCounter
       if (this.messageList.length <= Counter) {
         this.displayedList = this.messageList
         this.isLoadMore = false
@@ -101,6 +134,9 @@ export default {
         return originalString.substr(0, 30) + '···'
       }
       return originalString
+    },
+    timestamp2Text(timestamp) {
+      return formatTime(timestamp)
     }
   }
 }
@@ -121,16 +157,12 @@ export default {
       border-bottom: 1px solid #dbdedf;
       margin-top: 20px;
       &-avatar {
-        color: #001529;
-        img {
-          width: 32px;
-          height: 32px;
-        }
+        display: inline-block;
       }
       &-content {
         position: absolute;
         margin-top: 5px;
-        margin-left: 20px;
+        margin-left: 15px;
         font-weight: bolder;
         span {
           color: #20a0ff;
@@ -139,11 +171,12 @@ export default {
       &-time {
         float: right;
         color: grey;
-        margin-top: 8px;
+        margin-top: 5px;
+        margin-right: 10px;
       }
       &-detail {
         &-content {
-          margin-left: 50px;
+          margin-left: 40px;
           margin-bottom: 15px;
           border: 1px solid #d1d5da79;
           border-radius: 3px;
