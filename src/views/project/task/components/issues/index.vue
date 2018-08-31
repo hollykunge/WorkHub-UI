@@ -84,7 +84,7 @@
 
 <script>
 import propertySelect from 'src/views/components/propertySelect'
-import { getIssue, addIssue, putIssue, delIssue, allIssue, pageIssue} from 'api/project/issue/index'
+import { getIssue, addIssue, putIssue, delIssue, allIssue, pageIssue } from 'api/project/issue/index'
 import { formatTime } from 'utils/index'
 
 export default {
@@ -146,10 +146,10 @@ export default {
       console.log('筛选问题')
     },
     handleFilterLable() {
-      console.log('根据标签筛选')
+      this.$router.push({ name: '问题标签' })
     },
     handleFilterMilestone() {
-      console.log('显示里程碑')
+      this.$router.push({ name: '里程碑' })
     },
 
     handleTaskFilter() {
@@ -230,8 +230,11 @@ export default {
   margin: 0 30px 10px 20px;
   .file-table-header {
     border-radius: 3px 3px 0 0;
+    &.el-table--enable-row-hover .el-table__body tr:hover > td {
+      background-color: #f1f8ff;
+    }
     .el-table__row {
-      background-color: #ffffff;
+      background-color: #f1f8ff;
     }
   }
   .pull-request-description {

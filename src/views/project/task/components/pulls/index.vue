@@ -88,7 +88,7 @@ export default {
       requestType: { closed: false, currentUser: '' },
 
       pullRequestHeader: [{ name: 'jihainan', hashCode: 'b2a5e260d4', comment: '修改表头样式', time: '一个小时之前' }],
-      pullRequestList: [{ id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一个小时前提交', isFolder: true }, { id: 2, title: '添加window10支持', tips: '#450 test在十分钟前提交', commentNum: '0', isFolder: false }] }
+      pullRequestList: [{ id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一个小时前提交', isFolder: true }, { id: 2, title: '添加window10支持', tips: '#450 test在十分钟前提交', commentNum: '0', isFolder: false }]    }
   },
   watch: {
     // fliterUserText(val) { this.filterUser(val) },
@@ -138,7 +138,7 @@ export default {
     // },
     handleCheckRequest(row) {
       console.log(row)
-      this.$router.push({ name: '合并请求详情', params: { pullId: row.id }})
+      this.$router.push({ name: '合并请求详情', params: { pullId: row.id } })
     }
   }
 }
@@ -173,8 +173,11 @@ export default {
     margin: 0 30px 10px 20px;
     .file-table-header {
       border-radius: 3px 3px 0 0;
+      &.el-table--enable-row-hover .el-table__body tr:hover > td {
+        background-color: #f1f8ff;
+      }
       .el-table__row {
-        background-color: #ffffff;
+        background-color: #f1f8ff;
       }
     }
     .pull-request-description {

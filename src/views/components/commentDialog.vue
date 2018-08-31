@@ -8,7 +8,8 @@
   <!-- 事件：onCancle 点击取消按钮触发的事件 -->
   <!-- 事件：onConfirm 点击确认按钮触发的事件，事件的参数值为当前的内容 -->
   <div class="comment-dialog">
-    <img class="comment-avatar" :src="'../'+avatar">
+    <!-- <img class="comment-avatar" :src="'../'+avatar"> -->
+    <Avatar :username="name" :size="45" :lighten="200" style=""></Avatar>
     <div class="comment-bubble">
       <div class="arrow">
         <em></em>
@@ -32,6 +33,7 @@
 
 <script>
 import MdEditor from 'components/MdEditor'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'commentDialog',
@@ -56,8 +58,11 @@ export default {
   },
   data() {
     return {
-      content: '### 说点什么吧！'
+      content: '# '
     }
+  },
+  computed: {
+    ...mapGetters(['name'])
   },
   watch: {
     content(val) { this.$emit('contentChange', val) }
