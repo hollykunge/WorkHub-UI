@@ -19,7 +19,7 @@
             <el-table-column label="序号" prop="taskId" type="index" align="center" width="65"></el-table-column>
             <el-table-column label="任务名称" prop="taskName" align="center" width="250" show-overflow-tooltip>
               <template scope="scope">
-                <span>{{scope.row.taskName.match(/\/(\S*)(?=.git)/)[1]}}</span>
+                <span v-if="scope.row.taskName !== undefined">{{scope.row.taskName.match(/\/(\S*)(?=.git)/)[1]}}</span>
               </template>
             </el-table-column>
             <el-table-column label="负责人" prop="taskExecutorId" align="center"></el-table-column>
