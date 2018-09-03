@@ -15,19 +15,19 @@
                 <icon name="flag"></icon>里程碑
               </el-button>
             </el-button-group>
-            <el-input @keyup.enter.native="handleLabelFilter" class="filter-item" style="width: 150px;" placeholder="标签" size="small"></el-input>
+            <el-input @keyup.enter.native="handleLabelFilter" class="filter-item" style="width: 150px;" placeholder="标签" size="small" v-model="listQuery.name"></el-input>
             <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleLabelFilter" size="small">搜索</el-button>
           </div>
         </el-col>
       </el-row>
     </div>
 
-    <div class="task-label-new" v-if="showCreateTable">
+    <div class="task-label-new" v-show="showCreateTable">
       <div class="label-container">
         <span v-if="labelForm.name == undefined || labelForm.name.trim().length == 0" :style="{backgroundColor: labelForm.color}">{{labelPreview}}</span>
         <span v-else :style="{backgroundColor: labelForm.color}">{{labelForm.name}}</span>
       </div>
-      <el-form :inline="true" :form="labelForm" :rules="rules" label-position="right">
+      <el-form :inline="true" :form="labelForm" :rules="rules" ref="form" label-position="right">
         <el-form-item label="标签名称" prop="name">
           <el-input v-model="labelForm.name" placeholder="输入标签名" size="small"></el-input>
         </el-form-item>
@@ -39,7 +39,8 @@
         </el-form-item>
         <el-form-item style="float: right">
           <el-button type="danger" @click="cancle" size="small" plain>取消</el-button>
-          <el-button type="success" @click="createLabel" size="small">创建标签</el-button>
+          <el-button v-if="labelForm.id" type="danger" @click="modifyLabel" size="small">修改</el-button>
+          <el-button v-else type="success" @click="createLabel" size="small">创建</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -81,8 +82,8 @@
           <template scope="scope">
             <!-- 注意这有一个权限的设置 -->
             <div v-if="userId == scope.row.crtUser">
-              <el-button type="primary" @click="handleLabelEdit" size="small" plain>修改</el-button>
-              <el-button type="danger" @click="handleLabelDelete" size="small" plain>删除</el-button>
+              <el-button type="primary" @click="handleLabelEdit(scope.row)" size="small" plain>修改</el-button>
+              <el-button type="danger" @click="handleLabelDelete(scope.row)" size="small" plain>删除</el-button>
             </div>
           </template>
         </el-table-column>
@@ -101,19 +102,21 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { pageLabel, allLabel, getLabel, addLabel, putLabel, delLabel } from 'api/project/label/index'
 
 export default {
-  props: ['taskId'],
+  props: ['projectId', 'taskId'],
   data() {
     return {
       listLoading: false,
       labelHeader: [1],
       total: 0,
       listQuery: {
+        name: undefined,
         page: 1,
         limit: 10
       },
-      labelList: [{ id: 1, taskId: 1, name: '小小猪', content: '我是一只小小猪', color: '#7777', numIssues: 3, numClosedIssues: 2, crtUser: 1 }],
+      labelList: [{ id: 1, taskId: 1, name: '小小猪', content: '我是一只小小猪', color: '#777777', numIssues: 3, numClosedIssues: 2, crtUser: 1 }],
       showCreateTable: false,
       labelPreview: '标签预览',
       labelForm: {
@@ -128,23 +131,134 @@ export default {
   computed: {
     ...mapGetters(['userId'])
   },
+  created() {
+    this.getLabelList()
+  },
   methods: {
     handleCreateLabel() {
       this.showCreateTable = !this.showCreateTable
+      this.resetForm()
     },
-    handleLable() { },
-    handleMilestone() { },
-    handleLabelFilter() { },
-    handleSizeChange() { },
-    handleCurrentChange() { },
-    handleLabelEdit() { },
-    handleLabelDelete() { },
+    handleLable() {
+      this.$router.push({ name: '问题标签' })
+    },
+    handleMilestone() {
+      this.$router.push({ name: '里程碑' })
+    },
+    handleLabelFilter() {
+      this.listLoading = true
+      this.listQuery.taskId = this.taskId
+      pageLabel(this.listQuery).then(res => {
+        this.listLoading = false
+        this.labelList = res.data.rows
+        this.total = res.data.total
+      })
+    },
+    handleSizeChange() {
+      this.listQuery.limit = val;
+      this.getLabelList();
+    },
+    handleCurrentChange() {
+      this.listQuery.page = val;
+      this.getLabelList();
+    },
+    handleLabelEdit(row) {
+      this.labelForm = row
+      this.showCreateTable = true
+    },
+    handleLabelDelete(row) {
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delLabel(row.id)
+          .then(res => {
+            if (res.status === 200) {
+              this.$notify({
+                title: '成功',
+                message: '删除成功',
+                type: 'success',
+                duration: 2000
+              })
+              const index = this.labelList.indexOf(row)
+              this.labelList.splice(index, 1)
+            } else {
+              this.$notify({
+                title: '失败',
+                message: '删除失败',
+                type: 'error',
+                duration: 2000
+              })
+            }
+
+          })
+      })
+    },
     cancle() {
       this.showCreateTable = false
     },
+    getLabelList() {
+      this.listLoading = true
+      this.listQuery.taskId = this.taskId
+      pageLabel(this.listQuery).then(res => {
+        this.listLoading = false
+        this.labelList = res.data.rows
+        this.total = res.data.total
+      })
+    },
+    modifyLabel() {
+      putLabel(this.labelForm).then(res => {
+        if (res.status === 200) {
+          this.getLabelList()
+          this.showCreateTable = false
+          this.$notify({
+            title: '成功',
+            message: '修改成功',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$notify({
+            title: '失败',
+            message: '修改失败',
+            type: 'error',
+            duration: 2000
+          })
+        }
+      })
+    },
     createLabel() {
       this.labelForm.taskId = this.taskId
-      console.log(this.labelForm)
+      this.labelForm.numIssues = 0
+      this.labelForm.numClosedIssues = 0
+      addLabel(this.labelForm).then(res => {
+        if (res.status === 200) {
+          this.getLabelList()
+          this.showCreateTable = false
+          this.$notify({
+            title: '成功',
+            message: '创建成功',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$notify({
+            title: '失败',
+            message: '创建失败',
+            type: 'error',
+            duration: 2000
+          })
+        }
+      })
+    },
+    resetForm() {
+      this.labelForm = {
+        taskId: this.taskId,
+        name: undefined,
+        color: '#7AE13F',
+        content: undefined
+      }
     }
   }
 }

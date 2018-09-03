@@ -46,7 +46,7 @@ export function putIssue(data) {
 // 删除问题
 export function delIssue(id) {
   return fetch({
-    url: '/api/project/issue' + id,
+    url: '/api/project/issue/' + id,
     method: 'delete'
   })
 }
