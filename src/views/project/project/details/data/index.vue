@@ -19,24 +19,28 @@
             <el-table-column label="序号" prop="taskId" type="index" align="center" width="65"></el-table-column>
             <el-table-column label="任务名称" prop="taskName" align="center" width="250" show-overflow-tooltip>
               <template scope="scope">
-                <span v-if="scope.row.taskName !== undefined">{{scope.row.taskName.match(/\/(\S*)(?=.git)/)[1]}}</span>
+                <span>{{scope.row.task.taskName.match(/\/(\S*)(?=.git)/)[1]}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="负责人" prop="taskExecutorId" align="center"></el-table-column>
+            <el-table-column label="负责人" prop="taskExecutorId" align="center">
+              <template scope="scope">
+                <span>{{scope.row.task.taskExecutorId}}</span>
+              </template>
+            </el-table-column>
             <!-- <el-table-column label="优先级" prop="taskPriority" align="center"> -->
             <el-table-column label="优先级" prop="taskId" align="center" width="80">
               <template scope="scope">
-                <el-tag v-if="scope.row.taskId" type="danger">高</el-tag>
+                <el-tag v-if="scope.row.task.taskId" type="danger">高</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="计划完成时间" prop="taskPlanEnd" align="center">
               <template scope="scope">
-                <span>{{timestamp2Time(scope.row.taskPlanEnd, "{y}-{m}-{d}")}}</span>
+                <span>{{timestamp2Time(scope.row.task.taskPlanEnd, "{y}-{m}-{d}")}}</span>
               </template>
             </el-table-column>
             <el-table-column label="进度" prop="taskProcess" align="center">
               <template scope="scope">
-                <el-progress :percentage="scope.row.taskProcess * 25" :status="scope.row.taskProcess==4?'success':''"></el-progress>
+                <el-progress :percentage="scope.row.task.taskProcess * 25" :status="scope.row.taskProcess==4?'success':''"></el-progress>
               </template>
             </el-table-column>
             <el-table-column v-if="projectData_btn_edit || projectData_btn_del" align="left" label="操作" fixed="right" width="150px">
@@ -144,7 +148,7 @@ export default {
       this.getTaskList(this.currentPropertie)
     },
     handleCheck (task) {
-      this.$router.push({ name: '任务详情', params: { projectId: this.projectId, taskId: task.taskId } })
+      this.$router.push({ name: '任务详情', params: { projectId: this.projectId, taskId: task.task.taskId } })
     },
     handleDelete (row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
@@ -152,7 +156,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteTask(row.taskId).then(() => {
+        deleteTask(row.task.taskId).then(() => {
           this.$notify({
             title: '成功',
             message: '删除成功',
