@@ -128,11 +128,21 @@ export const constantRouterMap = [{
       component: _import('project/task/components/issues/index'),
       name: '任务问题'
     }, {
-      path: ':issueId/conversation',
-      component: _import('project/task/components/issues/conversation'),
-      name: '任务问题详情',
-      props: true
+      path: 'labels',
+      component: _import('project/task/components/labels/index'),
+      name: '问题标签'
     }, {
+      path: 'milestones',
+      component: _import('project/task/components/milestones/index'),
+      name: '里程碑'
+    },
+    // {
+    //   path: ':issueId/conversation',
+    //   component: _import('project/task/components/issues/conversation'),
+    //   name: '任务问题详情',
+    //   props: true
+    // }, 
+    {
       path: 'chartManage',
       component: _import('project/task/components/chartManage/index'),
       name: '图表管理'
@@ -162,32 +172,32 @@ export const constantRouterMap = [{
       component: _import('project/task/components/taskData/uploadFile'),
       name: '文件上传'
     }, {
-      path: ':pullId',
+      path: ':pullId/conversation',
       component: _import('project/task/components/pulls/content'),
       name: '合并请求详情',
-      redirect: ':pullId/conversation',
-      props: true,
-      children: [{
-        path: 'conversation',
-        component: _import('project/task/components/pulls/conversation'),
-        name: '问题讨论',
-        props: true
-      }, {
-        path: 'commit',
-        component: _import('project/task/components/pulls/commit'),
-        name: '提交记录',
-        props: true
-      }, {
-        path: 'checks',
-        component: _import('project/task/components/pulls/checks'),
-        name: '冲突检测',
-        props: true
-      }, {
-        path: 'filesChanged',
-        component: _import('project/task/components/pulls/filesChanged'),
-        name: '文件变更',
-        props: true
-      }]
+      // redirect: ':pullId/conversation',
+      props: true
+      // children: [{
+      //   path: 'conversation',
+      //   component: _import('project/task/components/pulls/conversation'),
+      //   name: '问题讨论',
+      //   props: true
+      // }, {
+      //   path: 'commit',
+      //   component: _import('project/task/components/pulls/commit'),
+      //   name: '提交记录',
+      //   props: true
+      // }, {
+      //   path: 'checks',
+      //   component: _import('project/task/components/pulls/checks'),
+      //   name: '冲突检测',
+      //   props: true
+      // }, {
+      //   path: 'filesChanged',
+      //   component: _import('project/task/components/pulls/filesChanged'),
+      //   name: '文件变更',
+      //   props: true
+      // }]
     }, {
       path: 'newPull',
       component: _import('project/task/components/pulls/newPull'),

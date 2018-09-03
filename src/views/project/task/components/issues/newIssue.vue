@@ -1,7 +1,7 @@
 <template>
   <div class="discussion-box">
-    <el-input v-model="issue.name" placeholder="标题"></el-input>
-    <comment-dialog title="" @onConfirm="hangdleCommentChange" confirmText="提交"></comment-dialog>
+    <el-input v-model="issue.name" placeholder="问题标题"></el-input>
+    <comment-dialog title="" @onConfirm="hangdleCommentChange" confirmText="提交问题"></comment-dialog>
   </div>
 </template>
 
@@ -41,4 +41,7 @@ export default {
 </script>
 
 <style>
+.discussion-box {
+  margin: 0 30px 10px 20px;
+}
 </style>
