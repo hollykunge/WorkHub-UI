@@ -126,7 +126,8 @@ export const constantRouterMap = [{
     }, {
       path: 'taskIssue',
       component: _import('project/task/components/issues/index'),
-      name: '任务问题'
+      name: '任务问题',
+      props: true
     }, {
       path: 'labels',
       component: _import('project/task/components/labels/index'),
