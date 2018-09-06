@@ -15,7 +15,7 @@
                 <icon name="flag"></icon>里程碑
               </el-button>
             </el-button-group>
-            <el-input @keyup.enter.native="handleIssuesFilter" class="filter-item" style="width: 150px;" placeholder="问题关键字" size="small"></el-input>
+            <el-input @keyup.enter.native="handleIssuesFilter" v-model="listQuery.name" class="filter-item" style="width: 150px;" placeholder="问题关键字" size="small"></el-input>
             <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleIssuesFilter" size="small">搜索</el-button>
           </div>
         </el-col>
@@ -88,6 +88,7 @@ import { getIssue, addIssue, putIssue, delIssue, allIssue, pageIssue } from 'api
 import { formatTime } from 'utils/index'
 
 export default {
+  props: ['projectId', 'taskId'],
   components: { propertySelect },
   data() {
     return {
@@ -98,12 +99,12 @@ export default {
       users: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
       // 对请求进行筛选，修改筛选条件时改变相应对象的值
       requestType: { closed: false, currentUser: '' },
-
       issueHeader: [{ name: 'jihainan', hashCode: 'b2a5e260d4', comment: '修改表头样式', time: '一个小时之前' }],
-      // { id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一天前提出', isFolder: true }
       issueList: [],
       listLoading: false,
       listQuery: {
+        name: undefined,
+        isClosed: 0,
         limit: 10,
         page: 1,
       },
@@ -114,7 +115,7 @@ export default {
     // 监听requestType，当变化时根据requestType的值重新获取request列表
     requestType: {
       handler(oldValue, newValue) {
-        console.log('重新获取合并请求的列表')
+        this.getIssueList()
       },
       deep: true
     }
@@ -132,18 +133,19 @@ export default {
   },
   methods: {
     getIssueList() {
+      this.listQuery.taskId = this.taskId
       this.listLoading = true
-      allIssue().then(res => {
+      pageIssue(this.listQuery).then(res => {
         this.listLoading = false
-        this.issueList = res
-        console.log(res)
+        this.issueList = res.data.rows
+        this.total = res.data.total
       })
     },
     handleCreateIssues() {
       this.$router.push({ name: '新建问题' })
     },
     handleIssuesFilter() {
-      console.log('筛选问题')
+      this.getIssueList()
     },
     handleFilterLable() {
       this.$router.push({ name: '问题标签' })
@@ -151,15 +153,13 @@ export default {
     handleFilterMilestone() {
       this.$router.push({ name: '里程碑' })
     },
-
-    handleTaskFilter() {
-      console.log('123')
-    },
     handleOpened() {
       this.requestType.closed = false
+      this.listQuery.isClosed = 0
     },
     handleClosed() {
       this.requestType.closed = true
+      this.listQuery.isClosed = 1
     },
     // handleNewPull() {
     //   this.$router.push({ name: '新建合并请求' })
@@ -180,16 +180,13 @@ export default {
     //   }
     // },
     handleCheckIssue(row) {
-      console.log(row)
       this.$router.push({ name: '任务问题详情', params: { issueId: row.id } })
     },
     handleSizeChange(val) {
       this.listQuery.limit = val
-      // this.getTaskData()
     },
     handleCurrentChange(val) {
       this.listQuery.page = val
-      // this.getTaskData()
     },
     timestamp2Text(timestamp) {
       return formatTime(timestamp)

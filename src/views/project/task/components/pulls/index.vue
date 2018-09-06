@@ -8,13 +8,13 @@
         <el-col :span="12">
           <div class="pull-request-button-group">
             <el-button-group>
-              <el-button type="warning" size="small" plain>
+              <el-button @click="handleLable" type="warning" size="small" plain>
                 <icon name="bookmark"></icon>标签</el-button>
-              <el-button type="warning" size="small" plain>
+              <el-button @click="handleMilestone" type="warning" size="small" plain>
                 <icon name="flag"></icon>里程碑</el-button>
             </el-button-group>
-            <el-input @keyup.enter.native="handleTaskFilter" placeholder="输入关键词" size="small" v-model="searchKeys"></el-input>
-            <el-button type="primary" v-waves icon="search" @click="handleTaskFilter" size="small">搜索</el-button>
+            <el-input @keyup.enter.native="handlePullFilter" placeholder="输入关键词" size="small" v-model="listQuery.title"></el-input>
+            <el-button type="primary" v-waves icon="search" @click="handlePullFilter" size="small">搜索</el-button>
           </div>
         </el-col>
       </el-row>
@@ -44,8 +44,8 @@
         </el-table-column>
       </el-table>
 
-      <el-table :data="pullRequestList" :show-header="false">
-        <el-table-column align="left">
+      <el-table :data="pullRequestList" v-loading="listLoading" :show-header="false">
+        <el-table-column align="left" show-overflow-tooltip>
           <template scope="scope">
             <div class="pull-request-description">
               <icon name="exchange" style="color: #13ce66"></icon>
@@ -53,9 +53,19 @@
                 <h3 @click="handleCheckRequest(scope.row)">
                   <a>{{scope.row.title}}</a>
                 </h3>
-                <span>{{scope.row.tips}}</span>
               </div>
             </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="left" show-overflow-tooltip>
+          <template scope="scope">
+            <span class="pull-request-content">{{scope.row.content}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="center" show-overflow-tooltip>
+          <template scope="scope">
+            <span class="pull-request-content"># {{scope.row.index}} 由
+              <a>{{scope.row.headUserName}}</a>提交</span>
           </template>
         </el-table-column>
         <el-table-column align="right">
@@ -70,16 +80,33 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="task-label-footer">
+      <el-row type="flex" justify="center">
+        <div v-show="!listLoading" class="pagination-container">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total"> </el-pagination>
+        </div>
+      </el-row>
+    </div>
   </div>
 </template>
 
 <script>
 import propertySelect from 'src/views/components/propertySelect'
+import { pagePull, allPull, getPull, addPull, putPull, delPull } from 'api/project/pull/index'
+
 export default {
+  props: ['projectId', 'taskId'],
   components: { propertySelect },
   data() {
     return {
-      searchKeys: '',
+      listQuery: {
+        title: undefined,
+        limit: 10,
+        page: 1,
+        hasMerged: 0
+      },
+      listLoading: false,
+      total: 0,
       // 通过用户搜索
       // fliterUserText: '',
       // filteredUser: [{ name: 'master' }, { name: 'jihainan' }, { name: '测试' }],
@@ -88,14 +115,12 @@ export default {
       requestType: { closed: false, currentUser: '' },
 
       pullRequestHeader: [{ name: 'jihainan', hashCode: 'b2a5e260d4', comment: '修改表头样式', time: '一个小时之前' }],
-      pullRequestList: [{ id: 1, title: '下载后不能运行', commentNum: '4', tips: '#450 姬海南在一个小时前提交', isFolder: true }, { id: 2, title: '添加window10支持', tips: '#450 test在十分钟前提交', commentNum: '0', isFolder: false }]    }
+      pullRequestList: [{ id: 1, index: 13, title: '下载后不能运行', content: '这是我的测试合并请求', headUserName: "姬海南" }]    }
   },
   watch: {
-    // fliterUserText(val) { this.filterUser(val) },
-    // 监听requestType，当变化时根据requestType的值重新获取request列表
     requestType: {
       handler(oldValue, newValue) {
-        console.log('重新获取合并请求的列表')
+        this.getPullList()
       },
       deep: true
     }
@@ -108,14 +133,25 @@ export default {
       return this.requestType.closed ? { color: '#96989b' } : { color: '#24292e' }
     }
   },
+  created() {
+    this.getPullList()
+  },
   methods: {
-    handleTaskFilter() {
-      console.log('123')
+    handleLable() {
+      this.$router.push({ name: '问题标签' })
+    },
+    handleMilestone() {
+      this.$router.push({ name: '里程碑' })
+    },
+    handlePullFilter() {
+      this.getPullList()
     },
     handleOpened() {
+      this.listQuery.hasMerged = 0
       this.requestType.closed = false
     },
     handleClosed() {
+      this.listQuery.hasMerged = 1
       this.requestType.closed = true
     },
     handleNewPull() {
@@ -124,21 +160,35 @@ export default {
     handleUserChanged(newUser) {
       console.log('当前用户' + newUser)
     },
-    // filterUser(val) {
-    //   if (!val) {
-    //     this.filteredUser = this.users
-    //   } else {
-    //     this.filteredUser = []
-    //     this.users.forEach(element => {
-    //       if (element.name.indexOf(val) >= 0) {
-    //         this.filteredUser.push(element)
-    //       }
-    //     })
-    //   }
-    // },
     handleCheckRequest(row) {
       console.log(row)
       this.$router.push({ name: '合并请求详情', params: { pullId: row.id } })
+    },
+    handleSizeChange() {
+      this.listQuery.limit = val;
+      this.getPullList();
+    },
+    handleCurrentChange() {
+      this.listQuery.page = val;
+      this.getPullList();
+    },
+    getPullList() {
+      this.listLoading = true
+      this.listQuery.taskId = this.taskId
+      pagePull(this.listQuery).then(res => {
+        if (res.status === 200) {
+          this.listLoading = false
+          this.pullRequestList = res.data.row
+          this.total = res.data.total
+        } else (
+          this.$notify({
+            title: '失败',
+            message: '数据获取失败，请重试',
+            type: 'error',
+            duration: 2000
+          })
+        )
+      })
     }
   }
 }
@@ -180,16 +230,18 @@ export default {
         background-color: #f1f8ff;
       }
     }
-    .pull-request-description {
-      display: inline-flex;
-      h3 {
-        margin: -2px 10px;
+    .pull-request {
+      &-description {
+        display: inline-flex;
+        h3 {
+          margin: -2px 10px;
+        }
       }
-      &-title {
-        span {
-          margin-left: 12px;
-          font-size: 12px;
-          color: #7b7373;
+      &-content {
+        color: #586069;
+        font-size: 12px;
+        a:hover {
+          border-bottom: 1px solid;
         }
       }
     }
