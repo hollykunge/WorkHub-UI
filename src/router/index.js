@@ -122,7 +122,8 @@ export const constantRouterMap = [{
     }, {
       path: 'pullRequest',
       component: _import('project/task/components/pulls/index'),
-      name: '合并请求'
+      name: '合并请求',
+      props: true
     }, {
       path: 'taskIssue',
       component: _import('project/task/components/issues/index'),
@@ -144,7 +145,7 @@ export const constantRouterMap = [{
     //   component: _import('project/task/components/issues/conversation'),
     //   name: '任务问题详情',
     //   props: true
-    // }, 
+    // },
     {
       path: 'chartManage',
       component: _import('project/task/components/chartManage/index'),

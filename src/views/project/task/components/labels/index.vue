@@ -146,13 +146,7 @@ export default {
       this.$router.push({ name: '里程碑' })
     },
     handleLabelFilter() {
-      this.listLoading = true
-      this.listQuery.taskId = this.taskId
-      pageLabel(this.listQuery).then(res => {
-        this.listLoading = false
-        this.labelList = res.data.rows
-        this.total = res.data.total
-      })
+      this.getLabelList()
     },
     handleSizeChange() {
       this.listQuery.limit = val;
