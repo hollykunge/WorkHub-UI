@@ -1,14 +1,73 @@
 <template>
-  <div class="new-pull-qequest">
-    <h2>新建合并请求</h2>
+  <div class="new-pull">
+    <div class="new-pull-header">
+      <h3>新建合并请求</h3>
+    </div>
+    <div class="new-pull-branch">
+      <property-select title="基础分支" :properties="baseBranches" @changed="handleBaseBranch"></property-select>
+      <icon name="long-arrow-left"></icon>
+      <property-select title="对比分支" :properties="compareBranches" @changed="handleCompareBranch"></property-select>
+    </div>
+    <div class="new-pull-content">
+      <comment-dialog inputPrompt="标题" confirmText="创建合并请求" @onConfirm="handleSubmit"></comment-dialog>
+    </div>
+    <div class="new-pull-info">
+      <span>显示分支 {{baseBranch}} 和分支 {{compareBranch}} 的比对信息</span>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
+import propertySelect from 'src/views/components/propertySelect'
+import commentDialog from 'src/views/components/commentDialog'
+import { addPull } from 'api/project/pull/index'
 
+export default {
+  props: ['projectId', 'taskId'],
+  components: { propertySelect, commentDialog },
+  data() {
+    return {
+      baseBranches: [{ name: 'master' }, { name: 'dev' }, { name: 'test' }],
+      compareBranches: [{ name: '0911' }, { name: 'tww' }, { name: 'wo' }],
+      baseBranch: 'master',
+      compareBranch: '0911'
+    }
+  },
+  methods: {
+    handleBaseBranch(val) {
+      this.baseBranch = val
+      console.log(val)
+    },
+    handleCompareBranch(val) {
+      this.compareBranch = val
+      console.log(val)
+    },
+    handleSubmit(val) {
+      if (val.title === '') {
+        this.$notify({
+          title: '提示',
+          message: '标题不能为空',
+          type: 'warning',
+          duration: 2000
+        })
+        return
+      }
+      console.log(val)
+    }
+  }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
+.new-pull {
+  margin: 0 30px 10px 20px;
+  &-header {
+    margin-bottom: 24px;
+    border-bottom: 1px #e1e4e8 solid;
+  }
+  &-branch {
+    margin-bottom: 16px;
+    // border-bottom: 1px #e1e4e8 solid;
+  }
+}
 </style>

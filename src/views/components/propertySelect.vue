@@ -4,7 +4,7 @@
   <!-- 需要为组件传一个下拉菜单内容数组 properties -->
   <!-- 当选择属性时触发 changed 事件，通过监听该事件可获取当前选择的属性 -->
   <el-dropdown trigger="click" menu-align="start" class="property-dropdown">
-    <el-button size="small" class="property-dropdown-button" style="margin-left: 20px;">{{title}}：{{ currentProperty }}
+    <el-button size="small" class="property-dropdown-button">{{title}}：{{ currentProperty }}
       <icon name="caret-down"></icon>
     </el-button>
     <el-dropdown-menu slot="dropdown" class="property-dropdown-content" style="background: #ffffff; border-radius: 8px; width: 200px;">

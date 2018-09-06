@@ -16,11 +16,22 @@
         <span></span>
       </div>
       <div class="content">
-        <span v-if="title!=''" class="content-header" style="line-height: 40px;">
+        <span v-if="title!=''" class="content-header">
           <strong>{{title}}</strong>
         </span>
+        <span v-if="inputPrompt!=''" class="content-input">
+          <el-row type="flex" justify="center">
+            <el-col :span="23">
+              <el-input v-model="inputText" :placeholder="inputPrompt"></el-input>
+            </el-col>
+          </el-row>
+        </span>
         <div class="content-editor">
-          <md-editor id='contentEditor' ref="contentEditor" v-model='content' height="150px " :zIndex='20'></md-editor>
+          <el-row type="flex" justify="center">
+            <el-col :span="23">
+              <md-editor id='contentEditor' ref="contentEditor" v-model='content' height="150px " :zIndex='20'></md-editor>
+            </el-col>
+          </el-row>
         </div>
       </div>
       <div class="footer">
@@ -41,7 +52,11 @@ export default {
   props: {
     title: {
       type: String,
-      default: '对话框'
+      default: ''
+    },
+    inputPrompt: {
+      type: String,
+      default: ''
     },
     avatar: {
       type: String,
@@ -58,7 +73,8 @@ export default {
   },
   data() {
     return {
-      content: '# '
+      content: '### ',
+      inputText: ''
     }
   },
   computed: {
@@ -72,8 +88,11 @@ export default {
       this.$emit('onCancel')
     },
     handleConfirm() {
+      const commentData = {}
+      commentData.title = this.inputText
+      commentData.content = this.content
       console.log('点击了确认')
-      this.$emit('onConfirm', this.content)
+      this.$emit('onConfirm', commentData)
     }
   }
 
@@ -82,7 +101,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .comment-dialog {
-  margin: 20px 0 0 20px;
+  margin: 20px 0 0 0px;
   display: inline-flex;
   width: 100%;
   .comment-avatar {
@@ -94,7 +113,7 @@ export default {
     position: relative;
     border: 1px solid #d6d2d2;
     border-radius: 6px;
-    background-color: #f0f8ff;
+    background-color: #ffffff;
     margin: 0 0 20px 20px;
     .arrow {
       position: absolute;
@@ -114,15 +133,20 @@ export default {
         border-color: transparent #d6d2d2 transparent transparent;
       }
       span {
-        border-color: transparent #f0f8ff transparent transparent;
+        border-color: transparent #ffffff transparent transparent;
         left: 2px;
       }
     }
     .content {
       &-header {
-        margin: 0 15px;
+        line-height: 40px;
+        margin: 0 20px;
+      }
+      &-input {
+        line-height: 50px;
       }
       &-editor {
+        margin-top: 10px;
         .CodeMirror {
           height: 100% !important;
         }
