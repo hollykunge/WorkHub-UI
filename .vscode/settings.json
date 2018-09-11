@@ -1,33 +1,33 @@
 {
     "eslint.enable": true,
-    "workbench.startupEditor": "welcomePage",
+    "standard.enable": true,
     "vetur.format.defaultFormatter.js": "vscode-typescript",
-    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
-    "editor.quickSuggestions": {
-        "strings": true
-    },
-    "editor.tabSize": 2,
-    "eslint.autoFixOnSave": true,
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        {
-            "language": "vue",
-            "autoFix": true
-        },
-        {
-            "language": "html",
-            "autoFix": true
-        }
-    ],
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
     "vetur.format.defaultFormatter.html": "js-beautify-html",
-    "standard.enable": false,
-    "workbench.statusBar.visible": true,
-    "workbench.activityBar.visible": true,
-    "editor.minimap.enabled": false,
-    "editor.renderWhitespace": "none",
-    "editor.renderControlCharacters": false
+    "javascript.validate.enable": false, // Disable the built-in VSCode validator
+    // "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+    // "editor.quickSuggestions": {
+    //     "strings": true
+    // },
+    // "editor.tabSize": 2,
+    // "eslint.autoFixOnSave": true,
+    // "eslint.validate": [
+    //     "javascript",
+    //     "javascriptreact",
+    //     {
+    //         "language": "vue",
+    //         "autoFix": true
+    //     },
+    //     {
+    //         "language": "html",
+    //         "autoFix": true
+    //     }
+    // ],
+    // "editor.formatOnPaste": true,
+    // "editor.formatOnSave": true,
+    // "editor.formatOnType": true,
+    // "workbench.statusBar.visible": true,
+    // "workbench.activityBar.visible": true,
+    // "editor.minimap.enabled": false,
+    // "editor.renderWhitespace": "none",
+    // "editor.renderControlCharacters": false
 }
