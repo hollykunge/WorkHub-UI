@@ -3,7 +3,7 @@ import fetch from 'utils/fetch'
 // 查找合并请求
 export function pagePull(query) {
   return fetch({
-    url: '/api/project/task/pull/page',
+    url: '/api/project/pull/page',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function pagePull(query) {
 // 查找全部合并请求
 export function allPull() {
   return fetch({
-    url: '/api/project/task/pull/all',
+    url: '/api/project/pull/all',
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function allPull() {
 // 查找某个合并请求
 export function getPull(id) {
   return fetch({
-    url: '/api/project/task/pull/page' + id,
+    url: '/api/project/pull/page' + id,
     method: 'get'
   })
 }
@@ -28,7 +28,7 @@ export function getPull(id) {
 // 新建合并请求
 export function addPull(data) {
   return fetch({
-    url: '/api/project/task/pull',
+    url: '/api/project/pull',
     method: 'post',
     data: data
   })
@@ -37,7 +37,7 @@ export function addPull(data) {
 // 修改合并请求
 export function putPull(data) {
   return fetch({
-    url: '/api/project/task/pull',
+    url: '/api/project/pull',
     method: 'put',
     data: data
   })
@@ -46,7 +46,7 @@ export function putPull(data) {
 // 删除合并请求
 export function delPull(id) {
   return fetch({
-    url: '/api/project/task/pull/' + id,
+    url: '/api/project/pull/' + id,
     method: 'delete'
   })
 }
