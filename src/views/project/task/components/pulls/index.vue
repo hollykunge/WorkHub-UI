@@ -175,6 +175,7 @@ export default {
     getPullList() {
       this.listLoading = true
       this.listQuery.taskId = this.taskId
+      this.listQuery.hasMerged = undefined
       pagePull(this.listQuery).then(res => {
         if (res.status === 200) {
           this.listLoading = false
