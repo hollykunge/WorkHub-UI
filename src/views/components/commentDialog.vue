@@ -29,7 +29,7 @@
         <div class="content-editor">
           <el-row type="flex" justify="center">
             <el-col :span="23">
-              <md-editor id='contentEditor' ref="contentEditor" v-model='content' height="150px " :zIndex='20'></md-editor>
+              <md-editor id='contentEditor' ref="contentEditor" v-model='context' height="150px " :zIndex='20'></md-editor>
             </el-col>
           </el-row>
         </div>
@@ -73,7 +73,7 @@ export default {
   },
   data() {
     return {
-      content: '### ',
+      context: '',
       inputText: ''
     }
   },
@@ -81,7 +81,7 @@ export default {
     ...mapGetters(['name'])
   },
   watch: {
-    content(val) { this.$emit('contentChange', val) }
+    context(val) { this.$emit('contentChange', val) }
   },
   methods: {
     handleCancle() {
@@ -90,7 +90,7 @@ export default {
     handleConfirm() {
       const commentData = {}
       commentData.title = this.inputText
-      commentData.content = this.content
+      commentData.context = this.context
       console.log('点击了确认')
       this.$emit('onConfirm', commentData)
     }

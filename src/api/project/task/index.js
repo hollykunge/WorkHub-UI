@@ -79,3 +79,10 @@ export function getFileList(query) {
     params: query
   })
 }
+
+export function getTaskBranch(taskId) {
+  return fetch({
+    url: '/api/project/task/' + taskId + '/branches',
+    method: 'get'
+  })
+}

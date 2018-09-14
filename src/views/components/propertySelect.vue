@@ -47,15 +47,16 @@ export default {
   },
   created () {
     this.filteredProperty = this.properties
-    if (this.currentProperty === undefined) {
+    if (this.currentProperty === undefined && this.properties[0] !== undefined) {
       this.currentProperty = this.properties[0].name
+      // console.log(this.properties[0].name)
     } 
   },
   methods: {
     filterProperty (val) {
       if (!val) {
         this.filteredProperty = this.properties
-      } else if (this.properties === undefined) {
+      } else if (this.properties === undefined || this.properties.lengrh === 0) {
         this.filteredProperty = []
       } else {
         this.filteredProperty = []
